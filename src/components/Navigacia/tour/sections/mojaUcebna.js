@@ -44,10 +44,7 @@ export function steps() {
       waitFor: waitMedium,
     },
     {
-      selectors: [
-        ".computer .column-left .news-list",
-        ".mobile .news-list",
-      ],
+      selectors: [".computer .column-left .news-list", ".mobile .news-list"],
       title: "Novinky na Akadémii",
       text: "Každá nová pieseň alebo video sa objaví v prehľade noviniek. Máš tak prehľad o tom, čo pribudlo.",
       side: "right",
@@ -118,9 +115,7 @@ export function steps() {
       waitFor: waitShort,
     },
     {
-      selectors: [
-        ".bottom-nav-wrapper .bottom-bar",
-      ],
+      selectors: [".bottom-nav-wrapper .bottom-bar"],
       closest: ".bottom-nav-wrapper",
       title: "Navigácia na ďalšie podstránky",
       text: "Darčekové poukážky, predplatné, HeliČas, kniha aj nastavenia účtu sú vždy poruke v spodnej lište.",
