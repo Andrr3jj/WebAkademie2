@@ -7,6 +7,8 @@ export function steps() {
     video: "[data-tour='lesson-video'], video[controls]",
     markComplete: "[data-tour='mark-complete']",
     lyricsToggle: "[data-tour='lyrics-toggle']",
+    onlineDifficulty: "[data-tour='mojekurzy-difficulty']",
+    onlineSongsHeading: "[data-tour='mojekurzy-songs-heading']",
   };
 
   return [
@@ -52,6 +54,8 @@ export function steps() {
 
     // === OZNAČIŤ AKO ZVLÁDNUTÉ ===
     {
+      goto: "/ucebna/zadarmo-video",
+      selector: sel.markComplete,
       waitFor: 400,
       bind: { text: "Označiť ako zvládnuté" }, // (nájde to aj stav „Zvládnuté“ cez aria-label)
       closest: ".button, [data-tour='mark-complete']",
@@ -65,6 +69,7 @@ export function steps() {
     // === TEXT PIESNE ===
     {
       goto: "/ucebna/zadarmo-video",
+      selector: sel.lyricsToggle,
       waitFor: 800, // nech sa dotiahne DOM
       // vyhľadá podľa textu na [role="button"] a [aria-label]
       bind: { text: "Text piesne" },
@@ -85,5 +90,44 @@ export function steps() {
       side: "left",
       pad: 18,
     },
+    {
+      goto: "/ucebna/moje-kurzy",
+      selector: sel.onlineDifficulty,
+      waitFor: 600,
+      closest: ".box-item.oblubene.narocnost",
+      title: "Vyber si náročnosť",
+      text: "Tu si zvolíš, či chceš lekcie pre začiatočníkov, pokročilejších alebo profíkov.",
+      side: "left",
+      pad: 24,
+      radius: 24,
+    },
+    {
+      selector: sel.onlineSongsHeading,
+      title: "Zoznam piesní v kurze",
+      text: "Podľa zvolenej úrovne sa ti tu zobrazia skladby pripravené na štúdium.",
+      side: "top",
+      pad: { x: 22, y: 18 },
+      radius: 14,
+      scrollMode: "nearest",
+      scrollInline: "nearest",
+    },
   ];
 }
+
+export const branch = {
+  title: "Skvelé! Náučné videá máš prejdené 🎉",
+  text: "Vyber si, ako chceš pokračovať v ďalšom kroku.",
+  options: [
+    {
+      label: "Číselné zápisy",
+      goto: "/ciselne-zapisy",
+      to: "zapisy",
+      planLabel: "Číselné zápisy",
+    },
+    {
+      label: "Dokončiť prehliadku",
+      planLabel: "Hotovo",
+      steps: [],
+    },
+  ],
+};

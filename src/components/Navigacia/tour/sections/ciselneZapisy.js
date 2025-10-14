@@ -1,5 +1,5 @@
 // src/components/Navigacia/tour/sections/ciselneZapisy.js
-import { steps as videoSteps } from "./naucneVidea";
+import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
 import avatarLike from "@/assets/images/gallery/avatar-like.png";
 
 export function steps() {
@@ -186,6 +186,7 @@ export const branch = {
       label: "Pozrieť náučné videá",
       goto: "/naucne-videa",
       steps: videoSteps,
+      branch: videoBranch,
       planLabel: "Náučné videá",
     },
     {

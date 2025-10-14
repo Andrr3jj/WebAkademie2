@@ -86,6 +86,7 @@ export default {
     const PLAN_PLACEHOLDERS = [
       "Domovská stránka",
       "Ďalšia oblasť",
+      "Ďalšia sekcia",
       "Precvičovanie",
       "Hotovo",
     ];
