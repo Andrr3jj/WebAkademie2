@@ -8,7 +8,10 @@
       <div class="line horizontal w-80"></div>
 
       <div v-if="section1" id="section1" class="obsah">
-        <div class="box-item oblubene narocnost naposledy-sledovane">
+        <div
+          class="box-item oblubene narocnost naposledy-sledovane"
+          data-tour="mojekurzy-difficulty"
+        >
           <div class="nadpis">
             <p>
               Vyberte si sekciu <br />
@@ -69,7 +72,7 @@
             cvičenia, ktoré Vám pomôžu začať a postupne sa zlepšovať vo Vašej
             hre na heligónke.
           </p>
-          <p class="nadpis">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -77,7 +80,10 @@
         </div>
       </div>
       <div v-if="section2" id="section2" class="obsah">
-        <div class="box-item oblubene narocnost naposledy-sledovane">
+        <div
+          class="box-item oblubene narocnost naposledy-sledovane"
+          data-tour="mojekurzy-difficulty"
+        >
           <div class="nadpis">
             <p>
               Vyberte si sekciu <br />
@@ -137,7 +143,7 @@
             Nájdete tu náročnejšie skladby a techniky, ktoré Vám pomôžu
             zdokonaliť Váš hudobný talent a posunúť sa na ďalšiu úroveň.
           </p>
-          <p class="nadpis">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -145,7 +151,10 @@
         </div>
       </div>
       <div v-if="section3" id="section3" class="obsah">
-        <div class="box-item oblubene narocnost naposledy-sledovane">
+        <div
+          class="box-item oblubene narocnost naposledy-sledovane"
+          data-tour="mojekurzy-difficulty"
+        >
           <div class="nadpis">
             <p>
               Vyberte si sekciu <br />
@@ -207,7 +216,7 @@
             Tu nájdete náročnejšie skladby, techniky a tipy, ktoré Vám pomôžu
             posunúť Vašu hru na vyššiu úroveň.
           </p>
-          <p class="nadpis">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -232,7 +241,10 @@
         <div class="line horizontal w-80"></div>
 
         <div v-if="section1" id="section1" class="obsah">
-          <div class="box-item oblubene narocnost naposledy-sledovane">
+          <div
+            class="box-item oblubene narocnost naposledy-sledovane"
+            data-tour="mojekurzy-difficulty"
+          >
             <div class="nadpis">
               <p>
                 Vyberte si sekciu <br />
@@ -296,7 +308,7 @@
               cvičenia, ktoré Vám pomôžu začať a postupne sa zlepšovať vo Vašej
               hre na heligónke.
             </p>
-            <p class="nadpis">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -304,7 +316,10 @@
           </div>
         </div>
         <div v-if="section2" id="section2" class="obsah">
-          <div class="box-item oblubene narocnost naposledy-sledovane">
+          <div
+            class="box-item oblubene narocnost naposledy-sledovane"
+            data-tour="mojekurzy-difficulty"
+          >
             <div class="nadpis">
               <p>
                 Vyberte si sekciu <br />
@@ -367,7 +382,7 @@
               Nájdete tu náročnejšie skladby a techniky, ktoré Vám pomôžu
               zdokonaliť Váš hudobný talent a posunúť sa na ďalšiu úroveň.
             </p>
-            <p class="nadpis">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -375,7 +390,10 @@
           </div>
         </div>
         <div v-if="section3" id="section3" class="obsah">
-          <div class="box-item oblubene narocnost naposledy-sledovane">
+          <div
+            class="box-item oblubene narocnost naposledy-sledovane"
+            data-tour="mojekurzy-difficulty"
+          >
             <div class="nadpis">
               <p>
                 Vyberte si sekciu <br />
@@ -438,7 +456,7 @@
               Tu nájdete náročnejšie skladby, techniky a tipy, ktoré Vám pomôžu
               posunúť Vašu hru na vyššiu úroveň.
             </p>
-            <p class="nadpis">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>

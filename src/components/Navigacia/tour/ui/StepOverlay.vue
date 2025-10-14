@@ -113,6 +113,18 @@ export default {
       });
     }
 
+    const waitDelay = (ms) =>
+      new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
+
+    async function skipMissing() {
+      if (typeof tour.skipCurrentStep === "function") {
+        const skipped = await tour.skipCurrentStep();
+        if (skipped) return;
+      }
+      if (index.value < steps.value.length - 1) await tour.next();
+      else tour.close();
+    }
+
     function pickTarget(s) {
       let el = s?.selector ? document.querySelector(s.selector) : null;
       if (!el) return null;
@@ -145,9 +157,20 @@ export default {
 
       let el = pickTarget(s);
 
+      if (!(el instanceof Element)) {
+        const MAX_TRIES = 8;
+        let attempt = 0;
+        while (!(el instanceof Element) && attempt < MAX_TRIES) {
+          await waitDelay(120);
+          await nextTick();
+          el = pickTarget(s);
+          attempt += 1;
+        }
+      }
+
       // 👇 kľúčová ochrana – ak nie je Element, krok preskoč a nič nepozoruj
       if (!(el instanceof Element)) {
-        skipMissing();
+        await skipMissing();
         return;
       }
 
@@ -274,11 +297,6 @@ export default {
         "--arrow-x": toRem(arrowX),
         "--arrow-y": toRem(arrowY),
       };
-    }
-
-    function skipMissing() {
-      if (index.value < steps.value.length - 1) tour.next();
-      else tour.close();
     }
 
     function updateSpotThrottled() {
