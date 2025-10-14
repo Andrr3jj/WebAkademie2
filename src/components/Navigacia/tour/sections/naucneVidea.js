@@ -50,6 +50,18 @@ export function steps() {
       radius: 26,
     },
 
+    // === OZNAČIŤ AKO ZVLÁDNUTÉ ===
+    {
+      waitFor: 400,
+      bind: { text: "Označiť ako zvládnuté" }, // (nájde to aj stav „Zvládnuté“ cez aria-label)
+      closest: ".button, [data-tour='mark-complete']",
+      title: "Označiť ako zvládnuté",
+      text: "Keď máš hotovo, označ lekciu a sleduj progres.",
+      side: "top",
+      pad: { x: 22, y: 18 },
+      radius: 18,
+    },
+
     // === TEXT PIESNE ===
     {
       goto: "/ucebna/zadarmo-video",
@@ -60,18 +72,6 @@ export function steps() {
       closest: ".button, [data-tour='lyrics-toggle']",
       title: "Text piesne",
       text: "Zobraz si text skladby a precvičuj rovno s hudbou.",
-      side: "top",
-      pad: { x: 22, y: 18 },
-      radius: 18,
-    },
-
-    // === OZNAČIŤ AKO ZVLÁDNUTÉ ===
-    {
-      waitFor: 400,
-      bind: { text: "Označiť ako zvládnuté" }, // (nájde to aj stav „Zvládnuté“ cez aria-label)
-      closest: ".button, [data-tour='mark-complete']",
-      title: "Označiť ako zvládnuté",
-      text: "Keď máš hotovo, označ lekciu a sleduj progres.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
