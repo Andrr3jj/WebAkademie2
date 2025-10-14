@@ -1,5 +1,6 @@
 // src/components/Navigacia/tour/sections/ciselneZapisy.js
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
+import { steps as classroomSteps, branch as classroomBranch } from "./mojaUcebna";
 import avatarLike from "@/assets/images/gallery/avatar-like.png";
 
 export function steps() {
@@ -176,24 +177,47 @@ export function steps() {
   ];
 }
 
-export const branch = {
-  title: "Skvelé, číselné zápisy máš prejdené",
-  text: "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
-  avatar: avatarLike,
-  planBridgeLabel: "Náučné videá",
-  options: [
-    {
+export function branch(ctx = {}) {
+  const hasCompleted = typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
+  const videoDone = hasCompleted("video");
+
+  const options = [];
+
+  if (!videoDone) {
+    options.push({
       label: "Pozrieť náučné videá",
       goto: "/naucne-videa",
+      name: "video",
+      planLabel: "Náučné videá",
       steps: videoSteps,
       branch: videoBranch,
-      planLabel: "Náučné videá",
+      planBridgeLabel: "Moja učebňa",
+    });
+  } else {
+    options.push({
+      label: "Pokračovať do Mojej učebne",
+      goto: "/ucebna",
+      name: "ucebna",
+      planLabel: "Moja učebňa",
+      steps: classroomSteps,
+      branch: classroomBranch,
       planBridgeLabel: "Hotovo",
-    },
-    {
-      label: "Dokončiť prehliadku",
-      planLabel: "Hotovo",
-      steps: [],
-    },
-  ],
-};
+    });
+  }
+
+  options.push({
+    label: "Dokončiť prehliadku",
+    planLabel: "Hotovo",
+    steps: [],
+  });
+
+  return {
+    title: "Skvelé, číselné zápisy máš prejdené",
+    text: videoDone
+      ? "Obe oblasti máš prejdené, poď si pozrieť Moju učebňu alebo prehliadku ukonči."
+      : "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
+    avatar: avatarLike,
+    planBridgeLabel: videoDone ? "Moja učebňa" : "Náučné videá",
+    options,
+  };
+}

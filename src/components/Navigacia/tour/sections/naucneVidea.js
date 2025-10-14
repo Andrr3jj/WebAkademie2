@@ -1,4 +1,6 @@
 // src/components/Navigacia/tour/sections/naucneVidea.js
+import { steps as zapisySteps, branch as zapisyBranch } from "./ciselneZapisy";
+import { steps as classroomSteps, branch as classroomBranch } from "./mojaUcebna";
 export function steps() {
   const sel = {
     heading: "[data-tour='naucne-heading']",
@@ -114,22 +116,46 @@ export function steps() {
   ];
 }
 
-export const branch = {
-  title: "Skvelé! Náučné videá máš prejdené 🎉",
-  text: "Vyber si, ako chceš pokračovať v ďalšom kroku.",
-  planBridgeLabel: "Číselné zápisy",
-  options: [
-    {
+export function branch(ctx = {}) {
+  const hasCompleted = typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
+  const zapisyDone = hasCompleted("zapisy");
+
+  const options = [];
+
+  if (!zapisyDone) {
+    options.push({
       label: "Číselné zápisy",
       goto: "/ciselne-zapisy",
-      to: "zapisy",
+      name: "zapisy",
       planLabel: "Číselné zápisy",
+      steps: zapisySteps,
+      branch: zapisyBranch,
+      planBridgeLabel: "Moja učebňa",
+    });
+  } else {
+    options.push({
+      label: "Pokračovať do Mojej učebne",
+      goto: "/ucebna",
+      name: "ucebna",
+      planLabel: "Moja učebňa",
+      steps: classroomSteps,
+      branch: classroomBranch,
       planBridgeLabel: "Hotovo",
-    },
-    {
-      label: "Dokončiť prehliadku",
-      planLabel: "Hotovo",
-      steps: [],
-    },
-  ],
-};
+    });
+  }
+
+  options.push({
+    label: "Dokončiť prehliadku",
+    planLabel: "Hotovo",
+    steps: [],
+  });
+
+  return {
+    title: "Skvelé! Náučné videá máš prejdené 🎉",
+    text: zapisyDone
+      ? "Obe oblasti máš prejdené, poď sa pozrieť do Mojej učebne alebo prehliadku ukonči."
+      : "Vyber si, ako chceš pokračovať v ďalšom kroku.",
+    planBridgeLabel: zapisyDone ? "Moja učebňa" : "Číselné zápisy",
+    options,
+  };
+}

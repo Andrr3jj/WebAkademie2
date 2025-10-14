@@ -86,7 +86,8 @@ export default {
     const PLAN_BLUEPRINT = [
       { label: "Domovská stránka", bridgeLabel: "Ďalšia oblasť" },
       { label: "Číselné zápisy", bridgeLabel: "Náučné videá" },
-      { label: "Náučné videá", bridgeLabel: "Hotovo" },
+      { label: "Náučné videá", bridgeLabel: "Moja učebňa" },
+      { label: "Moja učebňa", bridgeLabel: "Hotovo" },
       { label: "Hotovo", bridgeLabel: "" },
     ];
 

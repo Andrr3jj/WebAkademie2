@@ -117,6 +117,8 @@ export const branch = {
     {
       label: "Číselné zápisy",
       goto: "/ciselne-zapisy",
+      name: "zapisy",
+      planLabel: "Číselné zápisy",
       steps: zapisySteps,
       branch: zapisyBranch,
       planBridgeLabel: "Náučné videá",
@@ -124,6 +126,8 @@ export const branch = {
     {
       label: "Náučné videá",
       goto: "/naucne-videa",
+      name: "video",
+      planLabel: "Náučné videá",
       steps: videoSteps,
       branch: videoBranch,
       planBridgeLabel: "Číselné zápisy",
