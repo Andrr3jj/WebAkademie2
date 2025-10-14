@@ -60,10 +60,10 @@
                   v-if="idx < planBridges.length"
                   :key="`connector-${idx}`"
                   class="plan-connector"
-                  :class="{
-                    'status-done': planBridges[idx].status === 'done',
-                    'status-current': planBridges[idx].status === 'current',
-                  }"
+                  :class="[
+                    `status-${planBridges[idx].status}`,
+                    { 'is-collapsed': planBridges[idx].collapsed },
+                  ]"
                   aria-hidden="true"
                 ></span>
               </template>
@@ -74,7 +74,10 @@
                 <span
                   v-if="idx < planBridges.length"
                   class="plan-label"
-                  :class="`status-${planBridges[idx].status}`"
+                  :class="[
+                    `status-${planBridges[idx].status}`,
+                    { 'is-collapsed': planBridges[idx].collapsed },
+                  ]"
                 >
                   {{ planBridges[idx].label || "\u00A0" }}
                 </span>
@@ -147,15 +150,30 @@ export default {
       if (items.length < 2) return [];
 
       return items.slice(0, -1).map((item, idx) => {
+        const next = items[idx + 1] || null;
         const rawLabel =
-          typeof item?.label === "string" ? item.label.trim() : "";
-        const status = item?.status || "upcoming";
+          (typeof item?.bridgeLabel === "string"
+            ? item.bridgeLabel.trim()
+            : "") || (typeof next?.label === "string" ? next.label.trim() : "");
+        const prevStatus = item?.status || "upcoming";
+        const nextStatus = next?.status || "upcoming";
+
+        let status = "upcoming";
+        if (prevStatus === "done" && nextStatus === "done") status = "done";
+        else if (
+          prevStatus === "done" ||
+          prevStatus === "current" ||
+          nextStatus === "current"
+        )
+          status = "current";
+
         const showLabel = rawLabel && status !== "upcoming";
 
         return {
           index: item?.index ?? idx,
           status,
           label: showLabel ? rawLabel : "",
+          collapsed: status === "done",
         };
       });
     });
@@ -412,12 +430,16 @@ export default {
   padding: 0 clamp(0.5rem, 1.6vw, 1.25rem);
   box-sizing: border-box;
   overflow: hidden;
+  justify-items: center;
+  text-align: center;
+  margin-inline: auto;
 }
 .plan-track {
   --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
   --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
@@ -429,6 +451,7 @@ export default {
   --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
   display: flex;
   align-items: flex-start;
+  justify-content: center;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
@@ -465,6 +488,13 @@ export default {
   background: #d7e1ea;
   transition: background 0.25s ease;
 }
+.plan-connector.is-collapsed {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  margin-inline: calc(var(--plan-gap) * -0.5);
+  opacity: 0;
+}
 .plan-connector.status-done {
   background: var(--ha-yellow);
 }
@@ -472,10 +502,10 @@ export default {
   background: linear-gradient(90deg, var(--ha-yellow) 0%, #d7e1ea 100%);
 }
 .plan-label {
-  flex: 1 1 clamp(3rem, 10vw, 10rem);
-  max-width: clamp(4.25rem, 20vw, 12.5rem);
+  flex: 1 1 clamp(3rem, 9vw, 9.5rem);
+  max-width: clamp(4rem, 16vw, 11rem);
   text-align: center;
-  font-size: clamp(0.78rem, 0.72rem + 0.2vw, 0.92rem);
+  font-size: clamp(0.7rem, 0.64rem + 0.2vw, 0.85rem);
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.24;
@@ -487,6 +517,9 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.plan-label.is-collapsed {
+  display: none;
 }
 .plan-label.status-done {
   color: #0f240f;

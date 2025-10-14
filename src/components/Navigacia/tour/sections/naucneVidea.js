@@ -117,12 +117,14 @@ export function steps() {
 export const branch = {
   title: "Skvelé! Náučné videá máš prejdené 🎉",
   text: "Vyber si, ako chceš pokračovať v ďalšom kroku.",
+  planBridgeLabel: "Číselné zápisy",
   options: [
     {
       label: "Číselné zápisy",
       goto: "/ciselne-zapisy",
       to: "zapisy",
       planLabel: "Číselné zápisy",
+      planBridgeLabel: "Hotovo",
     },
     {
       label: "Dokončiť prehliadku",

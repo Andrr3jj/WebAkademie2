@@ -180,6 +180,7 @@ export const branch = {
   title: "Skvelé, číselné zápisy máš prejdené",
   text: "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
   avatar: avatarLike,
+  planBridgeLabel: "Náučné videá",
   options: [
     {
       label: "Pozrieť náučné videá",
@@ -187,6 +188,7 @@ export const branch = {
       steps: videoSteps,
       branch: videoBranch,
       planLabel: "Náučné videá",
+      planBridgeLabel: "Hotovo",
     },
     {
       label: "Dokončiť prehliadku",

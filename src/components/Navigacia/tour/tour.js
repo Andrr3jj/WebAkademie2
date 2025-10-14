@@ -441,6 +441,7 @@ function buildProgram() {
       {
         name: "home+menu",
         label: "Domovská stránka",
+        bridgeLabel: homeMenu.branch?.planBridgeLabel || "",
         steps: homeMenu.steps(),
         branch: homeMenu.branch,
       },
@@ -710,6 +711,7 @@ export const tour = {
     state.program.stages.push({
       name: opt.name || opt.to || "branch",
       label: opt.planLabel || opt.label || opt.name || opt.to || "Ďalšia etapa",
+      bridgeLabel: branchConfig?.planBridgeLabel || opt.planBridgeLabel || "",
       steps: normalizedNext,
       ...(branchConfig ? { branch: branchConfig } : {}),
     });
