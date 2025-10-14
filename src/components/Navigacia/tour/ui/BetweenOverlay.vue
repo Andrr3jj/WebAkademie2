@@ -567,6 +567,9 @@ export default {
 .plan-summary__item.status-current .plan-summary__status {
   background: rgba(144, 202, 80, 0.22);
   color: #0f240f;
+  background: rgba(144, 202, 80, 0.22);
+  box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
+    0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
 }
 .plan-summary__bridge {
   display: inline-flex;
