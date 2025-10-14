@@ -1,6 +1,9 @@
 // src/components/Navigacia/tour/sections/ciselneZapisy.js
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
-import { steps as classroomSteps, branch as classroomBranch } from "./mojaUcebna";
+import {
+  steps as classroomSteps,
+  branch as classroomBranch,
+} from "./mojaUcebna";
 import avatarLike from "@/assets/images/gallery/avatar-like.png";
 
 export function steps() {
@@ -178,22 +181,28 @@ export function steps() {
 }
 
 export function branch(ctx = {}) {
-  const hasCompleted = typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
+  const hasCompleted =
+    typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
   const videoDone = hasCompleted("video");
+  const classroomDone = hasCompleted("ucebna");
 
   const options = [];
+  let text = "Ako chceš pokračovať? Vyber si ďalší krok.";
+  let planBridgeLabel = "Náučné videá";
 
   if (!videoDone) {
     options.push({
-      label: "Pozrieť náučné videá",
+      label: "Pokračovať na Náučné videá",
       goto: "/naucne-videa",
       name: "video",
       planLabel: "Náučné videá",
       steps: videoSteps,
       branch: videoBranch,
-      planBridgeLabel: "Moja učebňa",
+      planBridgeLabel: "Náučné videá",
     });
-  } else {
+    text = "Číselné zápisy máš prejdené. Pokračuj na náučné videá.";
+    planBridgeLabel = "Náučné videá";
+  } else if (!classroomDone) {
     options.push({
       label: "Pokračovať do Mojej učebne",
       goto: "/ucebna",
@@ -201,23 +210,25 @@ export function branch(ctx = {}) {
       planLabel: "Moja učebňa",
       steps: classroomSteps,
       branch: classroomBranch,
-      planBridgeLabel: "Hotovo",
+      planBridgeLabel: "Moja učebňa",
     });
+    text = "Máme hotové videá aj zápisy. Poďme teraz do Mojej učebne.";
+    planBridgeLabel = "Moja učebňa";
+  } else {
+    options.push({
+      label: "Dokončiť prehliadku",
+      planLabel: "Hotovo",
+      steps: [],
+    });
+    text = "Všetko máš prejdené. Prehliadku môžeš ukončiť.";
+    planBridgeLabel = "Hotovo";
   }
-
-  options.push({
-    label: "Dokončiť prehliadku",
-    planLabel: "Hotovo",
-    steps: [],
-  });
 
   return {
     title: "Skvelé, číselné zápisy máš prejdené",
-    text: videoDone
-      ? "Obe oblasti máš prejdené, poď si pozrieť Moju učebňu alebo prehliadku ukonči."
-      : "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
+    text,
     avatar: avatarLike,
-    planBridgeLabel: videoDone ? "Moja učebňa" : "Náučné videá",
+    planBridgeLabel,
     options,
   };
 }

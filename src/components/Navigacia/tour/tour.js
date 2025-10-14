@@ -102,10 +102,7 @@ function branchContext(stage = null) {
 function resolveBranch(branch, stage = null) {
   if (!branch) return null;
   const ctx = branchContext(stage);
-  const raw =
-    typeof branch === "function"
-      ? branch(ctx)
-      : branch;
+  const raw = typeof branch === "function" ? branch(ctx) : branch;
   if (!raw || typeof raw !== "object") return null;
 
   const planBridgeLabel =
@@ -122,8 +119,7 @@ function resolveBranch(branch, stage = null) {
   const options = Array.isArray(optionsSource)
     ? optionsSource
         .map((opt) => {
-          const resolved =
-            typeof opt === "function" ? opt(ctx) : opt;
+          const resolved = typeof opt === "function" ? opt(ctx) : opt;
           if (!resolved || typeof resolved !== "object") return null;
           return { ...resolved };
         })
@@ -638,7 +634,6 @@ async function advanceStageIfNeeded() {
     };
     return;
   }
-
 }
 
 /** ===============================
@@ -659,7 +654,9 @@ export const tour = {
         cleanupBindings();
         detachViewportWatchers();
 
-        state.program = { stages: [{ key: "nologin", name: "nologin", steps: [] }] };
+        state.program = {
+          stages: [{ key: "nologin", name: "nologin", steps: [] }],
+        };
         state.stageIndex = 0;
         state.index = 0;
         state.open = true;
@@ -685,7 +682,8 @@ export const tour = {
 
     if (state.program?.stages?.length) {
       state.program.stages = state.program.stages.map((stage, idx) => {
-        const key = stageKeyFrom(stage) || normalizeStageKey(`stage-${idx + 1}`);
+        const key =
+          stageKeyFrom(stage) || normalizeStageKey(`stage-${idx + 1}`);
         return { ...stage, key };
       });
     }
@@ -803,7 +801,8 @@ export const tour = {
     const rawKey =
       opt.key || opt.name || opt.to || opt.planLabel || opt.label || "";
     const stageKey =
-      normalizeStageKey(rawKey) || normalizeStageKey(`stage-${newStageIndex + 1}`);
+      normalizeStageKey(rawKey) ||
+      normalizeStageKey(`stage-${newStageIndex + 1}`);
 
     const stage = {
       key: stageKey,
