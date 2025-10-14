@@ -260,9 +260,9 @@ export default {
   --intro-dur: 420ms;
   --intro-out: 340ms;
 
-  --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
-  --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
-  --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
+  --intro-gap: clamp(0.35rem, 1.6vw, 0.95rem);
+  --intro-avatar-w: clamp(10.94rem, 15.4vw, 14.44rem);
+  --intro-bubble-w: clamp(18.38rem, 29.4vw, 31.5rem);
 }
 
 /* vrstva */
