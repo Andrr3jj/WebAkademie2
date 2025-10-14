@@ -14,7 +14,7 @@
 
       <div class="guide-actions">
         <span class="guide-progress"
-          >Krok {{ index + 1 - firstReal }}/{{ total }}</span
+          >Krok {{ currentNumber }}/{{ total }}</span
         >
 
         <button
@@ -66,17 +66,22 @@ export default {
     const steps = computed(() => tour.state.steps || []);
 
     // intro (= type: 'intro') sa do poradovníka krokov neráta
-    const firstReal = computed(() =>
-      steps.value[0]?.type === "intro" ? 1 : 0
+    const countedIndexes = computed(() =>
+      steps.value.reduce((acc, step, idx) => {
+        if (idx === 0 && step?.type === "intro") return acc;
+        if (!step || step.type === "intro" || step.__skipped) return acc;
+        acc.push(idx);
+        return acc;
+      }, [])
     );
-    const total = computed(() =>
-      Math.max(0, steps.value.length - firstReal.value)
-    );
+    const total = computed(() => countedIndexes.value.length);
+    const currentNumber = computed(() => {
+      const pos = countedIndexes.value.indexOf(index.value);
+      return pos >= 0 ? pos + 1 : 0;
+    });
 
-    const isLast = computed(
-      () => index.value - firstReal.value >= total.value - 1
-    );
-    const hasPrev = computed(() => index.value > firstReal.value);
+    const isLast = computed(() => currentNumber.value >= total.value);
+    const hasPrev = computed(() => countedIndexes.value.indexOf(index.value) > 0);
     const step = computed(() => steps.value[index.value] || null);
 
     const spotStyle = ref({});
@@ -276,9 +281,12 @@ export default {
       };
     }
 
-    function skipMissing() {
-      if (index.value < steps.value.length - 1) tour.next();
-      else tour.close();
+    async function skipMissing() {
+      const skipped = await tour.skipCurrentStep?.();
+      if (!skipped) {
+        if (index.value < steps.value.length - 1) tour.next();
+        else tour.close();
+      }
     }
 
     function updateSpotThrottled() {
@@ -355,7 +363,7 @@ export default {
     return {
       index,
       total,
-      firstReal,
+      currentNumber,
       isLast,
       hasPrev,
       step,
