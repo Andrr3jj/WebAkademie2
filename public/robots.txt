@@ -1,0 +1,42 @@
+User-agent: *
+# ✅ POVOLENÉ STRÁNKY
+Allow: /
+Allow: /naucne-videa
+Allow: /ciselne-zapisy
+Allow: /miesta-vyucby
+Allow: /zistit-viac
+Allow: /helifest
+Allow: /helishop
+Allow: /o-nas
+Allow: /o-nas/juraj-kvocka
+Allow: /o-nas/andrej-trnka
+Allow: /o-nas/libor-hlinik
+Allow: /o-nas/matej-kondela
+Allow: /pomoc
+Allow: /obchodne-podmienky
+Allow: /caste-otazky
+Allow: /kosik
+Allow: /registracia
+Allow: /prihlasenie
+Allow: /zabudnute-heslo
+Allow: /zabudnute-heslo-uspesne
+Allow: /vytvorenie-hesla
+Allow: /uspesne-odoslanie-formularu
+Allow: /pripravujeme
+Allow: /uspesny-nakup
+Allow: /neuspesny-nakup
+Allow: /helishop/produkt
+Allow: /knizky/prvy-diel
+Allow: /ucebna/zadarmo-video
+
+# 🚫 ZAKÁZANÉ CHRÁNENÉ ČASTI
+Disallow: /admin
+Disallow: /ucebna
+Disallow: /pokladna
+Disallow: /potrebne-prihlasenie
+Disallow: /test
+Disallow: /test2
+Disallow: /test3
+
+# 🗺️ SITEMAPA
+Sitemap: https://heligonkovaakademia.sk/sitemap.xml

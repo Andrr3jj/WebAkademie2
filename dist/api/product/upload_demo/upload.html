@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <form
+      id="uploadForm"
+      action="upload.php"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <label for="files">Vyber súbor/y ...</label>
+      <input id="files" type="file" name="data[]" multiple />
+      <div id="progress"></div>
+      <button type="submit">Upload</button>
+      <div class="result"></div>
+    </form>
+
+    <script>
+      const uploadForm = document.querySelector("#uploadForm");
+      const filesInput = uploadForm.querySelector("#files");
+
+      filesInput.onchange = () => {
+        uploadForm.querySelector("label").innerHTML = "";
+        for (let i = 0; i < filesInput.files.length; i++) {
+          uploadForm.querySelector("label").innerHTML +=
+            '<span><i class="fa-solid fa-file"></i>' +
+            filesInput.files[i].name +
+            "</span>";
+        }
+      };
+
+      uploadForm.onsubmit = (event) => {
+        event.preventDefault();
+        if (!filesInput.files.length) {
+          uploadForm.querySelector(".result").innerHTML =
+            "Prosím zvoľ súbor/y!";
+        } else {
+          let uploadFormDate = new FormData(uploadForm);
+          let request = new XMLHttpRequest();
+          request.open("POST", uploadForm.action);
+          request.upload.addEventListener("progress", (event) => {
+            // nahrávanie
+            uploadForm.querySelector("button").innerHTML =
+              "Nahrávanie... " +
+              "(" +
+              ((event.loaded / event.total) * 100).toFixed(2) +
+              "%)";
+            uploadForm.querySelector("#progress").style.background =
+              "linear-gradient(to right, #25b350, #25b350 " +
+              Math.round((event.loaded / event.total) * 100) +
+              "%, #e6e8ec " +
+              Math.round((event.loaded / event.total) * 100) +
+              "%)";
+            uploadForm.querySelector("button").disabled = true;
+          });
+          request.onreadystatechange = () => {
+            if (request.readyState == 4 && request.status == 200) {
+              // už nahrané / resp. stav nahrania je v request.responseText
+              uploadForm.querySelector(".result").innerHTML =
+                request.responseText;
+            }
+          };
+          request.send(uploadFormDate);
+        }
+      };
+    </script>
+  </body>
+</html>

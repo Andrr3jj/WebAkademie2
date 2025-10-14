@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Vrstva_2" data-name="Vrstva 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 60" width="620" height="60">
+  <defs>
+    <style>
+      .cls-1 {
+      fill: #26251d;
+      stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Vrstva_1-2">
+    <path class="cls-1" d="M619,1v58H1V1h618M619,0H1C.45,0,0,.45,0,1v58c0,.55.45,1,1,1h618c.55,0,1-.45,1-1V1c0-.55-.45-1-1-1Z"/>
+  </g>
+</svg>

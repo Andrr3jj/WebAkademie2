@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Úspešná registrácia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Almarai:wght@700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    .background {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(180deg, rgba(254, 243, 90, 0.93) 39.17%, rgba(144, 202, 80, 0.93) 89.8%, rgba(59, 168, 70, 0.93) 100%);
+      border-radius: 30px;
+    }
+
+    .container {
+      text-align: center;
+      padding: 3%;
+      border-radius: 30px;
+      border: 6px solid #fef35a;
+      background: #ededed;
+      box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.5);
+      margin: 5% auto;
+      max-width: 900px;
+      min-width: 200px;
+    }
+
+    .title {
+      width: 70%;
+      max-width: 70%;
+      height: auto;
+      margin: 0 15%;
+    }
+
+    h2 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 2.5em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      margin-bottom: 0;
+    }
+
+    h3 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 115%;
+      /* 2.15625rem */
+      margin: 0.7em;
+    }
+
+    .description {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      /* 1.79688rem */
+
+      margin: 1rem auto 1.5em;
+    }
+
+    h4 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 115%;
+      /* 1.79688rem */
+    }
+
+    h5 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 115%;
+      /* 1.79688rem */
+      margin: 1em auto 0.4em;
+    }
+
+    p {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.25em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      /* 1.4375rem */
+    }
+
+    .w-70 {
+      width: 70%;
+      margin: auto;
+    }
+
+    .w-80 {
+      width: 80%;
+    }
+
+    .logo {
+      width: 11em;
+      height: 11em;
+      filter: drop-shadow(8px 8px 5px rgba(0, 0, 0, 0.35));
+      display: inline-flex;
+    }
+
+    /*čiara/rozdelovač*/
+
+    .horizontal {
+      width: 100%;
+      height: 0.5em;
+      border-radius: 0.34375em;
+      border: 0px solid #000;
+      background: #fef35a;
+      box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+      margin: 0.5rem 0px 3rem;
+    }
+
+    .tlacidlo {
+      text-align: center;
+      margin-bottom: 2em;
+
+    }
+
+    .button {
+      width: 13.625em;
+      height: 3.25em;
+      border-radius: 2.1875em;
+      background: #fef35a;
+      box-shadow: 2.5px 2.5px 5px 0px rgba(0, 0, 0, 0.35);
+      display: inline-flex;
+    }
+
+    .button a {
+      color: #000;
+      text-align: center;
+      font-family: Almarai;
+      font-size: 1.6875em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: 0.16875em;
+      margin-top: 0.4em;
+      margin-left: 1em;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .link {
+      display: inline-flex;
+      gap: 3%;
+      margin: 1.5rem auto 0.5em;
+    }
+
+    .link a {
+      margin: 0 20px;
+    }
+
+    .link img {
+      width: 3.25em;
+      height: 3.25em;
+      flex-shrink: 0;
+    }
+
+    .link img:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+      transition-duration: 0.2s;
+    }
+
+    .confets p {
+      color: #000;
+      font-family: Bahnschrift;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: 0.21875em;
+      font-size: 4em;
+    }
+
+    .lava {
+      float: left;
+      margin-top: 0;
+    }
+
+    .prava {
+      float: right;
+      margin-top: 0;
+    }
+
+    .confets {
+      max-width: 900px;
+      min-width: 700px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .background {
+        border-radius: 20px;
+      }
+
+      .container {
+        border-radius: 20px;
+        padding: 5%;
+        margin: 5%;
+        background: #ededed !important;
+      }
+
+      h5 {
+        font-size: 1.2em;
+      }
+
+      .confets {
+        display: none;
+      }
+
+      body>div>div:nth-child(14) {
+        margin-bottom: 0.5em;
+      }
+
+      .title {
+        width: 100%;
+        margin: 0;
+      }
+
+      h2 {
+        font-size: 1.8em;
+      }
+
+      h3 {
+        font-size: 1.5em;
+      }
+
+      h4 {
+        font-size: 1.2em;
+      }
+
+      .description,
+      p {
+        font-size: 1.1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background">
+    <div class="container">
+      <img src="https://heligonkovaakademia.sk/data/images/nadpis.png" class="title" alt="Heligónková akadémia" />
+      <div class="confets">
+        <p class="lava">🎉</p>
+        <p class="prava">🎉</p>
+      </div>
+      <h2>%name% %surname%</h2>
+      <h3>Vaša registrácia prebehla úspešne!</h3>
+      <p class="description w-80">
+        Srdečne vás vítame v Heligónkovej Akadémii Sme nadšení, že ste sa k nám
+        pridali na cestu hudobného objavovania a zábavy s heligónkou.
+      </p>
+
+      <div class="horizontal"></div>
+
+      <h4>Čo môžete očakávať od Heligónkovej Akadémie?</h4>
+
+      <h5>Pestrost repertoáru 🎵</h5>
+      <p class="w-70">
+        Od ludoviek po súčasnú hudbu, pripravili sme pre vás široký výber
+        piesní, ktoré vám pomôžu rozvíjať vaše schopnosti na heligónke.
+      </p>
+      <h5>Inovatívne učebné metódy ✨</h5>
+      <p class="w-70">
+        Naši skúsení učitelia vám pomôžu postupne zdokonaľovať vašu hru
+        prostredníctvom moderných vzdelávacích prístupov.
+      </p>
+      <h5>Spoločenstvo heligonkárov 🤝</h5>
+      <p class="w-70">
+        Buďte súčasťou aktívneho spoločenstva heligonkárov, kde môžete zdieľať
+        svoje pokroky, inšpirácie a nápady s ostatnými nadšencami.
+      </p>
+
+      <div class="horizontal"></div>
+
+      <img class="logo" src="https://heligonkovaakademia.sk/data/images/logo.png" alt="logo" />
+
+      <p class="description w-80">
+        Začnite svoju hudobnú cestu ešte dnes! Kliknite na odkaz nižšie a
+        začnite objavovať tajomstvá heligónky
+      </p>
+
+      <div class="tlacidlo">
+        <div class="button">
+          <a href="https://heligonkovaakademia.sk">Objavovať</a>
+        </div>
+      </div>
+
+
+      <div class="horizontal"></div>
+
+      <h3>Sledujte nás</h3>
+
+      <div class="link">
+        <a href="https://www.instagram.com/heligonkova_akademia/">
+          <img
+            src="https://heligonkovaakademia.sk/data/images/instagram.png"
+            alt="instagram" />
+        </a>
+        <a href="https://www.facebook.com/heligonkovaakademia/">
+          <img
+            src="https://heligonkovaakademia.sk/data/images/facebook.png"
+            alt="facebook" />
+        </a>
+        <a href="https://www.tiktok.com/@heligonkovaakademia">
+          <img
+            src="https://heligonkovaakademia.sk/data/images/tiktok.png"
+            alt="tiktok" />
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

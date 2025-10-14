@@ -1,0 +1,1081 @@
+
+@import "@/assets/sass/_colors.scss";
+
+// BAHNSCHRIFT
+@font-face {
+  font-family: Bahnshrift;
+  src: url(https://heligonkovaakademia.sk/data/fonts/BAHNSCHRIFT.TTF);
+}
+
+// Avenir
+@font-face {
+  font-family: Avenir;
+  src: url(https://heligonkovaakademia.sk/data/fonts/Avenir-Oblique.ttf);
+}
+
+// Calibri
+@font-face {
+  font-family: Calibri;
+  src: url(https://heligonkovaakademia.sk/data/fonts/calibri.ttf);
+}
+
+
+button {
+  margin: 1em auto;
+  border-radius: 0.7em;
+}
+
+form > div:nth-child(1) > div:nth-child(6) {
+  margin-top: 2em;
+}
+
+
+
+.main-content {
+  width: 100%;
+  height: fit-content;
+
+  padding: 0 4%;
+  width: 92%;
+}
+
+.information {
+  position: relative;
+  // font-size: 1vw;
+  font-size: 0.94em;
+  margin: auto;
+}
+
+p.title {
+  height: auto;
+  line-height: 2em;
+}
+
+.title {
+  font-family: Adumu;
+  width: 100%;
+  letter-spacing: 0.06em;
+  color: #000;
+  text-align: center;
+  display: block;
+  font-size: 3.5em;
+  font-weight: 400;
+  unicode-bidi: isolate;
+  box-sizing: border-box;
+  height: 2.5em;
+  line-height: 12em;
+}
+
+.stupnica {
+  width: 100%;
+  font-size: 2.2em;
+  margin: auto;
+  text-align: center;
+  font-weight: 600;
+  box-sizing: border-box;
+  font-family: Bahnshrift, "Open Sans", sans-serif;
+}
+
+.autor {
+  bottom: 0;
+  right: 0;
+  font-size: 2.2em;
+  position: absolute;
+  text-align: right;
+  width: fit-content;
+  font-weight: 600;
+  font-family: Bahnshrift, "Open Sans", sans-serif;
+}
+
+.start > img {
+  margin-right: -0.1em;
+}
+
+.end > img {
+  margin-left: -0.1em;
+}
+
+.start > img,
+.end > img {
+  width: 7.2em;
+}
+
+.start > img:nth-child(2) {
+  width: 7.1em;
+}
+
+.cast .takty {
+  display: flex;
+  justify-content: center;
+  padding-left: 3em;
+  margin: 0.1em auto;
+}
+
+.cast {
+  display: flex;
+  justify-content: center;
+  // margin-bottom: 1em;
+}
+
+.start,
+.end {
+  display: flex;
+  flex-direction: column;
+  gap: 2.3em;
+  width: fit-content;
+}
+
+.end > img:last-child {
+  width: 6.05em;
+}
+
+.takt {
+  display: flex;
+  flex-direction: row;
+}
+
+.doba {
+  width: 4.2em;
+}
+
+.doba-prva {
+  width: 5em;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+.doba-prva .riadky,
+.doba-prva .basa {
+  border-left: 1px solid #000;
+}
+
+.takt-prva .doba-prva .riadky,
+.takt-prva .doba-prva .basa {
+  border-left: none;
+}
+
+.doba-posledna {
+  width: 5em;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.template {
+  //font-size: 0.75vw;
+  margin: auto;
+  font-size: 0.71em;
+}
+
+//štýlovanie riadkov
+
+.riadky,
+.basa {
+  border-top: .15em solid #000;
+  border-bottom: .15em solid #000;
+  height: 10.8em;
+  position: relative;
+}
+
+.riadky {
+  display: flex;
+  flex-direction: column;
+}
+
+.basa {
+  height: 3.63em;
+  overflow-y: clip;
+}
+
+.basa {
+  position: relative;
+}
+
+.basa::before,
+.basa::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  // width: 0.13em;
+  width: 1px;
+  background-color: black;
+}
+
+.basa::before {
+  top: 0;
+  height: 25%; /* prvých 30% border */
+}
+
+.basa::after {
+  bottom: 0;
+  height: 25%; /* posledných 40% border */
+}
+
+.doba-prva .basa::before,
+.doba-prva .basa::after {
+  height: 0;
+}
+
+.riadok {
+  // height: 3.4em;
+  height: 3em;
+  padding: 0.2em;
+  margin: 0.3em;
+  margin-top: 1.2em;
+  border: 0.2em solid #d6d6d6;
+  width: 3em;
+  border-radius: 50%;
+  position: relative;
+}
+
+.doba-cislo {    position: absolute;
+  height: 100%;
+  top: -5%;
+  text-align: center;
+  font-family: Bahnshrift, "Open Sans", sans-serif;
+
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+
+  font-size: 1.9em;
+  font-weight: 400;
+}
+
+//doba cislo
+.riadok :nth-child(1).dva-cisla .doba-cislo {
+  top: 33%;
+  font-size: 1.6em;
+}
+.riadok :nth-child(2).dva-cisla .doba-cislo {
+  top: 73%;
+  font-size: 1.6em;
+}
+
+.riadok :nth-child(1).tri-cisla .doba-cislo {
+  top: 25%;
+  font-size: 1.1em;
+}
+.riadok :nth-child(2).tri-cisla .doba-cislo {
+  top: 52%;
+  font-size: 1.1em;
+}
+.riadok :nth-child(3).tri-cisla .doba-cislo {
+  top: 80%;
+  font-size: 1.1em;
+}
+
+.riadok :nth-child(1).styri-cisla .doba-cislo {
+  top: 15%;
+  font-size: 0.9em;
+}
+.riadok :nth-child(2).styri-cisla .doba-cislo {
+  top: 38%;
+  font-size: 0.9em;
+}
+.riadok :nth-child(3).styri-cisla .doba-cislo {
+  top: 61%;
+  font-size: 0.9em;
+}
+.riadok :nth-child(4).styri-cisla .doba-cislo {
+  top: 84%;
+  font-size: 0.9em;
+}
+
+//doba index
+.riadok :nth-child(1).dva-cisla .doba-index {
+  top: 8%;
+  font-size: 0.8em;
+}
+.riadok :nth-child(2).dva-cisla .doba-index {
+  top: 46%;
+  font-size: 0.8em;
+}
+
+.riadok :nth-child(1).tri-cisla .doba-index {
+  top: 4%;
+  font-size: 0.6em;
+}
+.riadok :nth-child(2).tri-cisla .doba-index {
+  top: 32%;
+  font-size: 0.6em;
+}
+.riadok :nth-child(3).tri-cisla .doba-index {
+  top: 59%;
+  font-size: 0.6em;
+}
+
+.riadok :nth-child(1).styri-cisla .doba-index {
+  top: 0%;
+  font-size: 0.5em;
+}
+.riadok :nth-child(2).styri-cisla .doba-index {
+  top: 23%;
+  font-size: 0.5em;
+}
+.riadok :nth-child(3).styri-cisla .doba-index {
+  top: 47%;
+  font-size: 0.5em;
+}
+.riadok :nth-child(4).styri-cisla .doba-index {
+  top: 68%;
+  font-size: 0.5em;
+}
+
+.doba-index {
+  font-size: 0.9em;
+  position: absolute;
+  left: 54%;
+  font-weight: 400;
+  top: 17%;
+}
+
+.basa-index {
+  left: 64%;
+  width: auto;
+    width: -webkit-fill-available;
+}
+
+.doba-text {
+  padding-bottom: 0.1em;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 500;
+  padding-top: 0.42em;
+  font-family: Calibri, Arial, Open-sans, Helvetica, sans-serif;
+
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.doba-basa {
+  font-size: 2.2em;
+  text-align: center;
+  font-weight: 800;
+  padding: 0.4em 0 0em;
+  margin: 0 auto;
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+}
+
+.doba-smer {
+  font-size: 2.2em;
+  font-weight: 100;
+  padding: 0;
+  width: 70%;
+  text-align: center;
+  line-height: 1.1em;
+  // margin: 0 0.2em;
+  margin: 1px .2em -1px;
+  // padding-top: 0.1em;
+  font-family: Bahnshrift, "Open Sans", sans-serif;
+}
+
+.green {
+  background-color: #c6e29e;
+}
+
+.yellow {
+  background-color: #faf697;
+}
+
+textarea {
+  margin: 3em auto 0;
+  width: 60%;
+  text-align: center;
+  max-width: 30em;
+  white-space: break-spaces;
+  height: auto;
+  overflow-y: visible;
+  font-family: Bahnshrift, "Open Sans", sans-serif;
+
+  font-weight: 600;
+  font-size: 1em;
+}
+
+//context menu
+.context-menu {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  border-radius: 4px;
+  overflow: scroll;
+  max-height: 30em;
+  min-width: 10em;
+}
+
+.context-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.context-menu li {
+  padding: 10px;
+  cursor: pointer;
+}
+.context-menu li.main-li {
+  background-color: #f4f4f4;
+  border-top: 0.1em solid #dbdbdb;
+  border-bottom: 0.1em solid #dbdbdb;
+}
+
+.context-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.drzanie img {
+  position: absolute;
+  top: -26%;
+  left: 47%;
+  overflow: visible;
+  width: 4.5em;
+  z-index: -1;
+}
+
+.drzanie-basa img {
+  position: absolute;
+
+  overflow: visible;
+  z-index: 1;
+}
+
+.drzanie-basa .doby2-basy {
+  top: 36%;
+  right: -55%;
+  width: 2.7em;
+}
+.drzanie-basa .doba2-basy-off {
+  top: 36%;
+  right: -56%;
+  width: 2.7em;
+  transform: scaleX(1.22);
+}
+.drzanie-basa .doba2-basy-off2 {
+  top: 36%;
+  right: -44%;
+  width: 2.7em;
+  transform: scaleX(1.22);
+}
+.drzanie-basa .doba2-basy-off3 {
+  top: 36%;
+  right: -47%;
+  width: 2.7em;
+  transform: scaleX(1.22);
+}
+.drzanie-basa .doby3-basy {
+  width: 7em;
+  right: -133%;
+  top: 35%;
+}
+.drzanie-basa .doba3-basy-off {
+  transform: scale(1.05);
+  width: 7em;
+  right: -158%;
+  top: 35%;
+}
+.drzanie-basa .doba3-basy-off2 {
+  transform: scaleX(1.2);
+  width: 7em;
+  right: -167%;
+  top: 35%;
+}
+.drzanie-basa .doba3-basy-off3 {
+  transform: scaleX(1.15);
+  width: 7em;
+  right: -134%;
+  top: 35%;
+}
+.drzanie-basa .doby4-basy {
+  width: 11.5em;
+  right: -222%;
+  top: 35%;
+}
+.drzanie-basa .doba4-basy-off {
+  transform: scaleX(1.1);
+  right: -271%;
+  top: 37%;
+}
+.drzanie-basa .doba4-basy-off1 {
+  transform: scaleX(1.11);
+  right: -225%;
+}
+.drzanie-basa .doba4-basy-off2 {
+  transform: scaleX(1.13);
+  right: -274%;
+  top: 37%;
+}
+.drzanie-basa .doba4-basy-off3 {
+  transform: scaleX(1.08);
+  right: -221%;
+}
+.drzanie-basa .doba4-basy-off4 {
+  transform: scaleX(1.08);
+  right: -229%;
+}
+.drzanie-basa .doby5-basy {
+  width: 16.6em;
+  right: -323%;
+  top: 38%;
+}
+.drzanie-basa .doba5-basy-off {
+  width: 17em;
+  right: -393%;
+  top: 37%;
+}
+.drzanie-basa .doba5-basy-off1 {
+  width: 17em;
+  right: -330%;
+  top: 37%;
+}
+.drzanie-basa .doba5-basy-off2 {
+  width: 17.3em;
+  right: -403%;
+  top: 37%;
+}
+.drzanie-basa .doba5-basy-off3 {
+  width: 17.6em;
+  right: -339%;
+  top: 36%;
+}
+
+//štýli pridané 28.7 pre dlhšie držanie melódie a bás
+
+.drzanie-basa .doby6-basy {
+  width: 21.5em;
+  right: -418%;
+  top: 38%;
+}
+
+.drzanie-basa .doba6-basy-off {
+  right: -494%;
+}
+.drzanie-basa .doba6-basy-off1 {
+  right: -504%;
+}
+.drzanie-basa .doba6-basy-off2 {
+  right: -419%;
+  width: 21.7em;
+}
+.drzanie-basa .doba6-basy-off3 {
+  right: -524%;
+  width: 22.7em;
+}
+.drzanie-basa .doba6-basy-off4 {
+  right: -428%;
+  width: 22.1em;
+}
+
+
+.drzanie-basa .doby7-basy {
+  width: 25.5em;
+  right: -498%;
+  top: 38%;
+}
+
+.drzanie-basa .doba7-basy-off-val {
+  width: 26.8em;
+  right: -523%;
+}
+
+.drzanie-basa .doba7-basy-off {
+  right: -603%;
+  width: 25.8em;
+}
+.drzanie-basa .doba7-basy-off1 {
+  right: -622%;
+  width: 26.6em;
+}
+.drzanie-basa .doba7-basy-off2 {
+  right: -514%;
+  width: 26.4em;
+}
+.drzanie-basa .doba7-basy-off3 {
+  right: -632%;
+  width: 27.1em;
+}
+.drzanie-basa .doba7-basy-off4 {
+  right: -522%;
+  width: 26.8em;
+}
+
+
+.drzanie-basa .doby8-basy {
+  width: 30em;
+  right: -589%;
+  top: 38%;
+}
+
+.drzanie-basa .doba8-basy-off-val {
+  width: 31.5em;
+  right: -615%;
+}
+
+.drzanie-basa .doba8-basy-off {
+  right: -722%;
+  width: 31em;
+  top: 37%;
+}
+.drzanie-basa .doba8-basy-off1 {
+  right: -732%;
+  width: 31.3em;
+}
+.drzanie-basa .doba8-basy-off2 {
+  right: -599%;
+  width: 30.8em;
+}
+.drzanie-basa .doba8-basy-off3 {
+  right: -742%;
+  width: 31.7em;
+}
+.drzanie-basa .doba8-basy-off4 {
+  right: -625%;
+  width: 32.1em;
+}
+
+
+//koniec
+
+
+
+.drzanie-basa .doba2-basy-rozdelene {
+  top: 57.7%;
+  right: -146%;
+  width: 7em;
+}
+.drzanie-basa .doba3-basy-rozdelene {
+  top: 57.7%;
+  right: -236%;
+  width: 11em;
+}
+.drzanie-basa .doba3-basy-rozdelene2 {
+  top: 57.7%;
+  right: -206%;
+  width: 11em;
+}
+.drzanie-basa .doba4-basy-rozdelene {
+  top: 57.7%;
+  right: -290%;
+  width: 15.3em;
+}
+.drzanie-basa .doba5-basy-rozdelene {
+  top: 57.7%;
+  right: -391%;
+  width: 20.7em;
+}
+.drzanie-basa .doba5-basy-rozdelene2 {
+  top: 57.7%;
+  right: -478%;
+  width: 20.7em;
+}
+
+.drzanie-basa .doba1-basy-rozdelene-kon {
+  top: 37.7%;
+  right: 46%;
+  width: 3em;
+}
+.drzanie-basa .doba2-basy-rozdelene-kon {
+  top: 37%;
+  right: 45%;
+  width: 8.1em;
+}
+.drzanie-basa .doba3-basy-rozdelene-kon {
+  top: 37%;
+  right: 45%;
+  width: 12em;
+}
+.drzanie-basa .doba4-basy-rozdelene-kon {
+  top: 36%;
+  right: 46%;
+  width: 17em;
+}
+
+.drzanie .doby3 {
+  width: 8.7em;
+}
+.drzanie .doby4 {
+  width: 13em;
+}
+.drzanie .doby5 {
+  width: 18.6em;
+}
+.drzanie .doby6 {
+  width: 23em;
+}
+.drzanie .doby7 {
+  width: 27.1em;
+}
+.drzanie .doby8 {
+  width: 31.4em;
+}
+//pridané 29 júl
+.drzanie .doby9 {
+  width: 37em;
+}
+.drzanie .doby10 {
+  width: 41.2em;
+}
+.drzanie .doby10-koniec {
+  width: 42.8em;
+}
+.drzanie .doby11 {
+  width: 45.5em;
+}
+.drzanie .doby11-koniec {
+  width: 46.9em;
+}
+
+.drzanie .doby12 {
+  width: 49.7em;
+}
+.drzanie .doby12-koniec {
+  width: 51.1em;
+}
+
+//k
+
+.drzanie .doby2-koniec {
+  transform: scaleX(1.3);
+  left: 69%;
+}
+
+.drzanie .doby3-koniec {
+  transform: scaleX(1.15);
+  left: 66%;
+}
+.drzanie .doby4-koniec {
+  transform: scaleX(1.11);
+  left: 66%;
+}
+.drzanie .doby6-koniec {
+  transform: scaleX(1.04);
+  left: 66%;
+}
+.drzanie .doby7-koniec {
+  transform: scaleX(1.04);
+  left: 66%;
+}
+.drzanie .doby8-koniec {
+  transform: scaleX(1.04);
+  left: 66%;
+}
+
+.drzanie.doby-na-takt3 .doby5 {
+  width: 18.8em;
+  transform: scaleY(0.9);
+  top: -28%;
+}
+.drzanie.doby-na-takt3 .doby5-koniec {
+  transform: scaleX(1.06);
+  left: 67%;
+}
+.drzanie.doby-na-takt3 .doby6-koniec {
+  transform: scaleX(1.06);
+  left: 67%;
+}
+.drzanie.doby-na-takt3 .doby7 {
+  width: 28.6em;
+  transform: scaleY(0.95);
+  top: -28%;
+}
+.drzanie.doby-na-takt3 .doby7-koniec {
+  transform: scaleX(1);
+  left: 47%;
+}
+.drzanie.doby-na-takt3 .doby8 {
+  width: 32.8em;
+  transform: scaleY(0.93);
+  top: -28%;
+  left: 50%;
+}
+.drzanie.doby-na-takt3 .doby8-koniec {
+  transform: scaleX(1.04);
+  left: 68%;
+}
+
+//29.7
+
+.drzanie.drzanie.doby-na-takt3 .doby9-koniec {
+  width: 38.5em;
+}
+.drzanie.doby-na-takt3 .doby10 {
+    width: 42.8em;
+}
+
+.drzanie.doby-na-takt3 .doby11 {
+  width: 47.1em;
+}
+
+.drzanie.drzanie.doby-na-takt3 .doby11-koniec {
+  width: 48.4em;
+}
+.drzanie.doby-na-takt3 .doby12 {
+  width: 51.3em;
+}
+
+.drzanie.drzanie.doby-na-takt3 .doby12-koniec {
+  width: 52.7em;
+}
+
+//k
+
+.drzanie .doby4-rozdelene {
+  width: 7.5em;
+}
+.drzanie .doby6-rozdelene {
+  width: 11.5em;
+}
+.drzanie .doby8-rozdelene {
+  width: 16em;
+}
+
+//29.7
+.drzanie .doby2-rozdelene {
+  width: 3em;
+}
+.drzanie .doby10-rozdelene {
+   width: 22em;
+}
+.drzanie .doby12-rozdelene {
+   width: 27em;
+}
+.drzanie .doby14-rozdelene {
+   width: 32em;
+}
+//k
+
+.drzanie .inverz {
+  transform: scaleX(-1);
+  right: 46%;
+  left: unset;
+}
+
+.opakovanie {
+  position: absolute;
+  height: 100%;
+  top: -5%;
+
+  & > img {
+    height: 110%;
+    width: 1.2em;
+  }
+}
+
+.basa .opakovanie img {
+  height: 110%;
+  margin: 0;
+}
+
+.opakovanie-zaciatok {
+  left: 0em;
+}
+.opakovanie-koniec {
+  right: 0em;
+  margin: auto;
+}
+.takt-prva .opakovanie-zaciatok {
+  left: 0.1em;
+}
+.takt-posledna .opakovanie-koniec {
+  right: 0.1em;
+}
+
+.slabo-siva {
+  background-color: #d1d2d4;
+}
+
+.silno-siva {
+  background-color: #a8a9ad;
+}
+
+.stredne-siva {
+  background-color: #c1c1c1;
+}
+
+.popis input {
+  overflow: visible !important;
+  position: relative;
+  padding-bottom: 0.1em;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 400;
+  padding-top: 0.32em;
+  min-width: 100%;
+  font-style: italic;
+  width: 1em;
+}
+
+.popis-cast {
+  display: flex;
+  width: -webkit-fill-available;
+  padding-left: 3em;
+}
+
+.popis {
+  width: 100%;
+  flex: 1;
+}
+
+.popis-2 {
+  flex: 2;
+}
+
+.popis-3 {
+  flex: 3;
+}
+
+.popis input {
+  padding-bottom: 0.1em;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 500;
+  padding-top: 0.52em;
+  box-sizing: border-box;
+}
+
+
+.small-g {
+  padding: 0.3em 0 0.1em;
+}
+
+.riadky,
+.basy {
+  position: relative;
+}
+
+.riadky-overflow {
+  width: 100%;
+  height: 100%;
+  overflow-y: clip;
+display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+.doba-prva .riadky-overflow {
+  align-items: flex-end;
+}
+.doba-posledna .riadky-overflow {
+  align-items: flex-start;
+}
+
+.basy {
+  max-height: 5em;
+}
+
+.start-riadky {
+  position: absolute;
+  left: -7.1em;
+  height: 102%;
+  top: -1%;
+  z-index: 10;
+  // position: absolute;
+  // left: -7em;
+  // height: -webkit-fill-available;
+  // transform: scale(1.02);
+  // z-index: 10;
+}
+
+.end-riadky {
+  position: absolute;
+  right: -3.14em;
+  height: 102%;
+  top: -1%;
+  z-index: 10;
+}
+
+.start-basy {
+  position: absolute;
+  left: -6.9em;
+  height: 107.5%;
+  z-index: 10;
+}
+.end-basy {
+  position: absolute;
+  position: absolute;
+  right: -3.14em;
+  height: 100%;
+  z-index: 10;
+}
+
+.number-page {
+  width: 100%;
+  padding-top: 5em;
+  margin: 2em auto 1em;
+
+  p {
+    font-size: 1.2em;
+    padding: 0.2em;
+    font-family: Calibri, Arial, Open-sans, Helvetica, sans-serif;
+  }
+}
+
+.number-page.numer-page-bottom {
+  padding-top: 1em;
+  margin: auto;
+}
+
+.cast {
+  display: flex;
+  flex-direction: column;
+}
+
+.cast-margin {
+  padding-top: 200px;
+}
+.cast-margin2 {
+  padding-top: 60px; /*47*/
+}
+
+.zapis-cast {
+  margin: 0.5em auto 0;
+}
+
+.i-am-not-here-smile {
+  opacity: 0;
+}
+
+
+@media only screen and (max-width: 750px) {
+  .end-riadky {
+    height: 104.5%;
+top: -2.1%;
+  }
+  .doba-prva .riadky,
+  .doba-prva .basa {
+  border-left: 0.5px solid rgba(0, 0, 0, 1);
+  }
+  
+  .riadky,
+  .basa {
+  border-top: 0.7px solid rgba(0, 0, 0, 1);
+  border-bottom: 0.7px solid rgba(0, 0, 0, 1);
+  }
+  
+  .basa::before,
+  .basa::after {
+  content: "";
+  width: 0.5px;
+  }
+
+  .doba-basa {
+    font-weight: 500;
+    padding-top: .2em;
+  }
+
+  .basa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+

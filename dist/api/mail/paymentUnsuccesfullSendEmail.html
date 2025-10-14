@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Úspešná platba</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Almarai:wght@700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    .background {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(180deg, rgba(254, 243, 90, 0.93) 39.17%, rgba(144, 202, 80, 0.93) 89.8%, rgba(59, 168, 70, 0.93) 100%);
+      border-radius: 30px;
+    }
+
+    .container {
+      text-align: center;
+      padding: 3%;
+      border-radius: 30px;
+      border: 6px solid #fef35a;
+      background: #ededed;
+      box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.5);
+      margin: 5% auto;
+      max-width: 900px;
+      min-width: 200px;
+    }
+
+    .title {
+      width: 70%;
+      height: auto;
+      margin: 0 15%;
+    }
+
+    h2 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 2.5em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: #000;
+      text-align: left;
+      font-family: Bahnschrift;
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 115%;
+      margin: 1em 0;
+    }
+
+    .description {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      margin: 1em auto 1.5em;
+    }
+
+    h4 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 115%;
+      margin: 1.7em auto;
+    }
+
+    h5 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+      /* 1.875rem */
+    }
+
+    h6 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 115%;
+      /* 1.79688rem */
+      margin: 1em 0 0.3em;
+    }
+
+    p {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      /* 1.6875rem; */
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0.1em 0;
+    }
+
+    .ta-center {
+      text-align: center;
+    }
+
+    .w-70 {
+      width: 70%;
+      margin: auto;
+    }
+
+    .w-80 {
+      width: 80%;
+    }
+
+    .smaller {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      /* 1.4375rem */
+    }
+
+    .logo {
+      width: 11em;
+      height: 11em;
+      transform: translateX(-50%);
+      position: relative;
+      left: 28%;
+      filter: drop-shadow(8px 8px 5px rgba(0, 0, 0, 0.35));
+    }
+
+    /*čiara/rozdelovač*/
+
+    .line {
+      width: 0.3em;
+      height: auto;
+
+      border-radius: 0.34375em;
+      border: 0px solid #000;
+      background: #fef35a;
+      box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+      margin: 0.5rem 0px;
+    }
+
+    .line.horizontal {
+      width: 100%;
+      height: 0.5em;
+      margin: 2em 0px;
+    }
+
+    .objednavka-info {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cislo-objednavky {
+      margin-top: 1.3rem;
+    }
+
+    .celkom {
+      margin: 2rem 0 1rem;
+    }
+
+    .line-bottom.horizontal {
+      margin: 1em 0px 0.5em;
+    }
+
+    .podakovanie {
+      margin: 1rem auto 0.8em;
+    }
+
+    .domena {
+      margin: 1.2rem 0 0;
+    }
+
+    .info-box a {
+      text-decoration: none;
+      color: #000;
+    }
+    .mobil {
+      width: 1em;
+    }
+    .email {
+      width: 2em;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      /* 1.5rem */
+    }
+
+    a p {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      /* 1.875rem */
+    }
+
+    .cart {
+      width: 100%;
+      display: flex;
+      gap: 1.5em;
+      flex-direction: column;
+      height: auto;
+      padding-left: 0;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 2%;
+      justify-content: space-between;
+    }
+
+    .cart-item img:first-child {
+      width: 8rem;
+      max-width: 8em;
+      height: 100%;
+    }
+
+    .specifikacia {
+      margin-right: auto;
+      margin-left: 4%;
+    }
+
+    .nazov {
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: 0.06em;
+    }
+
+    .cart-item p {
+      text-align: left;
+    }
+
+    .piesen,
+    .cena {
+      font-size: 1.4375em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+    }
+
+    .nazov-piesne {
+      font-size: 1.25em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+    }
+
+    .roof {
+      left: 50%;
+      position: relative;
+      transform: translateX(-50%);
+      width: 100%;
+    }
+
+    .content {
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    @media screen and (max-width: 800px) {
+       .background {
+        border-radius: 20px;
+      }
+
+      .container {
+        border-radius: 20px;
+        padding: 5%;
+        margin: 5%;
+        background: #ededed !important;
+
+      }
+
+      .line {
+        width: 0.3em;
+        height: auto;
+      }
+
+      .line.horizontal {
+        width: 100%;
+        height: 0.3em;
+      }
+      .description,
+      p {
+        font-size: 1.2em !important;
+      }
+
+      .info-box a {
+        font-size: 1em;
+        width: 5em;
+      }
+
+      .domena p {
+        font-size: 1em !important;
+      }
+
+      .title {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    body>div>div:nth-child(14) {
+      margin-bottom: 0.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background">
+    <div class="container">
+      <img src="https://heligonkovaakademia.sk/data/images/nadpis.png" class="title" alt="Heligónková akadémia" />
+      <img src="https://heligonkovaakademia.sk/data/images/strecha.png" alt="" class="roof" />
+      <h2>Nespracovaná objednávka</h2>
+      <h3 class="ta-center">Vážený zákaznik</h3>
+      <p class="description w-80">
+        Chceme vám poďakovať za vašu nedávnu objednávku na našej stránke.
+        Bohužiaľ, chceme vás informovať, že vaša objednávka s číslom
+        <strong> %orderNumber% </strong> nebola spracovaná kvôli problémom s
+        platbou.
+      </p>
+
+      <div class="line horizontal"></div>
+
+      <h4 class="w-80">
+        Aby sme Vám mohli čo najrýchlejšie pomôcť, odporúčame skontrolovať
+        nasledujúce:
+      </h4>
+
+      <h6>Platobná karta</h6>
+      <p class="w-70 smaller">
+        Uistite sa, že informácie o vašej platobnej karte sú správne a že máte
+        dostatok finančných prostriedkov na účte.
+      </p>
+      <h6>Technické problémy</h6>
+      <p class="w-70 smaller">
+        Ak sa jedná o technický problém, skúste opäť vykonať platbu alebo nás
+        kontaktujte.
+      </p>
+
+      <h4 class="w-80">
+        Ak sa problém s platbou nevyrieši do niekoľkých hodín, bude vaša
+        objednávka automaticky zrušená.
+      </h4>
+
+      <div class="line line-bottom horizontal"></div>
+
+      <div class="podakovanie-logo">
+        <img class="logo" src="https://heligonkovaakademia.sk/data/images/logo.png" />
+        <p class="podakovanie">
+          Ďakujeme za vaše pochopenie a veríme, že sa nám čoskoro podarí vyriešiť
+          túto situáciu.
+        </p>
+      </div>
+
+      <div class="line line-bottom horizontal"></div>
+
+      <h5>Kontaktujte nás:</h5>
+
+      <div class="info">
+        <div class="info-box">
+          <img
+            src="https://heligonkovaakademia.sk/data/images/mobil.png" alt="mobil" class="mobil"/>
+          <a href="tel:+421915371474">+421 915 371 474</a>
+        </div>
+        <div class="info-box">
+          <img
+            src="https://heligonkovaakademia.sk/data/images/email.png" alt="email" class="email" />
+
+          <a href="mailto:objednavky@heligonkovaakademia.sk">objednavky@heligonkovaakademia.sk</a>
+        </div>
+
+        <div class="info-box domena">
+          <a href="https://heligonkovaakademia.sk">
+            <p>www.heligonkovaakademia.sk</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

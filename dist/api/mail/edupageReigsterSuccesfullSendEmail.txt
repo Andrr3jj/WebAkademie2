@@ -1,0 +1,12 @@
+%name%
+%surname%
+%placeOfBirth%
+%address%
+%dateOfBirth%
+%experience%
+%email%
+%phone%
+%placeOfStudy%
+%formOfStudy%
+%note%
+%approximateTimeOfStudy%

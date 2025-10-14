@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ďakujeme za vyplnenie prihlášky!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Open Sans", Arial, Helvetica, sans-serif;
+      }
+
+      .background {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(254, 243, 90, 0.93) 39.17%,
+          rgba(144, 202, 80, 0.93) 89.8%,
+          rgba(59, 168, 70, 0.93) 100%
+        );
+        border-radius: 30px;
+      }
+      .container {
+        width: 90%;
+        max-width: 700px;
+        background: #ededed;
+        border: 6px solid #fef35a;
+        border-radius: 30px;
+        box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.5);
+        margin: 30px auto;
+        padding: 30px 5%;
+        text-align: left;
+      }
+
+      .line.horizontal {
+        width: 100%;
+        height: 0.5em;
+        border-radius: 8px;
+        background: #fef35a;
+        margin: 2em 0;
+      }
+      .title {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 20px;
+        filter: drop-shadow(8px 8px 5px rgba(0, 0, 0, 0.35));
+      }
+      h3 {
+        margin: 20px 0 10px;
+        font-size: 18px;
+        color: #000;
+      }
+      p {
+        font-size: 15px;
+        line-height: 1.5;
+        color: #000;
+        margin: 0 0 15px;
+      }
+      table.summary {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        margin: 10px 0 20px;
+        margin-left: 15px;
+      }
+      table.summary td {
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+      ul {
+        margin: 0 0 15px 20px;
+        padding: 0;
+      }
+      ul li {
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+      .footer {
+        margin-top: 25px;
+        padding-top: 15px;
+        font-size: 16px;
+        color: #000;
+        text-align: center;
+      }
+      .footer a {
+        color: #000;
+        text-decoration: none;
+        margin-bottom: 10px;
+      }
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 20px 15px;
+          border-radius: 20px;
+        }
+      }
+      @media only screen and (max-width: 600px) {
+        .footer td {
+          display: block;
+          width: 100% !important;
+          text-align: center !important;
+          padding: 10px 0 !important; /* väčšia medzera medzi mailom a telefónom */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="container">
+        <!-- Nadpis obrázok -->
+        <img
+          src="https://heligonkovaakademia.sk/data/images/mail/nadpis-dakujeme-za-vyplnenie-prihlasky.png"
+          alt="Ďakujeme za vyplnenie prihlášky"
+          class="title"
+        />
+
+        <div class="line horizontal"></div>
+
+        <p><strong>Dobrý deň %name% %surname%,</strong></p>
+        <p>
+          ďakujeme za váš záujem o výučbu heligónky v Heligónkovej Akadémii.<br />
+          Vašu prihlášku sme úspešne prijali a aktuálne ju spracovávame.
+        </p>
+
+        <h3>✅ Zhrnutie vašej prihlášky:</h3>
+        <table class="summary">
+          <tr>
+            <td><strong>Meno a priezvisko:</strong></td>
+            <td>%name% %surname%</td>
+          </tr>
+          <tr>
+            <td><strong>Dátum narodenia:</strong></td>
+            <td>%dateOfBirth%</td>
+          </tr>
+          <tr>
+            <td><strong>Miesto narodenia:</strong></td>
+            <td>%placeOfBirth%</td>
+          </tr>
+          <tr>
+            <td><strong>Adresa:</strong></td>
+            <td>%address%</td>
+          </tr>
+          <tr>
+            <td><strong>Miesto výučby:</strong></td>
+            <td>%placeOfStudy%</td>
+          </tr>
+          <tr>
+            <td><strong>Forma výučby:</strong></td>
+            <td>%formOfStudy%</td>
+          </tr>
+          <tr>
+            <td><strong>Preferovaný čas:</strong></td>
+            <td>%approximateTimeOfStudy%</td>
+          </tr>
+          <!-- <tr>
+            <td><strong>Skúsenosti:</strong></td>
+            <td>%experience%</td>
+          </tr> -->
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td>%email%</td>
+          </tr>
+          <tr>
+            <td><strong>Telefón:</strong></td>
+            <td>%phone%</td>
+          </tr>
+          <tr>
+            <td><strong>Poznámka:</strong></td>
+            <td>%note%</td>
+          </tr>
+        </table>
+
+        <h3>ℹ️ Čo ďalej?</h3>
+        <p>
+          Vaša prihláška je u nás zaevidovaná a v najbližších dňoch sa vám
+          ozveme e-mailom alebo telefonicky s ďalšími informáciami.
+        </p>
+
+        <p><strong>Dáme vám vedieť:</strong></p>
+        <ul>
+          <li>či je požadovaný termín výučby voľný,</li>
+          <li>ktorému lektorovi bude žiak pridelený,</li>
+          <li>a aké budú ďalšie kroky k začiatku výučby.</li>
+        </ul>
+
+        <p>
+          V prípade, že by ste medzičasom chceli čokoľvek doplniť alebo
+          upraviť,<br />
+          môžete nám odpovedať priamo na tento e-mail.
+        </p>
+
+        <p>
+          <strong
+            >Ďakujeme, že ste sa rozhodli pre Heligónkovú Akadémiu.</strong
+          >
+        </p>
+
+        <p>
+          Veríme, že sa u nás budete cítiť dobre a že výučba prinesie radosť aj
+          pokrok.<br />
+          Tešíme sa na spoluprácu.
+        </p>
+
+        <div class="line horizontal"></div>
+
+        <div
+          class="footer"
+          style="
+            margin-top: 25px;
+            padding-top: 15px;
+            font-size: 12px;
+            color: #000;
+            text-align: center;
+          "
+        >
+          <table
+            role="presentation"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="100%"
+            style="font-size: 12px; color: #000; text-align: center"
+          >
+            <tr>
+              <td
+                valign="middle"
+                style="width: 50%; padding: 5px 10px; text-align: right"
+              >
+                <img
+                  width="18"
+                  src="https://heligonkovaakademia.sk/data/images/mail/email.png"
+                  alt="Mail ikonka"
+                  style="vertical-align: middle; margin-right: 6px"
+                />
+                <a
+                  href="mailto:info@heligonkovaakademia.sk"
+                  style="color: #000; text-decoration: none"
+                  >info@heligonkovaakademia.sk</a
+                >
+              </td>
+              <td
+                valign="middle"
+                style="width: 50%; padding: 5px 10px; text-align: left"
+              >
+                <img
+                  width="18"
+                  src="https://heligonkovaakademia.sk/data/images/mail/call.png"
+                  alt="Hovor ikonka"
+                  style="vertical-align: middle; margin-right: 6px"
+                />
+                <a
+                  href="tel:+421915371474"
+                  style="color: #000; text-decoration: none"
+                  >+421 915 371 474</a
+                >
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

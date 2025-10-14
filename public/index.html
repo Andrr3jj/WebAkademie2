@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+     <meta name="theme-color" content="#fef35a" />
+    <link rel="icon" href="https://heligonkovaakademia.sk/favicon.ico" />
+    <link
+      rel="shortcut icon"
+      href="https://heligonkovaakademia.sk/favicon.ico"
+      type="image/x-icon"
+    />
+
+
+    <!-- Open Graph -->
+    <meta property="og:url"         content="https://heligonkovaakademia.sk/" />
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="Heligónková Akadémia - Moderný spôsob učenia sa hry na heligónku 🎶" />
+    <meta property="og:description" content="Online kurzy, číselné zápisy a výučbové materiály pre začiatočníkov aj pokročilých." />
+    <meta property="og:image"       content="https://heligonkovaakademia.sk/data/seo/SeoDomovskastranka.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta property="twitter:domain"  content="heligonkovaakademia.sk" />
+    <meta property="twitter:url"     content="https://heligonkovaakademia.sk/" />
+    <meta name="twitter:title"       content="Heligónková Akadémia - Moderný spôsob učenia sa hry na heligónku 🎶" />
+    <meta name="twitter:description" content="Online kurzy, číselné zápisy a výučbové materiály pre začiatočníkov aj pokročilých." />
+    <meta name="twitter:image"       content="https://heligonkovaakademia.sk/data/seo/SeoDomovskastranka.png" />
+
+    <!-- Ikonky & manifest -->
+    <link rel="icon"                  href="https://heligonkovaakademia.sk/favicon.ico" />
+    <link rel="shortcut icon"         href="https://heligonkovaakademia.sk/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon"      href="/img/icons/apple-touch-icon-152x152.png" />
+    <link rel="mask-icon"             href="/img/icons/safari-pinned-tab.svg" color="#4DBA87" />
+    <link rel="manifest"              href="/manifest.json" />
+    <meta name="theme-color"          content="#4DBA87" />
+
+    <!-- Google tag (gtag.js) -->
+    <script>
+      const currentPath = window.location.pathname;
+
+      if (!currentPath.startsWith("/test")) {
+        const gtagScript = document.createElement("script");
+        gtagScript.setAttribute("async", "");
+        gtagScript.setAttribute(
+          "src",
+          "https://www.googletagmanager.com/gtag/js?id=G-NZK9718GR6"
+        );
+        document.head.appendChild(gtagScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+
+        // Počkaj, kým sa načíta gtag.js, a až potom spusti config
+        gtagScript.onload = () => {
+          gtag("js", new Date());
+          gtag("config", "G-NZK9718GR6");
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>
+        Oops! Táto stránka potrebuje JavaScript na správne fungovanie. Prosím povoľ ho v prehliadači.
+      </strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

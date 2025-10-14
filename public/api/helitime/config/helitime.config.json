@@ -1,0 +1,13 @@
+{
+  "credit_trigger_value_notification": "20",
+  "helitime_credit_per_timeout": "1",
+  "helitime_timeout_seconds": "55",
+  "helitime_first_play_time_seconds": "3600",
+  "helitime_first_play_time_multiplicator": "2",
+  "helitime_event0_start_time_hour": "16",
+  "helitime_event0_end_time_hour": "18",
+  "helitime_event0_multiplicator": "2",
+  "helitime_daily_limit": "401",
+  "helitime_daily_limit_reached_points": "0.1",
+  "helitime_to_eur_value_multiplier": "0.1"
+}

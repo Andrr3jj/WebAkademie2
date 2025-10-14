@@ -1,0 +1,8 @@
+%cislo_objednavky%
+%datum_objednavky%
+%datum_odoslania%
+%fakturacna_adresa%
+%dodacia_adresa%
+%sposob_dopravy%
+%objednany_tovar%
+%cena_celkom%

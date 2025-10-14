@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Vrstva_2" data-name="Vrstva 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 15" width="480" height="15">
+  <defs>
+    <style>
+      .cls-1 {
+      fill: #26251d;
+      stroke-width: 0px;
+      }
+
+      .cls-2 {
+      stroke-linecap: round;
+      }
+
+      .cls-2, .cls-3 {
+      fill: none;
+      stroke: #26251d;
+      stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+      stroke-width: .5px;
+      }
+    </style>
+  </defs>
+    <path class="cls-1" d="M456.74,1v24.28H1V1h455.74M456.74,0H1C.45,0,0,.45,0,1v24.28c0,.55.45,1,1,1h455.74c.55,0,1-.45,1-1V1c0-.55-.45-1-1-1h0Z"/>
+    <line class="cls-3" x1="116.15" y1="1.04" x2="116.15" y2="25.31"/>
+    <line class="cls-3" x1="228.87" y1="1" x2="228.87" y2="25.28"/>
+    <line class="cls-3" x1="341.6" y1="1" x2="341.6" y2="25.28"/>
+    <g>
+      <line class="cls-2" x1="32.78" y1="1" x2="32.78" y2="5.25"/>
+      <line class="cls-2" x1="32.78" y1="25.28" x2="32.78" y2="21.03"/>
+      <line class="cls-2" x1="59.84" y1="25.28" x2="59.84" y2="21.03"/>
+      <line class="cls-2" x1="86.56" y1="25.31" x2="86.56" y2="21.03"/>
+      <line class="cls-2" x1="59.84" y1="1" x2="59.84" y2="5.28"/>
+      <line class="cls-2" x1="86.56" y1="1.04" x2="86.56" y2="5.28"/>
+    </g>
+    <g>
+      <line class="cls-2" x1="145.5" y1=".98" x2="145.5" y2="5.23"/>
+      <line class="cls-2" x1="145.5" y1="25.25" x2="145.5" y2="21.01"/>
+      <line class="cls-2" x1="172.57" y1="25.25" x2="172.57" y2="21.01"/>
+      <line class="cls-2" x1="199.29" y1="25.29" x2="199.29" y2="21.01"/>
+      <line class="cls-2" x1="172.57" y1=".98" x2="172.57" y2="5.26"/>
+      <line class="cls-2" x1="199.29" y1="1.02" x2="199.29" y2="5.26"/>
+    </g>
+    <g>
+      <line class="cls-2" x1="258.37" y1=".98" x2="258.37" y2="5.23"/>
+      <line class="cls-2" x1="258.37" y1="25.25" x2="258.37" y2="21.01"/>
+      <line class="cls-2" x1="285.44" y1="25.25" x2="285.44" y2="21.01"/>
+      <line class="cls-2" x1="312.16" y1="25.29" x2="312.16" y2="21.01"/>
+      <line class="cls-2" x1="285.44" y1=".98" x2="285.44" y2="5.26"/>
+      <line class="cls-2" x1="312.16" y1="1.02" x2="312.16" y2="5.26"/>
+    </g>
+    <g>
+      <line class="cls-2" x1="370.95" y1="1.05" x2="370.95" y2="5.3"/>
+      <line class="cls-2" x1="370.95" y1="25.33" x2="370.95" y2="21.09"/>
+      <line class="cls-2" x1="398.01" y1="25.33" x2="398.01" y2="21.09"/>
+      <line class="cls-2" x1="424.74" y1="25.37" x2="424.74" y2="21.09"/>
+      <line class="cls-2" x1="398.01" y1="1.05" x2="398.01" y2="5.33"/>
+      <line class="cls-2" x1="424.74" y1="1.09" x2="424.74" y2="5.33"/>
+    </g>
+</svg>

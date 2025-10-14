@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Vrstva_2" data-name="Vrstva 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.01 24.78" preserveAspectRatio="none">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2a2922;
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #1d1d1b;
+        stroke: #26251d;
+        stroke-linejoin: round;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="Vrstva_1-2" data-name="Vrstva 1">
+    <ellipse class="cls-1" cx=".95" cy="15.05" rx=".95" ry="1.22"/>
+    <ellipse class="cls-1" cx=".95" cy="9.68" rx=".95" ry="1.22"/>
+    <rect class="cls-1" x="6.56" y=".25" width="1.45" height="24.28" transform="translate(14.56 24.78) rotate(-180)"/>
+    <rect class="cls-2" x="4.09" y=".25" width=".7" height="24.28" transform="translate(8.88 24.78) rotate(-180)"/>
+  </g>
+</svg>

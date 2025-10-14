@@ -1,0 +1,155 @@
+{
+
+
+  "7_day" : {
+    "id" : "7_day",
+    "name" : "",
+    "text" : "",
+    "image" : "",
+    "points_max" : "0",
+    "reward" : "100",
+    "reward_multiplicator" : "1.2",
+    "reward_max" : "400"
+  },
+
+
+  
+  "0" : {
+    "id" : "0",
+    "name" : "Prvé kroky",
+    "text" : "Stráv na stránke učením aspoň 5 hodín",
+    "image" : "",
+    "points_max" : "5",
+    "reward" : "150"
+  },
+  "1" : {
+    "id" : "1",
+    "name" : "Poctivý žiak",
+    "text" : "Stráv na stránke učením aspoň 15 hodín",
+    "image" : "",
+    "points_max" : "15",
+    "reward" : "350"
+  },
+  "2" : {
+    "id" : "2",
+    "name" : "Vytrvalý študent",
+    "text" : "Stráv na stránke učením aspoň 48 hodín",
+    "image" : "",
+    "points_max" : "48",
+    "reward" : "700"
+  },
+  "3" : {
+    "id" : "3",
+    "name" : "Skutočný heligonkár",
+    "text" : "Stráv na stránke učením aspoň 100 hodín",
+    "image" : "",
+    "points_max" : "100",
+    "reward" : "1000"
+  },
+
+
+
+  "100" : {
+    "id" : "100",
+    "name" : "Prvý repertoár piesni",
+    "text" : "Vlastni 15 číselných zápisov vo svojom zozname piesní",
+    "image" : "",
+    "points_max" : "15",
+    "reward" : "500"
+  },
+  "101" : {
+    "id" : "101",
+    "name" : "Hudobný nadšenec",
+    "text" : "Vlastni 35 číselných zápisov vo svojom zozname piesní",
+    "image" : "",
+    "points_max" : "35",
+    "reward" : "1000"
+  },
+  "102" : {
+    "id" : "102",
+    "name" : "Skutočný zberateľ",
+    "text" : "Vlastni 70 číselných zápisov vo svojom zozname piesní",
+    "image" : "",
+    "points_max" : "70",
+    "reward" : "1500"
+  },
+
+
+
+  "200" : {
+    "id" : "200",
+    "name" : "Prvá lekcia",
+    "text" : "Pozri si aspoň 1 celé náučné vide",
+    "image" : "",
+    "points_max" : "1",
+    "reward" : "250"
+  },
+  "201" : {
+    "id" : "201",
+    "name" : "Získavaj skúsenosti",
+    "text" : "Pozri si aspoň 15 náučných videí",
+    "image" : "",
+    "points_max" : "15",
+    "reward" : "750"
+  },
+  "202" : {
+    "id" : "202",
+    "name" : "Majster videí",
+    "text" : "Pozri si aspoň 45 náučných videí",
+    "image" : "",
+    "points_max" : "45",
+    "reward" : "2850"
+  },
+
+
+
+  "300" : {
+    "id" : "300",
+    "name" : "Pozvi priateľa a učte sa spolu",
+    "text" : "Pozvi kamaráta, ktorý urobí minimálny nákaup na stránke za 10 €",
+    "image" : "",
+    "points_max" : "1",
+    "reward" : "500"
+  },
+  "301" : {
+    "id" : "301",
+    "name" : "Heligónka v partii",
+    "text" : "Pozvi 3 priateľov, ktorí sa pridajú a učia sa na stránke 2 hodiny",
+    "image" : "",
+    "points_max" : "3",
+    "reward" : "750"
+  },
+  "302" : {
+    "id" : "302",
+    "name" : "Rozšír komunitu",
+    "text" : "Pozvi 5 priateľov, ktorí si zakúpia minimálne jeden číselný zápis",
+    "image" : "",
+    "points_max" : "5",
+    "reward" : "1250"
+  },
+
+  "400" : {
+    "id" : "400",
+    "name" : "Nahraj si profilovú fotku",
+    "text" : "Ukáž, že si súčasťou našej heligónkovej komunity!",
+    "image" : "",
+    "points_max" : "1",
+    "reward" : "30"
+  },
+  "401" : {
+    "id" : "401",
+    "name" : "Vyplň krátky formulár",
+    "text" : "Pomôž nám zlepšiť výučbu vyplnením rýchleho dotazníka",
+    "image" : "",
+    "points_max" : "1",
+    "reward" : "20"
+  },
+  "402" : {
+    "id" : "402",
+    "name" : "Prihlás sa na odber noviniek",
+    "text" : "Dostávaj exkluzívne informácie a špeciálne ponuky.",
+    "image" : "",
+    "points_max" : "1",
+    "reward" : "100"
+  }
+}

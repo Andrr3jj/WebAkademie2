@@ -1,0 +1,11 @@
+%orderNumber%
+%dateOfOrder%
+
+%name% %surname"
+%address%
+
+%order%
+
+%orderTotal%
+
+%billing_address%

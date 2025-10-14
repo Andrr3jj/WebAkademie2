@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Darčeková poukážka</title>
+  </head>
+  <body style="margin:0; padding:0; background: linear-gradient(180deg, rgba(254, 243, 90, 0.93) 39.17%, rgba(144, 202, 80, 0.93) 89.8%, rgba(59, 168, 70, 0.93) 100%);">
+    <table width="100%" height="100%" cellpadding="0" cellspacing="0" style="min-height:100vh;">
+      <tr>
+        <td align="center" valign="top" style="padding:40px 0;">
+          <div style="position:relative; display:inline-block; margin-left: auto; margin-right: auto;">
+            <!-- Pozadie poukážky -->
+            <img src="%image%" width="650" style="display:block;border-radius:20px;" alt="Darčeková poukážka Heligónková akadémia">
+
+            <!-- Obrázok podľa hodnoty poukážky (napr. 50.png) -->
+            <img 
+              src="%coupon%" 
+              width="240" 
+              style="position:absolute; left:0; right:0; top:490px; margin-left:auto; margin-right:auto; display:block; text-align:center;" 
+              alt="Hodnota poukážky">
+              
+            <!-- Kód a platnosť (ak chceš ponechať) -->
+            <div style="position:absolute; bottom: 10px; left:170px; width:350px; text-align:left; font-family:Arial,sans-serif; font-size:13px; color:#181f17; font-weight: bold;">
+              %text%
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

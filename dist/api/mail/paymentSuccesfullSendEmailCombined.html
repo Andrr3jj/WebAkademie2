@@ -1,0 +1,711 @@
+<!-- %billing_address% -->
+ <!-- 
+
+%email%
+%orderNumber%
+%dateOfOrder%
+%name%
+%surname%                                   
+
+%address%
+%order%
+%orderTotal%
+%billing_address%
+%delivery_address%
+%sposob_dopravy%
+ -->
+<!-- %billing_address% -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Úspešná platba kombinovaná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Almarai:wght@700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    .background {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(180deg, rgba(254, 243, 90, 0.93) 39.17%, rgba(144, 202, 80, 0.93) 89.8%, rgba(59, 168, 70, 0.93) 100%);
+      border-radius: 30px;
+    }
+
+    .container {
+      text-align: center;
+      padding: 3%;
+      border-radius: 30px;
+      border: 6px solid #fef35a;
+      background: #ededed;
+      box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, 0.5);
+      margin: 5% auto;
+      max-width: 900px;
+      min-width: 200px;
+    }
+
+    .title {
+      width: 100%;
+      height: auto;
+      margin: 0 0;
+    }
+
+    .roof {
+      left: 50%;
+      position: relative;
+      transform: translateX(-50%);
+      width: 100%;
+    }
+
+    .confirmation {
+      color: #000;
+      text-align: center;
+      font-family: Open Sans, sans-serif;
+      font-size: 2.5em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    .customer {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 115%;
+      margin: 1em 0;
+      text-align: center;
+    }
+
+    .description {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      margin: 1em auto 1.5em;
+    }
+
+    .horizontal {
+      width: 100%;
+      height: 0.5em;
+      border-radius: 0.34375em;
+      border: 0px solid #000;
+      background: #fef35a;
+      box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+      margin: 0.5rem 0px 3rem;
+    }
+
+    .content {
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .content h2 {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 2.5em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    .cislo-objednavky {
+      margin-top: 1.3em;
+      overflow: hidden;
+    }
+
+    .number {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+      margin: 0.15em 0;
+      float: left;
+    }
+
+    .order {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      margin: 0.15em 0;
+      float: right;
+    }
+
+    .objednavka-info {
+      overflow: hidden;
+    }
+
+    .address {
+      color: #000;
+      text-align: left;
+      font-family: Bahnschrift;
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 115%;
+      margin: 1em 0;
+    }
+
+    .name {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0.1rem 0;
+      text-align: initial;
+    }
+
+    .adresa {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0.1rem 0;
+      text-align: initial;
+    }
+
+    .krasnany {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0.1rem 0;
+      text-align: initial;
+    }
+
+    .republic {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0.1rem 0;
+      text-align: initial;
+    }
+
+    .tovar {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.875em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 115%;
+      margin: 1em 0;
+      text-align: center;
+    }
+
+    .objednavka {
+      gap: 1.5em;
+      flex-direction: column;
+      height: auto;
+      padding-left: 0;
+    }
+
+    .cart {
+      width: 100%;
+      gap: 1.5em;
+      flex-direction: column;
+      height: auto;
+      padding-left: 0;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 2%;
+      justify-content: space-between;
+    }
+
+    .noty {
+      width: 16em;
+      max-width: 16em;
+      height: 75%;
+    }
+
+    .line {
+      width: 0.3em;
+      height: 14em;
+      border-radius: 0.34375em;
+      border: 0px solid #000;
+      background: #fef35a;
+      box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+      margin: 0.5rem 10px;
+    }
+
+    .specifikacia {
+      margin-right: auto;
+      margin-left: 4%;
+    }
+
+    .nazov {
+      font-size: 2em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: 0.06em;
+      width: 8em;
+      text-align: initial;
+    }
+
+    .piesen {
+      font-size: 1.6em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 120%;
+      text-align: initial;
+      margin-top: -0.2em;
+      margin-bottom: 0.9em;
+    }
+
+    .nazov-piesne {
+      font-size: 1.6em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 120%;
+      text-align: initial;
+      margin-top: -0.2em;
+      margin-bottom: 0.9em;
+    }
+
+    .cena {
+      font-size: 1.6em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 120%;
+      text-align: initial;
+      margin-top: -0.2em;
+    }
+
+    .celkom {
+      margin: 2em 0 1em;
+      overflow: hidden;
+    }
+
+    .dph {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.6875em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      float: left;
+    }
+
+    .celkom-suma {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.6875em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      float: right;
+    }
+
+    .celkom-text {
+      color: #000;
+      font-family: Bahnschrift;
+      font-size: 1.55em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+      text-align: initial;
+    }
+
+    .logo {
+      width: 11em;
+      height: 11em;
+      /* transform: translateX(-50%); */
+      position: relative;
+      margin: auto;
+      /* left: 35%; */
+      filter: drop-shadow(8px 8px 5px rgba(0, 0, 0, 0.35));
+    }
+
+    .podakovanie {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 115%;
+      margin: 1em auto 0.8em;
+    }
+
+    .change {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+    }
+
+    .info-box a {
+      text-decoration: none;
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.25em;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%;
+    }
+    .mobil {
+      width: 1em;
+    }
+    .email {
+      width: 2em;
+    }
+
+    .web {
+      width: 1em;
+    }
+
+    .domena {
+      margin: 1.2em 0 0;
+    }
+
+    .domena a {
+      text-decoration: none;
+    }
+
+    .doprava {
+      text-align: left;
+    font-size: 1.3em;
+    }
+
+    .domena p {
+      color: #000;
+      text-align: center;
+      font-family: Bahnschrift;
+      font-size: 1.5625em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+    }
+
+    .w-80 {
+      width: 80%;
+    }
+
+    .tlacidlo {
+      text-align: center;
+      margin-bottom: 2em;
+    }
+
+
+    .button {
+      width: 22.5em;
+      height: 3.25em;
+      border-radius: 2.1875em;
+      background: #fef35a;
+      box-shadow: 2.5px 2.5px 5px 0px rgba(0, 0, 0, 0.35);
+      display: inline-flex;
+    }
+
+    .button a {
+      color: #000;
+      text-align: center;
+      font-family: Almarai;
+      font-size: 1.6875em;
+      font-style: normal;
+      text-decoration: none;
+      font-weight: 700;
+      line-height: 115%;
+      letter-spacing: 0.16875em;
+      margin-top: 0.4em;
+      margin-left: 1em;
+    }
+
+    @media only screen and (max-width: 600px) {
+
+      /* Mobile styles */
+      .background {
+        border-radius: 20px;
+      }
+
+      .container {
+        border-radius: 20px;
+        padding: 5%;
+        margin: 5%;
+        background: #ededed !important;
+
+      }
+
+      .order {
+        float: left;
+      }
+
+      .cart-item {
+        display: block;
+      }
+
+      .specifikacia {
+        margin: 0em;
+      }
+
+      .noty {
+        width: 12em;
+        max-width: 12em;
+      }
+
+      .line {
+        display: none;
+      }
+
+      .nazov {
+        font-size: 1.6em;
+      }
+
+      .piesen {
+        font-size: 1.4em;
+      }
+
+      .nazov-piesne {
+        font-size: 1.4em;
+      }
+
+      .cena {
+        font-size: 1.4em;
+      }
+
+      .celkom-suma {
+        float: none;
+        text-align: center;
+      }
+
+      .description,
+      p {
+        font-size: 1.2em !important;
+      }
+
+      .info-box a {
+        font-size: 1em;
+        width: 5em;
+      }
+
+      .domena p {
+        font-size: 1em !important;
+      }
+
+      .title {
+        width: 100%;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background">
+    <div class="container">
+      <img src="https://heligonkovaakademia.sk/data/images/nadpis-kombinovany.png" class="title" alt="Heligónková akadémia" />
+      <h2 class="confirmation">
+        Potvrdenie objednávky
+      </h2>
+      <h3 class="customer">
+        Ahoj, %name% %surname%
+      </h3>
+      <p class="description w-80">
+        Týmto e-mailom potvrdzujeme, že sme v poriadku prijali Vašu <br>
+        objednávku a zasielame Vám upresňujúce informácie.
+      </p>
+
+      <div class="horizontal"></div>
+
+      <div class="content">
+        <h2>
+          Tvoja objednávka
+        </h2>
+
+        <div class="objednavka-info cislo-objednavky">
+          <p class="number">
+            Objednavacie číslo:
+          </p>
+          <p class="order">
+            %orderNumber%
+          </p>
+        </div>
+        <div class="objednavka-info">
+          <p class="number">
+            Dátum objednávky:
+          </p>
+          <p class="order">
+            %dateOfOrder%
+          </p>
+        </div>
+
+        <h3 class="address">
+          <b>Fakturačná adresa</b>
+        </h3>
+
+        <p class="name">
+          %name% %surname%
+        </p>
+        <p class="adresa">
+          %billing_address%
+        </p>
+        
+        <p class="republic">
+          Slovenská republika
+        </p>
+
+        <h3 class="address">
+          <b>Dodacia adresa</b>
+        </h3>
+
+        <p class="name">
+          %name% %surname%
+        </p>
+        <p class="adresa">
+          %delivery_address%
+        </p>
+        
+        <p class="republic">
+          Slovenská republika
+        </p>
+
+        <p class="doprava"><strong>Spôsob dopravy: </strong> %sposob_dopravy% </p>
+
+        <div class="horizontal"></div>
+
+        <h3  class="tovar">
+          <b>Objednaný tovar</b>
+        </h3>
+
+        %order%
+        
+
+        <div class="celkom">
+          <h4 class="dph">
+            Objednávka celkom s DPH
+          </h4>
+          <h4 class="celkom-suma">
+            %orderTotal% €
+          </h4>
+        </div>
+
+        <div class="horizontal"></div>
+
+        <p class="description w-80">
+          <strong>
+
+            Vaše zakúpené piesne boli automaticky pridané do tvojho zoznamu, kde ich máte vždy k dispozícii.
+          </strong>
+        </p>
+  
+        <div class="tlacidlo">
+          <div class="button">
+            <a href="https://heligonkovaakademia.sk">Môj zoznam piesní</a>
+          </div>
+        </div>
+
+
+
+        <p class="podakovanie">
+          <strong>
+          V krátkom čase by si mal/a obdržať notifikáciu od prepravcu s informáciami o doručení.
+        </strong>
+        </p>
+        <p class="podakovanie">
+          <strong>
+          Veríme, že ti náš produkt spraví radosť
+        </strong>
+        </p>
+        <p class="podakovanie">
+          Ďakujeme, že si nakúpil/a u nás - veľmi si to vážime! <br> S pozdravom <strong>Heligónková Akadémia </strong> .
+        </p>
+
+        <div class="horizontal"></div>
+
+        <!-- Outer wrapper with max-width and center alignment -->
+<table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; margin-top: 30px;">
+  <tr>
+    <!-- LOGO CELLA -->
+    <td align="left" valign="middle" style="width: 40%; padding-right: 20px;">
+      <img src="https://heligonkovaakademia.sk/data/images/logo-min.png" alt="logo" style="max-width: 100%; height: auto; display: block;" />
+    </td>
+
+    <!-- TEXT CELLA -->
+    <td align="left" valign="top" style="width: 60%;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#000000; font-family:Arial, sans-serif;">
+        <tr>
+          <td colspan="2" style="padding-bottom: 15px;">
+            <strong style="font-size: 16px; line-height: 24px;">
+              Potrebuješ niečo zmeniť v objednávke?<br />Kontaktujte nás ihneď:
+            </strong>
+          </td>
+        </tr>
+        <tr>
+          <td width="24" style="padding-right: 10px;">
+            <img src="https://heligonkovaakademia.sk/data/images/mobil.png" alt="telefon" width="20" style="display:block;" />
+          </td>
+          <td>
+            <a href="tel:+421915371474" style="color: #000; text-decoration: none;">+421 915 371 474</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="24" style="padding-right: 10px; padding-top: 6px;">
+            <img src="https://heligonkovaakademia.sk/data/images/email.png" alt="email" width="20" style="display:block;" />
+          </td>
+          <td style="padding-top: 6px;">
+            <a href="mailto:objednavky@heligonkovaakademia.sk" style="color: #000; text-decoration: none;">
+              objednavky@heligonkovaakademia.sk
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td width="24" style="padding-right: 10px; padding-top: 6px;">
+            <img src="https://heligonkovaakademia.sk/data/images/web.png" alt="web" width="20" style="display:block;" />
+          </td>
+          <td style="padding-top: 6px;">
+            <a href="https://heligonkovaakademia.sk" style="color: #000; text-decoration: none; font-weight: bold;">
+              www.heligonkovaakademia.sk
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+        
+        
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

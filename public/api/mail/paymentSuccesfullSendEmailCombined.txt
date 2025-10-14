@@ -1,0 +1,12 @@
+%email%
+%orderNumber%
+%dateOfOrder%
+%name%
+%surname%                                   
+
+%address%
+%order%
+%orderTotal%
+%billing_address%
+%delivery_address%
+%sposob_dopravy%
