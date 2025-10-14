@@ -7,6 +7,8 @@ export function steps() {
     video: "[data-tour='lesson-video'], video[controls]",
     markComplete: "[data-tour='mark-complete']",
     lyricsToggle: "[data-tour='lyrics-toggle']",
+    onlineDifficulty: "[data-tour='mojekurzy-difficulty']",
+    onlineSongsHeading: "[data-tour='mojekurzy-songs-heading']",
   };
 
   return [
@@ -87,6 +89,25 @@ export function steps() {
       text: "Kedykoľvek sa vieš vrátiť späť k celej ponuke videí.",
       side: "left",
       pad: 18,
+    },
+    {
+      goto: "/ucebna/moje-kurzy",
+      selector: sel.onlineDifficulty,
+      waitFor: 600,
+      closest: ".box-item.oblubene.narocnost",
+      title: "Vyber si náročnosť",
+      text: "Tu si zvolíš, či chceš lekcie pre začiatočníkov, pokročilejších alebo profíkov.",
+      side: "left",
+      pad: 24,
+      radius: 24,
+    },
+    {
+      selector: sel.onlineSongsHeading,
+      title: "Zoznam piesní v kurze",
+      text: "Podľa zvolenej úrovne sa ti tu zobrazia skladby pripravené na štúdium.",
+      side: "top",
+      pad: { x: 22, y: 18 },
+      radius: 14,
     },
   ];
 }
