@@ -1,7 +1,12 @@
 <template>
   <div class="content computer">
     <section class="first" :id="$route.name">
-      <video controls controlsList="nodownload">
+      <video
+        class="lesson-video"
+        data-tour="lesson-video"
+        controls
+        controlsList="nodownload"
+      >
         <source
           src="https://heligonkovaakademia.sk/data/free/fasiangy.mp4"
           type="video/mp4"
@@ -46,11 +51,32 @@
         </div>
 
         <div class="buttons">
-          <div class="button cursor-disable"><p>Označiť ako zvládnute</p></div>
-          <div @click="toggleText()" v-if="!showText" class="button">
+          <div
+            class="button cursor-disable"
+            data-tour="mark-complete"
+            role="button"
+            aria-label="Označiť ako zvládnuté"
+          >
+            <p>Označiť ako zvládnute</p>
+          </div>
+          <div
+            @click="toggleText()"
+            v-if="!showText"
+            class="button"
+            data-tour="lyrics-toggle"
+            role="button"
+            aria-label="Text piesne"
+          >
             <p>Text piesne</p>
           </div>
-          <div @click="toggleText()" v-else class="button">
+          <div
+            @click="toggleText()"
+            v-else
+            class="button"
+            data-tour="lyrics-toggle"
+            role="button"
+            aria-label="Skryť text"
+          >
             <p>Skryť text</p>
           </div>
         </div>
@@ -168,7 +194,12 @@
           </div>
         </div>
 
-        <video controls controlsList="nodownload">
+        <video
+          class="lesson-video"
+          data-tour="lesson-video"
+          controls
+          controlsList="nodownload"
+        >
           <source
             src="https://heligonkovaakademia.sk/data/free/fasiangy.mp4"
             type="video/mp4"
@@ -204,13 +235,32 @@
           </div>
 
           <div class="buttons">
-            <div class="button cursor-disable">
+            <div
+              class="button cursor-disable"
+              data-tour="mark-complete"
+              role="button"
+              aria-label="Označiť ako zvládnuté"
+            >
               <p>Označiť ako zvládnute</p>
             </div>
-            <div @click="toggleText()" v-if="!showText" class="button">
+            <div
+              @click="toggleText()"
+              v-if="!showText"
+              class="button"
+              data-tour="lyrics-toggle"
+              role="button"
+              aria-label="Text piesne"
+            >
               <p>Text piesne</p>
             </div>
-            <div @click="toggleText()" v-else class="button">
+            <div
+              @click="toggleText()"
+              v-else
+              class="button"
+              data-tour="lyrics-toggle"
+              role="button"
+              aria-label="Skryť text"
+            >
               <p>Skryť text</p>
             </div>
           </div>
