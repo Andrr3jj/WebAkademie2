@@ -37,14 +37,22 @@ function isCountedStep(step, index) {
 }
 
 function findNextAvailableIndex(fromIndex) {
-  for (let i = Math.max(fromIndex + 1, firstRealIndex()); i < state.steps.length; i++) {
+  for (
+    let i = Math.max(fromIndex + 1, firstRealIndex());
+    i < state.steps.length;
+    i++
+  ) {
     if (isCountedStep(state.steps[i], i)) return i;
   }
   return null;
 }
 
 function findPrevAvailableIndex(fromIndex) {
-  for (let i = Math.min(fromIndex - 1, state.steps.length - 1); i >= firstRealIndex(); i--) {
+  for (
+    let i = Math.min(fromIndex - 1, state.steps.length - 1);
+    i >= firstRealIndex();
+    i--
+  ) {
     if (isCountedStep(state.steps[i], i)) return i;
   }
   return null;
