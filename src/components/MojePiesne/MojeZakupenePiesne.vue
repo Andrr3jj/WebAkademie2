@@ -75,6 +75,7 @@
         :produktyID="produktyID"
         :produktyData="produktyData"
         :layouts="gridActive"
+        tour-anchor-first="owned-songs"
       />
 
       <div class="tipy-a-obrazok">

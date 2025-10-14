@@ -140,7 +140,7 @@ export function steps() {
     // F) Podstránka /ucebna/moje-piesne
     {
       goto: "/ucebna/moje-piesne",
-      selector: "section.computer.mobile .scroll",
+      selector: "[data-tour='owned-songs-list']",
       closest: "section.computer.mobile",
       title: "Moje piesne",
       text: "Tu je tvoja osobná zbierka. Každý zakúpený alebo získaný zápis sa okamžite zobrazí v Zozname piesní.",
@@ -151,10 +151,7 @@ export function steps() {
 
     // G) Konkrétny vlastnený zápis
     {
-      selectors: [
-        ".computer.zapisy .scroll .zapis:first-of-type .img-box-zapis",
-        "section.computer.mobile .scroll .zapisy-zoznam .box-zapis-flex:first-of-type .zapis.zakupene.rowLayout",
-      ],
+      selector: "[data-tour='owned-songs-card']",
       title: "Toto je tvoja pesnička",
       text: "Každý zakúpený alebo získaný číselný zápis sa objaví práve tu v zozname tvojich piesní.",
       side: "top",
@@ -164,10 +161,7 @@ export function steps() {
 
     // H) Tlačidlo Hrať na vlastnenom zápise
     {
-      selectors: [
-        "section.computer.mobile .scroll .zapisy-zoznam .box-zapis-flex:first-of-type .zapis.zakupene .button",
-        "section.computer.mobile .scroll .zapisy-zoznam .box-zapis-flex:first-of-type .zapis.zakupene.rowLayout .akcia .button",
-      ],
+      selector: "[data-tour='owned-songs-play']",
       title: "Spusti hranie",
       text: "Klikni na Hrať a otvoríš prehrávač s číselným zápisom pripraveným na cvičenie.",
       side: "left",

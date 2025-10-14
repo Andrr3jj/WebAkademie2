@@ -1,5 +1,9 @@
 <template>
-  <div class="zapisy-zoznam" :class="{ active: !layouts }">
+  <div
+    class="zapisy-zoznam"
+    :class="{ active: !layouts }"
+    :data-tour="tourAnchorFirst ? `${tourAnchorFirst}-list` : null"
+  >
     <JedenZapis
       v-for="(produktId, index) in this.produktyID"
       :key="index"
@@ -8,6 +12,7 @@
       :layouts="layouts"
       :creditBuy="creditBuy"
       :multiplier="multiplier"
+      :tour-anchor="tourAnchorFirst && index === 0 ? tourAnchorFirst : null"
     />
   </div>
 </template>
@@ -39,6 +44,10 @@ export default {
     creditBuy: {
       type: Boolean,
       default: () => false,
+    },
+    tourAnchorFirst: {
+      type: String,
+      default: null,
     },
   },
   methods: {
