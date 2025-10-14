@@ -48,11 +48,19 @@
           </p>
 
           <!-- plánik – ponecháme aj pre medzikrok -->
-          <div class="intro-plan" v-if="planItems.length">
-            <div class="plan-track" :aria-label="planSummary">
-              <template v-for="(item, idx) in planItems" :key="`dot-${idx}`">
+          <div class="intro-plan" v-if="planSegments.length">
+            <ol class="plan-summary" :aria-label="planSummary">
+              <li
+                v-for="(item, idx) in planSegments"
+                :key="`plan-${idx}`"
+                class="plan-summary__item"
+                :class="`status-${item.status}`"
+                :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
+                  item.status
+                )}`"
+              >
                 <span
-                  class="plan-dot"
+                  class="plan-summary__icon"
                   :class="`status-${item.status}`"
                   :aria-label="`${idx + 1}. ${item.label}`"
                 ></span>
@@ -77,8 +85,19 @@
                 <span class="plan-label" :class="`status-${bridge.status}`">
                   {{ bridge.label || "\u00A0" }}
                 </span>
-              </template>
-            </div>
+                <div class="plan-summary__text">
+                  <span class="plan-summary__title">{{ item.label }}</span>
+                  <div class="plan-summary__meta">
+                    <span class="plan-summary__status">{{
+                      statusLabel(item.status)
+                    }}</span>
+                    <span v-if="item.bridgeLabel" class="plan-summary__bridge">
+                      Ďalej: {{ item.bridgeLabel }}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            </ol>
           </div>
 
           <div
@@ -212,7 +231,36 @@ export default {
     });
     onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
 
-    return { stage, start, choose, planBridges };
+    const planSegments = computed(() => {
+      const items = Array.isArray(props.planItems) ? props.planItems : [];
+      const bridges = planBridges.value;
+      return items.map((item, idx) => {
+        const label =
+          (typeof item?.label === "string" && item.label.trim()) ||
+          `Etapa ${idx + 1}`;
+        const status = item?.status || "upcoming";
+        return {
+          ...item,
+          index: item?.index ?? idx,
+          label,
+          status,
+          bridgeLabel: bridges[idx]?.label || "",
+        };
+      });
+    });
+
+    const statusLabel = (status) => {
+      switch (status) {
+        case "done":
+          return "Hotovo";
+        case "current":
+          return "Práve prechádzaš";
+        default:
+          return "Čaká";
+      }
+    };
+
+    return { stage, start, choose, planBridges, planSegments, statusLabel };
   },
 };
 </script>
@@ -425,11 +473,9 @@ export default {
 }
 
 .intro-plan {
-  display: grid;
-  gap: clamp(0.375rem, 0.6vw, 0.875rem);
   width: 100%;
-  margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
-  padding: 0 clamp(0.5rem, 1.6vw, 1.25rem);
+  margin: 0 auto clamp(0.9rem, 1.4vw, 1.45rem);
+  padding: 0 clamp(0.4rem, 1.4vw, 1.15rem);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -464,17 +510,23 @@ export default {
   width: var(--plan-dot-size);
   height: var(--plan-dot-size);
   border-radius: 50%;
-  background: #d7e1ea;
-  box-shadow: 0 0 0 0.125rem #fff inset;
-  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
+  color: #0f240f;
+  background: #e6ecf2;
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.12);
 }
-.plan-dot.status-done {
+.plan-summary__icon.status-done {
   background: var(--ha-yellow);
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.18);
 }
-.plan-dot.status-current {
+.plan-summary__icon.status-current {
   background: #fff;
-  box-shadow: 0 0 0 0.1875rem var(--ha-yellow) inset, 0 0 0 0.125rem #fff;
-  transform: scale(1.08);
+  box-shadow: inset 0 0 0 0.1875rem var(--ha-yellow),
+    0 0 0 0.0625rem rgba(15, 36, 15, 0.08);
 }
 .plan-connector {
   flex: 1 1 clamp(1.875rem, 6vw, 6.25rem);
@@ -487,9 +539,13 @@ export default {
 }
 .plan-connector.status-done {
   background: var(--ha-yellow);
+  box-shadow: 0 0 0 0.1875rem rgba(144, 202, 80, 0.32);
 }
-.plan-connector.status-current {
-  background: linear-gradient(90deg, var(--ha-yellow) 0%, #d7e1ea 100%);
+.plan-summary__icon .icon.upcoming {
+  width: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  height: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  border-radius: 50%;
+  background: rgba(15, 36, 15, 0.25);
 }
 .plan-label {
   flex: 1 1 clamp(2.5rem, 12vw, 9rem);
@@ -500,6 +556,18 @@ export default {
   letter-spacing: 0.01em;
   line-height: 1.24;
   color: var(--ha-card-fg);
+  line-height: 1.35;
+}
+.plan-summary__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(0.35rem, 0.45vw, 0.55rem);
+  font-size: clamp(0.85rem, 0.82rem + 0.2vw, 0.98rem);
+  font-weight: 600;
+  color: rgba(15, 36, 15, 0.72);
+}
+.plan-summary__status {
   display: inline-flex;
   align-items: flex-start;
   justify-content: center;
@@ -511,15 +579,24 @@ export default {
 }
 .plan-label.status-done {
   color: #0f240f;
+  background: rgba(144, 202, 80, 0.22);
+  box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
+    0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
 }
-.plan-label.status-current {
-  color: var(--ha-card-fg);
-  opacity: 0.88;
+.plan-summary__bridge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999rem;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
-.plan-label.status-upcoming {
-  color: var(--ha-card-fg);
-  opacity: 0.65;
+.plan-summary__item.status-current .plan-summary__bridge {
+  background: rgba(144, 202, 80, 0.18);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
+
 .plan-tip.small {
   opacity: 0.8;
   font-size: clamp(0.9rem, 0.85rem + 0.2vw, 0.95rem);
