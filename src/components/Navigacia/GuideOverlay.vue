@@ -91,11 +91,132 @@ export default {
       { label: "Hotovo", bridgeLabel: "" },
     ];
 
+    const DIACRITIC_REGEX = new RegExp(
+      "[ÁÄĂÀÂÃÅĄÆČĆĎÉĚËÈÊĘÍÌÎÏĹĽŁŇŃÓÒÔÖÕŐŘŔŚŠŤÚÙÛÜŮÝŸŹŻŽáäăàâãåąæčćďéěëèêęíìîïĺľłňńóòôöõőřŕśšťťúùûüůýÿźżžßẞ]",
+      "g"
+    );
+    const DIACRITIC_MAP = {
+      Á: "A",
+      Ä: "A",
+      Ă: "A",
+      À: "A",
+      Â: "A",
+      Ã: "A",
+      Å: "A",
+      Ą: "A",
+      Æ: "AE",
+      Č: "C",
+      Ć: "C",
+      Ď: "D",
+      É: "E",
+      Ě: "E",
+      Ë: "E",
+      È: "E",
+      Ê: "E",
+      Ę: "E",
+      Í: "I",
+      Ì: "I",
+      Î: "I",
+      Ï: "I",
+      Ĺ: "L",
+      Ľ: "L",
+      Ł: "L",
+      Ň: "N",
+      Ń: "N",
+      Ó: "O",
+      Ò: "O",
+      Ô: "O",
+      Ö: "O",
+      Õ: "O",
+      Ő: "O",
+      Ř: "R",
+      Ŕ: "R",
+      Ś: "S",
+      Š: "S",
+      Ť: "T",
+      Ú: "U",
+      Ù: "U",
+      Û: "U",
+      Ü: "U",
+      Ů: "U",
+      Ý: "Y",
+      Ÿ: "Y",
+      Ź: "Z",
+      Ż: "Z",
+      Ž: "Z",
+      á: "a",
+      ä: "a",
+      ă: "a",
+      à: "a",
+      â: "a",
+      ã: "a",
+      å: "a",
+      ą: "a",
+      æ: "ae",
+      č: "c",
+      ć: "c",
+      ď: "d",
+      é: "e",
+      ě: "e",
+      ë: "e",
+      è: "e",
+      ê: "e",
+      ę: "e",
+      í: "i",
+      ì: "i",
+      î: "i",
+      ï: "i",
+      ĺ: "l",
+      ľ: "l",
+      ł: "l",
+      ň: "n",
+      ń: "n",
+      ó: "o",
+      ò: "o",
+      ô: "o",
+      ö: "o",
+      õ: "o",
+      ő: "o",
+      ř: "r",
+      ŕ: "r",
+      ś: "s",
+      š: "s",
+      ť: "t",
+      ú: "u",
+      ù: "u",
+      û: "u",
+      ü: "u",
+      ů: "u",
+      ý: "y",
+      ÿ: "y",
+      ź: "z",
+      ż: "z",
+      ž: "z",
+      ß: "ss",
+      ẞ: "ss",
+    };
+
+    const stripDiacritics = (value) => {
+      const str = String(value || "");
+      let ascii = str;
+
+      if (typeof ascii.normalize === "function") {
+        try {
+          ascii = ascii.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        } catch (error) {
+          ascii = str;
+        }
+      }
+
+      return ascii.replace(
+        DIACRITIC_REGEX,
+        (char) => DIACRITIC_MAP[char] || char
+      );
+    };
+
     const normalizeKey = (raw) =>
-      String(raw || "")
+      stripDiacritics(raw)
         .toLowerCase()
-        .normalize("NFD")
-        .replace(/\p{Diacritic}/gu, "")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
 

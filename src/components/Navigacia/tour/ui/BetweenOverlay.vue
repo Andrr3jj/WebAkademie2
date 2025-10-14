@@ -577,8 +577,7 @@ export default {
   white-space: normal;
   word-break: break-word;
 }
-.plan-summary__item.status-current .plan-summary__status {
-  background: rgba(144, 202, 80, 0.22);
+.plan-label.status-done {
   color: #0f240f;
   background: rgba(144, 202, 80, 0.22);
   box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
