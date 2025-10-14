@@ -91,6 +91,30 @@ export default {
       { label: "Hotovo", bridgeLabel: "" },
     ];
 
+    const normalizeKey = (raw) =>
+      String(raw || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
+    const stageKeyFrom = (stage, idx) => {
+      if (!stage) return `stage-${idx + 1}`;
+      if (stage.key) return stage.key;
+      if (stage.name) return stage.name;
+      if (stage.label) return stage.label;
+      return `stage-${idx + 1}`;
+    };
+
+    const baseLabelFor = (stage, idx) => {
+      if (stage?.label && String(stage.label).trim()) return stage.label.trim();
+      if (stage?.name && String(stage.name).trim()) return stage.name.trim();
+      const fallback = PLAN_BLUEPRINT[idx]?.label;
+      if (fallback && String(fallback).trim()) return fallback.trim();
+      return `Etapa ${idx + 1}`;
+    };
+
     const planItems = computed(() => {
       if (!hasRealSteps.value) return [];
 
@@ -104,53 +128,84 @@ export default {
         ? tour.state.program.stages
         : [];
 
-      const minLength = PLAN_BLUEPRINT.length;
-      const total = Math.max(minLength, programStages.length, stageIndex + 2);
+      const completedKeys = new Set(
+        (Array.isArray(tour.state.completedStageKeys)
+          ? tour.state.completedStageKeys
+          : []
+        )
+          .map((key) => normalizeKey(key))
+          .filter(Boolean)
+      );
 
-      const baseItems = Array.from({ length: total }, (_, idx) => {
-        const stage = programStages[idx] || null;
-        const blueprint = PLAN_BLUEPRINT[idx] || {};
-
-        const label =
-          (typeof stage?.label === "string" && stage.label.trim()) ||
-          (typeof stage?.name === "string" && stage.name.trim()) ||
-          (typeof blueprint.label === "string" && blueprint.label.trim()) ||
-          `Etapa ${idx + 1}`;
-
+      const items = programStages.map((stage, idx) => {
+        const key = normalizeKey(stageKeyFrom(stage, idx));
+        const label = baseLabelFor(stage, idx);
         const bridgeLabel =
           (typeof stage?.bridgeLabel === "string" &&
             stage.bridgeLabel.trim()) ||
           (typeof stage?.branch?.planBridgeLabel === "string" &&
             stage.branch.planBridgeLabel.trim()) ||
-          (typeof blueprint.bridgeLabel === "string" &&
-            blueprint.bridgeLabel.trim()) ||
+          (typeof PLAN_BLUEPRINT[idx]?.bridgeLabel === "string" &&
+            PLAN_BLUEPRINT[idx].bridgeLabel.trim()) ||
           "";
 
-        return {
+        const item = {
+          key,
           index: idx,
           label,
           bridgeLabel,
+          status: "upcoming",
         };
+
+        if (completedKeys.has(key)) {
+          item.status = "done";
+        } else if (!isBetween && idx === stageIndex) {
+          item.status = "current";
+        }
+
+        return item;
       });
 
-      const completedCount = Math.min(
-        baseItems.length,
-        stageIndex + (isBetween ? 1 : 0)
-      );
-      const activeIndex = Math.min(
-        baseItems.length - 1,
-        isBetween ? stageIndex + 1 : stageIndex
-      );
+      if (!items.length) {
+        const fallbackLabel = baseLabelFor(null, 0);
+        return [
+          {
+            key: normalizeKey(stageKeyFrom(null, 0)),
+            index: 0,
+            label: fallbackLabel,
+            bridgeLabel:
+              (typeof PLAN_BLUEPRINT[0]?.bridgeLabel === "string" &&
+                PLAN_BLUEPRINT[0].bridgeLabel.trim()) ||
+              "",
+            status: "current",
+          },
+        ];
+      }
 
-      return baseItems.map((item, idx) => ({
-        ...item,
-        status:
-          idx < completedCount
-            ? "done"
-            : idx === activeIndex
-            ? "current"
-            : "upcoming",
-      }));
+      // During between screens add a placeholder tile for the upcoming area.
+      if (isBetween) {
+        const currentStage =
+          programStages[Math.min(stageIndex, items.length - 1)] || null;
+        const placeholderLabel =
+          (typeof currentStage?.bridgeLabel === "string" &&
+            currentStage.bridgeLabel.trim()) ||
+          (typeof PLAN_BLUEPRINT[items.length]?.label === "string" &&
+            PLAN_BLUEPRINT[items.length].label.trim()) ||
+          "";
+
+        if (placeholderLabel) {
+          items.push({
+            key: `placeholder-${items.length}`,
+            index: items.length,
+            label: placeholderLabel,
+            bridgeLabel: "",
+            status: "upcoming",
+            placeholder: true,
+          });
+        }
+      }
+
+      return items;
     });
 
     const planSummary = computed(() => {
@@ -163,7 +218,9 @@ export default {
     });
 
     const planHint = computed(() => {
-      const active = planItems.value.find((item) => item.status === "current");
+      const active = planItems.value.find(
+        (item) => item.status === "current" && !item.placeholder
+      );
       if (!active) return "";
       return `${active.index + 1}. ${active.label}`;
     });

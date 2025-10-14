@@ -80,32 +80,61 @@ function stageKeyFrom(stage) {
 
 function markStageCompleted(stage) {
   const key = stageKeyFrom(stage);
-  if (!key) return;
-  if (state.completedStageKeys.includes(key)) return;
-  state.completedStageKeys = state.completedStageKeys.concat([key]);
+  const normalized = normalizeStageKey(key);
+  if (!normalized) return;
+  if (state.completedStageKeys.includes(normalized)) return;
+  state.completedStageKeys = state.completedStageKeys.concat([normalized]);
 }
 
 function branchContext(stage = null) {
-  const keys = Array.from(new Set(state.completedStageKeys));
+  const normalizedKeys = Array.from(
+    new Set(
+      (Array.isArray(state.completedStageKeys) ? state.completedStageKeys : [])
+        .map((key) => normalizeStageKey(key))
+        .filter((key) => Boolean(key))
+    )
+  );
+
+  const matchesKey = (candidate, key) => {
+    if (!candidate || !key) return false;
+    if (candidate === key) return true;
+    if (candidate.length >= 3 && key.includes(candidate)) return true;
+    if (key.length >= 3 && candidate.includes(key)) return true;
+    return false;
+  };
+
+  const hasCompleted = (key) => {
+    if (!key) return false;
+    const normalized = normalizeStageKey(key);
+    if (!normalized) return false;
+    return normalizedKeys.some((stored) => matchesKey(normalized, stored));
+  };
+
+  const hasCompletedAny = (...candidates) => {
+    const list = [];
+    candidates.forEach((candidate) => {
+      if (Array.isArray(candidate)) list.push(...candidate);
+      else if (candidate != null) list.push(candidate);
+    });
+    return list.some((candidate) => {
+      const normalized = normalizeStageKey(candidate);
+      if (!normalized) return false;
+      return normalizedKeys.some((stored) => matchesKey(normalized, stored));
+    });
+  };
+
   return {
     stage,
-    completedKeys: keys,
-    hasCompleted: (key) => {
-      if (!key) return false;
-      const normalized = normalizeStageKey(key);
-      if (!normalized) return false;
-      return keys.includes(normalized);
-    },
+    completedKeys: normalizedKeys,
+    hasCompleted,
+    hasCompletedAny,
   };
 }
 
 function resolveBranch(branch, stage = null) {
   if (!branch) return null;
   const ctx = branchContext(stage);
-  const raw =
-    typeof branch === "function"
-      ? branch(ctx)
-      : branch;
+  const raw = typeof branch === "function" ? branch(ctx) : branch;
   if (!raw || typeof raw !== "object") return null;
 
   const planBridgeLabel =
@@ -122,8 +151,7 @@ function resolveBranch(branch, stage = null) {
   const options = Array.isArray(optionsSource)
     ? optionsSource
         .map((opt) => {
-          const resolved =
-            typeof opt === "function" ? opt(ctx) : opt;
+          const resolved = typeof opt === "function" ? opt(ctx) : opt;
           if (!resolved || typeof resolved !== "object") return null;
           return { ...resolved };
         })
@@ -638,7 +666,6 @@ async function advanceStageIfNeeded() {
     };
     return;
   }
-
 }
 
 /** ===============================
@@ -659,7 +686,9 @@ export const tour = {
         cleanupBindings();
         detachViewportWatchers();
 
-        state.program = { stages: [{ key: "nologin", name: "nologin", steps: [] }] };
+        state.program = {
+          stages: [{ key: "nologin", name: "nologin", steps: [] }],
+        };
         state.stageIndex = 0;
         state.index = 0;
         state.open = true;
@@ -685,7 +714,8 @@ export const tour = {
 
     if (state.program?.stages?.length) {
       state.program.stages = state.program.stages.map((stage, idx) => {
-        const key = stageKeyFrom(stage) || normalizeStageKey(`stage-${idx + 1}`);
+        const key =
+          stageKeyFrom(stage) || normalizeStageKey(`stage-${idx + 1}`);
         return { ...stage, key };
       });
     }
@@ -800,10 +830,25 @@ export const tour = {
     const insertAt = state.steps.length; // index, kde začína nová etapa
 
     const newStageIndex = state.program.stages.length;
+
+    const previousStage =
+      newStageIndex > 0 ? state.program.stages[newStageIndex - 1] : null;
+    if (previousStage) {
+      const chosenLabel =
+        (typeof opt.planLabel === "string" && opt.planLabel.trim()) ||
+        (typeof opt.label === "string" && opt.label.trim()) ||
+        (typeof opt.name === "string" && opt.name.trim()) ||
+        "";
+      if (chosenLabel) {
+        previousStage.bridgeLabel = chosenLabel;
+      }
+    }
+
     const rawKey =
       opt.key || opt.name || opt.to || opt.planLabel || opt.label || "";
     const stageKey =
-      normalizeStageKey(rawKey) || normalizeStageKey(`stage-${newStageIndex + 1}`);
+      normalizeStageKey(rawKey) ||
+      normalizeStageKey(`stage-${newStageIndex + 1}`);
 
     const stage = {
       key: stageKey,
