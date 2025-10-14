@@ -95,11 +95,19 @@ function branchContext(stage = null) {
     )
   );
 
+  const matchesKey = (candidate, key) => {
+    if (!candidate || !key) return false;
+    if (candidate === key) return true;
+    if (candidate.length >= 3 && key.includes(candidate)) return true;
+    if (key.length >= 3 && candidate.includes(key)) return true;
+    return false;
+  };
+
   const hasCompleted = (key) => {
     if (!key) return false;
     const normalized = normalizeStageKey(key);
     if (!normalized) return false;
-    return normalizedKeys.includes(normalized);
+    return normalizedKeys.some((stored) => matchesKey(normalized, stored));
   };
 
   const hasCompletedAny = (...candidates) => {
@@ -108,7 +116,11 @@ function branchContext(stage = null) {
       if (Array.isArray(candidate)) list.push(...candidate);
       else if (candidate != null) list.push(candidate);
     });
-    return list.some((candidate) => hasCompleted(candidate));
+    return list.some((candidate) => {
+      const normalized = normalizeStageKey(candidate);
+      if (!normalized) return false;
+      return normalizedKeys.some((stored) => matchesKey(normalized, stored));
+    });
   };
 
   return {

@@ -48,41 +48,47 @@
           </p>
 
           <!-- plánik – ponecháme aj pre medzikrok -->
-          <div class="intro-plan" v-if="planItems.length">
-            <div class="plan-track" :aria-label="planSummary">
-              <template v-for="(item, idx) in planItems" :key="`dot-${idx}`">
+          <div class="intro-plan" v-if="planSegments.length">
+            <ol class="plan-summary" :aria-label="planSummary">
+              <li
+                v-for="(item, idx) in planSegments"
+                :key="`plan-${idx}`"
+                class="plan-summary__item"
+                :class="`status-${item.status}`"
+                :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
+                  item.status
+                )}`"
+              >
                 <span
-                  class="plan-dot"
+                  class="plan-summary__icon"
                   :class="`status-${item.status}`"
-                  :aria-label="`${idx + 1}. ${item.label}`"
-                ></span>
-                <span
-                  v-if="idx < planBridges.length"
-                  :key="`connector-${idx}`"
-                  class="plan-connector"
-                  :class="[
-                    `status-${planBridges[idx].status}`,
-                    { 'is-collapsed': planBridges[idx].collapsed },
-                  ]"
-                  aria-hidden="true"
-                ></span>
-              </template>
-            </div>
-            <div class="plan-labels">
-              <template v-for="(item, idx) in planItems" :key="`label-${idx}`">
-                <span class="plan-label-spacer" aria-hidden="true"></span>
-                <span
-                  v-if="idx < planBridges.length"
-                  class="plan-label"
-                  :class="[
-                    `status-${planBridges[idx].status}`,
-                    { 'is-collapsed': planBridges[idx].collapsed },
-                  ]"
                 >
-                  {{ planBridges[idx].label || "\u00A0" }}
+                  <span
+                    v-if="item.status === 'done'"
+                    class="icon"
+                    aria-hidden="true"
+                    >✓</span
+                  >
+                  <span
+                    v-else-if="item.status === 'current'"
+                    class="icon current"
+                    aria-hidden="true"
+                  ></span>
+                  <span v-else class="icon upcoming" aria-hidden="true"></span>
                 </span>
-              </template>
-            </div>
+                <div class="plan-summary__text">
+                  <span class="plan-summary__title">{{ item.label }}</span>
+                  <div class="plan-summary__meta">
+                    <span class="plan-summary__status">{{
+                      statusLabel(item.status)
+                    }}</span>
+                    <span v-if="item.bridgeLabel" class="plan-summary__bridge">
+                      Ďalej: {{ item.bridgeLabel }}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            </ol>
           </div>
 
           <div
@@ -210,7 +216,36 @@ export default {
     });
     onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
 
-    return { stage, start, choose, planBridges };
+    const planSegments = computed(() => {
+      const items = Array.isArray(props.planItems) ? props.planItems : [];
+      const bridges = planBridges.value;
+      return items.map((item, idx) => {
+        const label =
+          (typeof item?.label === "string" && item.label.trim()) ||
+          `Etapa ${idx + 1}`;
+        const status = item?.status || "upcoming";
+        return {
+          ...item,
+          index: item?.index ?? idx,
+          label,
+          status,
+          bridgeLabel: bridges[idx]?.label || "",
+        };
+      });
+    });
+
+    const statusLabel = (status) => {
+      switch (status) {
+        case "done":
+          return "Hotovo";
+        case "current":
+          return "Práve prechádzaš";
+        default:
+          return "Čaká";
+      }
+    };
+
+    return { stage, start, choose, planBridges, planSegments, statusLabel };
   },
 };
 </script>
@@ -423,133 +458,133 @@ export default {
 }
 
 .intro-plan {
-  display: grid;
-  gap: clamp(0.375rem, 0.6vw, 0.875rem);
   width: 100%;
-  margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
-  padding: 0 clamp(0.5rem, 1.6vw, 1.25rem);
+  margin: 0 auto clamp(0.9rem, 1.4vw, 1.45rem);
+  padding: 0 clamp(0.4rem, 1.4vw, 1.15rem);
   box-sizing: border-box;
-  overflow: hidden;
-  justify-items: center;
-  text-align: center;
-  margin-inline: auto;
 }
-.plan-track {
-  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
-  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
+.plan-summary {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--plan-gap);
-  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
-  box-sizing: border-box;
-  max-width: min(42rem, 100%);
-  margin-inline: auto;
+  flex-direction: column;
+  gap: clamp(0.55rem, 0.8vw, 0.9rem);
 }
-.plan-labels {
-  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
-  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
+.plan-summary__item {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--plan-gap);
-  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
-  box-sizing: border-box;
-  max-width: min(42rem, 100%);
-  margin-inline: auto;
-  flex-wrap: wrap;
-  row-gap: clamp(0.35rem, 0.6vw, 0.8rem);
+  gap: clamp(0.6rem, 1vw, 0.95rem);
+  padding: clamp(0.5rem, 0.6rem + 0.4vw, 0.95rem)
+    clamp(0.7rem, 0.9rem + 0.6vw, 1.5rem);
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0.85rem 2.1rem rgba(12, 24, 12, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.plan-label-spacer {
-  flex: 0 0 var(--plan-dot-size);
-  height: 0;
+.plan-summary__item.status-current {
+  transform: translateY(-0.1rem);
+  box-shadow: 0 1.1rem 2.4rem rgba(12, 24, 12, 0.12);
+  background: rgba(255, 255, 255, 0.94);
 }
-.plan-dot {
-  flex: 0 0 var(--plan-dot-size);
-  width: var(--plan-dot-size);
-  height: var(--plan-dot-size);
+.plan-summary__item.status-done {
+  background: rgba(144, 202, 80, 0.18);
+}
+.plan-summary__icon {
+  flex: 0 0 clamp(2.1rem, 2.6vw, 2.45rem);
+  width: clamp(2.1rem, 2.6vw, 2.45rem);
+  height: clamp(2.1rem, 2.6vw, 2.45rem);
   border-radius: 50%;
-  background: #d7e1ea;
-  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.95) inset,
-    0 0 0 0.0625rem rgba(16, 32, 16, 0.08);
-  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-}
-.plan-dot.status-done {
-  background: var(--ha-yellow);
-  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.9) inset,
-    0 0 0 0.0625rem rgba(16, 64, 16, 0.18);
-}
-.plan-dot.status-current {
-  background: #fff;
-  box-shadow: 0 0 0 0.1875rem var(--ha-yellow) inset, 0 0 0 0.125rem #fff;
-  transform: scale(1.08);
-}
-.plan-connector {
-  flex: 1 1 clamp(2.5rem, 8vw, 8.5rem);
-  min-width: clamp(2.25rem, 6.5vw, 6.5rem);
-  width: 100%;
-  height: 0.325rem;
-  border-radius: 999rem;
-  background: #d7e1ea;
-  transition: background 0.25s ease;
-}
-.plan-connector.is-collapsed {
-  flex: 1 1 clamp(2.5rem, 8vw, 8.5rem);
-  min-width: clamp(2.25rem, 6.5vw, 6.5rem);
-  width: 100%;
-  margin-inline: 0;
-  opacity: 0.45;
-}
-.plan-connector.status-done {
-  background: var(--ha-yellow);
-}
-.plan-connector.status-current {
-  background: linear-gradient(90deg, var(--ha-yellow) 0%, #d7e1ea 100%);
-}
-.plan-label {
-  flex: 1 1 clamp(4.5rem, 11vw, 12rem);
-  max-width: clamp(5.5rem, 18vw, 13.5rem);
-  text-align: center;
-  font-size: clamp(0.72rem, 0.66rem + 0.2vw, 0.9rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.35;
-  color: var(--ha-card-fg);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: clamp(1.6rem, 1.1rem + 0.9vw, 2.1rem);
-  padding: clamp(0.2rem, 0.16rem + 0.25vw, 0.45rem)
-    clamp(0.4rem, 0.3rem + 0.5vw, 0.9rem);
+  font-weight: 800;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
+  color: #0f240f;
+  background: #e6ecf2;
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.12);
+}
+.plan-summary__icon.status-done {
+  background: var(--ha-yellow);
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.18);
+}
+.plan-summary__icon.status-current {
+  background: #fff;
+  box-shadow: inset 0 0 0 0.1875rem var(--ha-yellow),
+    0 0 0 0.0625rem rgba(15, 36, 15, 0.08);
+}
+.plan-summary__icon .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.plan-summary__icon .icon.current {
+  width: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
+  height: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
+  border-radius: 50%;
+  background: var(--ha-yellow);
+  box-shadow: 0 0 0 0.1875rem rgba(144, 202, 80, 0.32);
+}
+.plan-summary__icon .icon.upcoming {
+  width: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  height: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  border-radius: 50%;
+  background: rgba(15, 36, 15, 0.25);
+}
+.plan-summary__text {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 0.35vw, 0.35rem);
+}
+.plan-summary__title {
+  font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.28rem);
+  font-weight: 800;
+  color: var(--ha-card-fg);
+  line-height: 1.35;
+}
+.plan-summary__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(0.35rem, 0.45vw, 0.55rem);
+  font-size: clamp(0.85rem, 0.82rem + 0.2vw, 0.98rem);
+  font-weight: 600;
+  color: rgba(15, 36, 15, 0.72);
+}
+.plan-summary__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 999rem;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0.35rem 0.9rem rgba(16, 32, 16, 0.08);
-  overflow: visible;
-  white-space: normal;
-  text-overflow: initial;
+  background: rgba(15, 36, 15, 0.08);
 }
-.plan-label.is-collapsed {
-  opacity: 0.72;
+.plan-summary__item.status-done .plan-summary__status {
+  background: rgba(144, 202, 80, 0.28);
+  color: #0f240f;
 }
-.plan-label.status-done {
+.plan-summary__item.status-current .plan-summary__status {
+  background: rgba(144, 202, 80, 0.22);
   color: #0f240f;
   background: rgba(144, 202, 80, 0.22);
   box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
     0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
 }
-.plan-label.status-current {
-  color: #0f240f;
-  background: rgba(144, 202, 80, 0.35);
-  box-shadow: 0 0.35rem 0.95rem rgba(16, 64, 16, 0.12);
+.plan-summary__bridge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999rem;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
-.plan-label.status-upcoming {
-  color: rgba(15, 36, 15, 0.78);
-  background: rgba(215, 225, 234, 0.32);
+.plan-summary__item.status-current .plan-summary__bridge {
+  background: rgba(144, 202, 80, 0.18);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
+
 .plan-tip.small {
   opacity: 0.8;
   font-size: clamp(0.9rem, 0.85rem + 0.2vw, 0.95rem);
