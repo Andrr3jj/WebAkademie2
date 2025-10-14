@@ -474,7 +474,21 @@ async function goTo(i) {
         resolveBind(s.bind) ||
         (s.selector ? document.querySelector(s.selector) : null);
       if (target && typeof target.scrollIntoView === "function") {
-        target.scrollIntoView({ block: "center", inline: "center" });
+        const behavior =
+          s.scrollBehavior && typeof s.scrollBehavior === "string"
+            ? s.scrollBehavior
+            : "auto";
+        const block =
+          s.scrollMode && typeof s.scrollMode === "string"
+            ? s.scrollMode
+            : "center";
+        const inline =
+          s.scrollInline && typeof s.scrollInline === "string"
+            ? s.scrollInline
+            : block === "nearest"
+            ? "nearest"
+            : "center";
+        target.scrollIntoView({ behavior, block, inline });
       }
     } catch (e) {
       /* no-op */

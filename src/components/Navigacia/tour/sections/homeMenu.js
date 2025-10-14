@@ -1,6 +1,6 @@
 // src/components/Navigacia/tour/sections/homeMenu.js
 import { steps as zapisySteps, branch as zapisyBranch } from "./ciselneZapisy";
-import { steps as videoSteps } from "./naucneVidea";
+import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
 
 export function steps() {
   const pad = 18;
@@ -123,6 +123,7 @@ export const branch = {
       label: "Náučné videá",
       goto: "/naucne-videa",
       steps: videoSteps,
+      branch: videoBranch,
     },
   ],
 };

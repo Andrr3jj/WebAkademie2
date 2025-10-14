@@ -108,6 +108,26 @@ export function steps() {
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 14,
+      scrollMode: "nearest",
+      scrollInline: "nearest",
     },
   ];
 }
+
+export const branch = {
+  title: "Skvelé! Náučné videá máš prejdené 🎉",
+  text: "Vyber si, ako chceš pokračovať v ďalšom kroku.",
+  options: [
+    {
+      label: "Číselné zápisy",
+      goto: "/ciselne-zapisy",
+      to: "zapisy",
+      planLabel: "Číselné zápisy",
+    },
+    {
+      label: "Dokončiť prehliadku",
+      planLabel: "Hotovo",
+      steps: [],
+    },
+  ],
+};

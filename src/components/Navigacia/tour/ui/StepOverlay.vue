@@ -183,7 +183,31 @@ export default {
       if (scrollIntoView) {
         const scrollTarget =
           s.__scrollTarget instanceof Element ? s.__scrollTarget : el;
-        scrollTarget.scrollIntoView({ behavior: "smooth", block: "center" });
+        const scrollBehavior =
+          s.scrollBehavior && typeof s.scrollBehavior === "string"
+            ? s.scrollBehavior
+            : "smooth";
+        const scrollBlock =
+          s.scrollMode && typeof s.scrollMode === "string"
+            ? s.scrollMode
+            : "center";
+        const scrollInline =
+          s.scrollInline && typeof s.scrollInline === "string"
+            ? s.scrollInline
+            : scrollBlock === "nearest"
+            ? "nearest"
+            : "center";
+
+        try {
+          scrollTarget.scrollIntoView({
+            behavior: scrollBehavior,
+            block: scrollBlock,
+            inline: scrollInline,
+          });
+        } catch (err) {
+          // fallback na staršie prehliadače
+          scrollTarget.scrollIntoView();
+        }
         if (scrollTarget !== el) {
           await waitForBox(scrollTarget);
         }
