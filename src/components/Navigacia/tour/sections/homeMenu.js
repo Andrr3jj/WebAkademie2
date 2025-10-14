@@ -112,18 +112,25 @@ export function steps() {
 export const branch = {
   title: "Skvelé! Domovská stránka je hotová 🎉",
   text: "Už vieš, čo je kde. Vyber si ďalšiu časť.",
+  planBridgeLabel: "Ďalšia oblasť",
   options: [
     {
       label: "Číselné zápisy",
       goto: "/ciselne-zapisy",
+      name: "zapisy",
+      planLabel: "Číselné zápisy",
       steps: zapisySteps,
       branch: zapisyBranch,
+      planBridgeLabel: "Náučné videá",
     },
     {
       label: "Náučné videá",
       goto: "/naucne-videa",
+      name: "video",
+      planLabel: "Náučné videá",
       steps: videoSteps,
       branch: videoBranch,
+      planBridgeLabel: "Číselné zápisy",
     },
   ],
 };

@@ -6,6 +6,7 @@ import router from "@/router";
 import * as homeMenu from "./sections/homeMenu";
 import { steps as zapisyFlowSteps } from "./sections/ciselneZapisy";
 import { steps as videoFlowSteps } from "./sections/naucneVidea";
+import { steps as classroomFlowSteps } from "./sections/mojaUcebna";
 
 // === Guest (nologged) – prvý krok musí byť type: "between" ===
 import { steps as notLoggedSteps } from "./sections/notLogged";
@@ -19,6 +20,7 @@ const state = reactive({
   stageIndex: 0, // na ktorej etape (stage) sme
   steps: [], // aktuálne "splattené" kroky
   program: null, // { stages: [ {name, steps, branch?}, ... ] }
+  completedStageKeys: [],
 
   // UI mód pre GuideOverlay prepínač
   mode: "steps", // 'steps' | 'between'
@@ -56,6 +58,86 @@ function findPrevAvailableIndex(fromIndex) {
     if (isCountedStep(state.steps[i], i)) return i;
   }
   return null;
+}
+
+function normalizeStageKey(raw) {
+  if (!raw) return "";
+  return String(raw)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function stageKeyFrom(stage) {
+  if (!stage) return "";
+  if (stage.key) return String(stage.key);
+  if (stage.name) return normalizeStageKey(stage.name);
+  if (stage.label) return normalizeStageKey(stage.label);
+  return "";
+}
+
+function markStageCompleted(stage) {
+  const key = stageKeyFrom(stage);
+  if (!key) return;
+  if (state.completedStageKeys.includes(key)) return;
+  state.completedStageKeys = state.completedStageKeys.concat([key]);
+}
+
+function branchContext(stage = null) {
+  const keys = Array.from(new Set(state.completedStageKeys));
+  return {
+    stage,
+    completedKeys: keys,
+    hasCompleted: (key) => {
+      if (!key) return false;
+      const normalized = normalizeStageKey(key);
+      if (!normalized) return false;
+      return keys.includes(normalized);
+    },
+  };
+}
+
+function resolveBranch(branch, stage = null) {
+  if (!branch) return null;
+  const ctx = branchContext(stage);
+  const raw =
+    typeof branch === "function"
+      ? branch(ctx)
+      : branch;
+  if (!raw || typeof raw !== "object") return null;
+
+  const planBridgeLabel =
+    typeof raw.planBridgeLabel === "function"
+      ? raw.planBridgeLabel(ctx)
+      : raw.planBridgeLabel;
+  const title = typeof raw.title === "function" ? raw.title(ctx) : raw.title;
+  const text = typeof raw.text === "function" ? raw.text(ctx) : raw.text;
+  const avatar =
+    typeof raw.avatar === "function" ? raw.avatar(ctx) : raw.avatar;
+
+  const optionsSource =
+    typeof raw.options === "function" ? raw.options(ctx) : raw.options;
+  const options = Array.isArray(optionsSource)
+    ? optionsSource
+        .map((opt) => {
+          const resolved =
+            typeof opt === "function" ? opt(ctx) : opt;
+          if (!resolved || typeof resolved !== "object") return null;
+          return { ...resolved };
+        })
+        .filter(Boolean)
+    : [];
+
+  return {
+    ...raw,
+    planBridgeLabel: planBridgeLabel || "",
+    title,
+    text,
+    avatar,
+    options,
+  };
 }
 
 function markStepSkippedAt(index) {
@@ -439,8 +521,10 @@ function buildProgram() {
   return {
     stages: [
       {
+        key: "home",
         name: "home+menu",
         label: "Domovská stránka",
+        bridgeLabel: homeMenu.branch?.planBridgeLabel || "",
         steps: homeMenu.steps(),
         branch: homeMenu.branch,
       },
@@ -515,6 +599,8 @@ function stepsForKey(key) {
       return zapisyFlowSteps();
     case "video":
       return videoFlowSteps();
+    case "ucebna":
+      return classroomFlowSteps();
     default:
       return [];
   }
@@ -530,18 +616,29 @@ async function advanceStageIfNeeded() {
   const atEndOfThisStage = state.index === stageEnd;
   if (!atEndOfThisStage) return;
 
-  if (currentStage.branch && Array.isArray(currentStage.branch.options)) {
+  markStageCompleted(currentStage);
+
+  const branchConfig = resolveBranch(currentStage.branch, currentStage);
+  if (branchConfig && branchConfig.options.length) {
+    currentStage.bridgeLabel =
+      branchConfig.planBridgeLabel || currentStage.bridgeLabel || "";
+
     state.mode = "between";
     state.between = {
       title:
-        currentStage.branch.title || "Skvelé! Domovská stránka je hotová 🎉",
+        branchConfig.title ||
+        currentStage.branch?.title ||
+        "Skvelé! Domovská stránka je hotová 🎉",
       text:
-        currentStage.branch.text || "Už vieš, čo je kde. Vyber si ďalšiu časť.",
-      avatar: currentStage.branch.avatar || null,
-      options: (currentStage.branch.options || []).map((o) => ({ ...o })),
+        branchConfig.text ||
+        currentStage.branch?.text ||
+        "Už vieš, čo je kde. Vyber si ďalšiu časť.",
+      avatar: branchConfig.avatar || currentStage.branch?.avatar || null,
+      options: branchConfig.options.map((o) => ({ ...o })),
     };
     return;
   }
+
 }
 
 /** ===============================
@@ -562,7 +659,7 @@ export const tour = {
         cleanupBindings();
         detachViewportWatchers();
 
-        state.program = { stages: [{ name: "nologin", steps: [] }] };
+        state.program = { stages: [{ key: "nologin", name: "nologin", steps: [] }] };
         state.stageIndex = 0;
         state.index = 0;
         state.open = true;
@@ -573,6 +670,7 @@ export const tour = {
           avatar: n0.avatar || null,
           options: (n0.options || []).map((o) => ({ ...o })),
         };
+        state.completedStageKeys = [];
         if (typeof window !== "undefined") window.__haTourSteps = [];
         return; // ⬅️ nologged mód zobrazený, končíme
       }
@@ -585,6 +683,13 @@ export const tour = {
         ? { stages: [{ name: "custom", steps: steps.slice() }] }
         : buildProgram();
 
+    if (state.program?.stages?.length) {
+      state.program.stages = state.program.stages.map((stage, idx) => {
+        const key = stageKeyFrom(stage) || normalizeStageKey(`stage-${idx + 1}`);
+        return { ...stage, key };
+      });
+    }
+
     cleanupBindings();
     detachViewportWatchers();
 
@@ -593,6 +698,7 @@ export const tour = {
     state.open = true;
     state.mode = "steps";
     state.between = null;
+    state.completedStageKeys = [];
 
     const firstStage = state.program.stages[0];
     const normalized = firstStage.steps.map((s) => normalizeFrame({ ...s }));
@@ -693,26 +799,33 @@ export const tour = {
 
     const insertAt = state.steps.length; // index, kde začína nová etapa
 
-    let branchConfig = null;
+    const newStageIndex = state.program.stages.length;
+    const rawKey =
+      opt.key || opt.name || opt.to || opt.planLabel || opt.label || "";
+    const stageKey =
+      normalizeStageKey(rawKey) || normalizeStageKey(`stage-${newStageIndex + 1}`);
+
+    const stage = {
+      key: stageKey,
+      name: opt.name || opt.to || "branch",
+      label: opt.planLabel || opt.label || opt.name || opt.to || "Ďalšia etapa",
+      bridgeLabel: opt.planBridgeLabel || "",
+      steps: normalizedNext,
+    };
+
     if (opt.branch) {
-      const rawBranch =
-        typeof opt.branch === "function" ? opt.branch() : opt.branch;
-      if (rawBranch && typeof rawBranch === "object") {
-        branchConfig = {
-          ...rawBranch,
-          options: Array.isArray(rawBranch.options)
-            ? rawBranch.options.map((option) => ({ ...option }))
-            : [],
-        };
+      const branchSource =
+        typeof opt.branch === "function" ? opt.branch : () => opt.branch;
+      const resolvedBranch = resolveBranch(branchSource, stage);
+      if (resolvedBranch) {
+        stage.branch = branchSource;
+        if (resolvedBranch.planBridgeLabel) {
+          stage.bridgeLabel = resolvedBranch.planBridgeLabel;
+        }
       }
     }
 
-    state.program.stages.push({
-      name: opt.name || opt.to || "branch",
-      label: opt.planLabel || opt.label || opt.name || opt.to || "Ďalšia etapa",
-      steps: normalizedNext,
-      ...(branchConfig ? { branch: branchConfig } : {}),
-    });
+    state.program.stages.push(stage);
     state.steps = state.steps.concat(normalizedNext);
     if (typeof window !== "undefined") {
       window.__haTourSteps = state.steps;
@@ -745,5 +858,6 @@ export const tour = {
     homeMenuSteps: homeMenu.steps,
     zapisyFlowSteps,
     videoFlowSteps,
+    classroomFlowSteps,
   },
 };

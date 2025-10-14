@@ -1,5 +1,6 @@
 // src/components/Navigacia/tour/sections/ciselneZapisy.js
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
+import { steps as classroomSteps, branch as classroomBranch } from "./mojaUcebna";
 import avatarLike from "@/assets/images/gallery/avatar-like.png";
 
 export function steps() {
@@ -140,13 +141,16 @@ export function steps() {
     // F) Podstránka /ucebna/moje-piesne
     {
       goto: "/ucebna/moje-piesne",
-      selector: "[data-tour='owned-songs-list']",
-      closest: "section.computer.mobile",
+      selectors: [
+        "section.computer.mobile .scroll h1",
+        "section.computer.mobile .scroll h5",
+      ],
       title: "Moje piesne",
       text: "Tu je tvoja osobná zbierka. Každý zakúpený alebo získaný zápis sa okamžite zobrazí v Zozname piesní.",
       side: "top",
       pad: { x: 24, y: 16 },
       radius: 18,
+      waitFor: 480,
     },
 
     // G) Konkrétny vlastnený zápis
@@ -157,6 +161,7 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 16,
+      waitFor: 520,
     },
 
     // H) Tlačidlo Hrať na vlastnenom zápise
@@ -167,26 +172,52 @@ export function steps() {
       side: "left",
       pad: { x: 18, y: 12 },
       radius: 12,
+      waitFor: 520,
     },
   ];
 }
 
-export const branch = {
-  title: "Skvelé, číselné zápisy máš prejdené",
-  text: "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
-  avatar: avatarLike,
-  options: [
-    {
+export function branch(ctx = {}) {
+  const hasCompleted = typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
+  const videoDone = hasCompleted("video");
+
+  const options = [];
+
+  if (!videoDone) {
+    options.push({
       label: "Pozrieť náučné videá",
       goto: "/naucne-videa",
+      name: "video",
+      planLabel: "Náučné videá",
       steps: videoSteps,
       branch: videoBranch,
-      planLabel: "Náučné videá",
-    },
-    {
-      label: "Dokončiť prehliadku",
-      planLabel: "Hotovo",
-      steps: [],
-    },
-  ],
-};
+      planBridgeLabel: "Moja učebňa",
+    });
+  } else {
+    options.push({
+      label: "Pokračovať do Mojej učebne",
+      goto: "/ucebna",
+      name: "ucebna",
+      planLabel: "Moja učebňa",
+      steps: classroomSteps,
+      branch: classroomBranch,
+      planBridgeLabel: "Hotovo",
+    });
+  }
+
+  options.push({
+    label: "Dokončiť prehliadku",
+    planLabel: "Hotovo",
+    steps: [],
+  });
+
+  return {
+    title: "Skvelé, číselné zápisy máš prejdené",
+    text: videoDone
+      ? "Obe oblasti máš prejdené, poď si pozrieť Moju učebňu alebo prehliadku ukonči."
+      : "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
+    avatar: avatarLike,
+    planBridgeLabel: videoDone ? "Moja učebňa" : "Náučné videá",
+    options,
+  };
+}

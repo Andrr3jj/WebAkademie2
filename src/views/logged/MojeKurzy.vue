@@ -72,7 +72,9 @@
             cvičenia, ktoré Vám pomôžu začať a postupne sa zlepšovať vo Vašej
             hre na heligónke.
           </p>
-          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">
+            Zoznam piesní:
+          </p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -143,7 +145,9 @@
             Nájdete tu náročnejšie skladby a techniky, ktoré Vám pomôžu
             zdokonaliť Váš hudobný talent a posunúť sa na ďalšiu úroveň.
           </p>
-          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">
+            Zoznam piesní:
+          </p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -216,7 +220,9 @@
             Tu nájdete náročnejšie skladby, techniky a tipy, ktoré Vám pomôžu
             posunúť Vašu hru na vyššiu úroveň.
           </p>
-          <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+          <p class="nadpis" data-tour="mojekurzy-songs-heading">
+            Zoznam piesní:
+          </p>
 
           <div class="zoznam">
             <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -308,7 +314,9 @@
               cvičenia, ktoré Vám pomôžu začať a postupne sa zlepšovať vo Vašej
               hre na heligónke.
             </p>
-            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">
+              Zoznam piesní:
+            </p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -382,7 +390,9 @@
               Nájdete tu náročnejšie skladby a techniky, ktoré Vám pomôžu
               zdokonaliť Váš hudobný talent a posunúť sa na ďalšiu úroveň.
             </p>
-            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">
+              Zoznam piesní:
+            </p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
@@ -456,7 +466,9 @@
               Tu nájdete náročnejšie skladby, techniky a tipy, ktoré Vám pomôžu
               posunúť Vašu hru na vyššiu úroveň.
             </p>
-            <p class="nadpis" data-tour="mojekurzy-songs-heading">Zoznam piesní:</p>
+            <p class="nadpis" data-tour="mojekurzy-songs-heading">
+              Zoznam piesní:
+            </p>
 
             <div class="zoznam">
               <p v-for="song in filterSongsName" :key="song">{{ song.name }}</p>
