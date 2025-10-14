@@ -11,8 +11,13 @@
     class="box-zapis-flex"
     :class="{ activeRowLayout: !layouts }"
     :style="flexCenter ? { 'justify-content': 'flex-start' } : {}"
+    :data-tour="tourAnchor ? `${tourAnchor}-wrapper` : null"
   >
-    <div class="zapis zakupene" v-if="layouts">
+    <div
+      class="zapis zakupene"
+      v-if="layouts"
+      :data-tour="tourAnchor ? `${tourAnchor}-card` : null"
+    >
       <div class="box-zapis">
         <div class="obtiaznost">
           <obtiaznost-zapisov :produktObtiaznost="produktyData.difficulty" />
@@ -71,6 +76,7 @@
           })
         "
         class="button"
+        :data-tour="tourAnchor ? `${tourAnchor}-play` : null"
       >
         <div class="samostatny-button">
           <img src="@/assets/images/icons/hrat.svg" alt="" />
@@ -78,7 +84,11 @@
         </div>
       </div>
     </div>
-    <div class="zapis zakupene rowLayout" v-if="!layouts">
+    <div
+      class="zapis zakupene rowLayout"
+      v-if="!layouts"
+      :data-tour="tourAnchor ? `${tourAnchor}-card` : null"
+    >
       <div class="name">
         <p class="table">
           {{ produktyData.name != "" ? produktyData.name : "Žiadny názov" }}
@@ -183,6 +193,7 @@
             })
           "
           class="button"
+          :data-tour="tourAnchor ? `${tourAnchor}-play` : null"
         >
           <div class="samostatny-button">
             <img src="@/assets/images/icons/hrat.svg" alt="" />
@@ -198,6 +209,7 @@
     class="box-zapis-flex"
     :class="{ activeRowLayout: !layouts }"
     :style="flexCenter ? { 'justify-content': 'flex-start' } : {}"
+    :data-tour="tourAnchor ? `${tourAnchor}-wrapper` : null"
   >
     <div class="zapis" v-if="layouts">
       <div class="nadpis">
@@ -653,6 +665,10 @@ export default {
     },
     multiplier: {
       type: [Number, String],
+      default: null,
+    },
+    tourAnchor: {
+      type: String,
       default: null,
     },
   },
