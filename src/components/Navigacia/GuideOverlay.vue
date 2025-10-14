@@ -45,7 +45,11 @@ export default {
 
     const hasRealSteps = computed(
       () =>
-        isLoggedIn.value && steps.value.some((step) => step?.type !== "intro")
+        isLoggedIn.value &&
+        steps.value.some((step, idx) => {
+          if (idx === 0 && step?.type === "intro") return false;
+          return step?.type !== "intro" && !step?.__skipped;
+        })
     );
 
     const syncTourMode = (loggedIn) => {
@@ -76,12 +80,17 @@ export default {
     const between = computed(() => tour.state.between || null);
 
     // v plániku nezapočítavame úvod
-    const visibleTotal = computed(() => {
-      if (!hasRealSteps.value) return 0;
-      return steps.value[0]?.type === "intro"
-        ? Math.max(0, steps.value.length - 1)
-        : steps.value.length;
-    });
+    const countedTotal = computed(() =>
+      steps.value.reduce((acc, step, idx) => {
+        if (idx === 0 && step?.type === "intro") return acc;
+        if (!step || step.type === "intro" || step.__skipped) return acc;
+        return acc + 1;
+      }, 0)
+    );
+
+    const visibleTotal = computed(() =>
+      hasRealSteps.value ? countedTotal.value : 0
+    );
 
     const PLAN_PLACEHOLDERS = [
       "Domovská stránka",

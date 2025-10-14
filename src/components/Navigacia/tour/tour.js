@@ -25,6 +25,41 @@ const state = reactive({
   between: null, // { title, text, options: [...] }
 });
 
+function firstRealIndex() {
+  return state.steps[0]?.type === "intro" ? 1 : 0;
+}
+
+function isCountedStep(step, index) {
+  if (!step) return false;
+  if (index === 0 && step.type === "intro") return false;
+  if (step.type === "intro") return false;
+  return !step.__skipped;
+}
+
+function findNextAvailableIndex(fromIndex) {
+  for (let i = Math.max(fromIndex + 1, firstRealIndex()); i < state.steps.length; i++) {
+    if (isCountedStep(state.steps[i], i)) return i;
+  }
+  return null;
+}
+
+function findPrevAvailableIndex(fromIndex) {
+  for (let i = Math.min(fromIndex - 1, state.steps.length - 1); i >= firstRealIndex(); i--) {
+    if (isCountedStep(state.steps[i], i)) return i;
+  }
+  return null;
+}
+
+function markStepSkippedAt(index) {
+  const step = state.steps[index];
+  if (!step || step.type === "intro" || step.__skipped) return false;
+  step.__skipped = true;
+  if (typeof window !== "undefined" && Array.isArray(window.__haTourSteps)) {
+    window.__haTourSteps[index] = step;
+  }
+  return true;
+}
+
 /** ===============================
  *  Helpery – routing, výber, text
  * ================================ */
@@ -557,17 +592,18 @@ export const tour = {
     if (state.mode === "between") return;
 
     const current = state.steps[state.index];
-    const atLast = state.index === state.steps.length - 1;
-    if (!atLast) {
-      await goTo(state.index + 1);
-      if (current?.gotoAfter) {
+    const shouldRunGotoAfter = current && !current.__skipped;
+    const nextIndex = findNextAvailableIndex(state.index);
+    if (nextIndex !== null) {
+      await goTo(nextIndex);
+      if (shouldRunGotoAfter && current?.gotoAfter) {
         await safePush(current.gotoAfter);
         await nextTick();
       }
       return;
     }
 
-    if (current?.gotoAfter) {
+    if (shouldRunGotoAfter && current?.gotoAfter) {
       await safePush(current.gotoAfter);
       await nextTick();
     }
@@ -581,13 +617,26 @@ export const tour = {
 
   async prev() {
     if (state.mode === "between") return;
-    if (state.index > 0) await goTo(state.index - 1);
+    const prevIndex = findPrevAvailableIndex(state.index);
+    if (prevIndex !== null) await goTo(prevIndex);
   },
 
   async goto(i = 0) {
     if (state.mode === "between") return;
-    const clamped = Math.max(0, Math.min(i, state.steps.length - 1));
-    await goTo(clamped);
+    if (!state.steps.length) return;
+    const firstReal = firstRealIndex();
+    let target = Math.max(0, Math.min(i, state.steps.length - 1));
+    if (target < firstReal && target !== 0) target = firstReal;
+    if (!isCountedStep(state.steps[target], target)) {
+      const forward = findNextAvailableIndex(target - 1);
+      if (forward !== null) target = forward;
+      else {
+        const backward = findPrevAvailableIndex(target + 1);
+        if (backward === null) return;
+        target = backward;
+      }
+    }
+    await goTo(target);
   },
 
   close() {
@@ -660,6 +709,13 @@ export const tour = {
 
     const targetIndex = insertAt === 0 ? 0 : insertAt;
     await goTo(targetIndex);
+  },
+
+  async skipCurrentStep() {
+    if (state.mode === "between") return false;
+    if (!markStepSkippedAt(state.index)) return false;
+    await this.next();
+    return true;
   },
 
   // pre rýchly prístup
