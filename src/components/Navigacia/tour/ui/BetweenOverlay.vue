@@ -445,6 +445,8 @@ export default {
   gap: var(--plan-gap);
   padding-inline: clamp(0.25rem, 1vw, 0.75rem);
   box-sizing: border-box;
+  max-width: min(42rem, 100%);
+  margin-inline: auto;
 }
 .plan-labels {
   --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
@@ -457,6 +459,10 @@ export default {
   gap: var(--plan-gap);
   padding-inline: clamp(0.25rem, 1vw, 0.75rem);
   box-sizing: border-box;
+  max-width: min(42rem, 100%);
+  margin-inline: auto;
+  flex-wrap: wrap;
+  row-gap: clamp(0.35rem, 0.6vw, 0.8rem);
 }
 .plan-label-spacer {
   flex: 0 0 var(--plan-dot-size);
@@ -468,11 +474,14 @@ export default {
   height: var(--plan-dot-size);
   border-radius: 50%;
   background: #d7e1ea;
-  box-shadow: 0 0 0 0.125rem #fff inset;
+  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.95) inset,
+    0 0 0 0.0625rem rgba(16, 32, 16, 0.08);
   transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 .plan-dot.status-done {
   background: var(--ha-yellow);
+  box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.9) inset,
+    0 0 0 0.0625rem rgba(16, 64, 16, 0.18);
 }
 .plan-dot.status-current {
   background: #fff;
@@ -489,11 +498,11 @@ export default {
   transition: background 0.25s ease;
 }
 .plan-connector.is-collapsed {
-  flex: 0 0 0;
-  width: 0;
-  min-width: 0;
-  margin-inline: calc(var(--plan-gap) * -0.5);
-  opacity: 0;
+  flex: 1 1 clamp(2.5rem, 8vw, 8.5rem);
+  min-width: clamp(2.25rem, 6.5vw, 6.5rem);
+  width: 100%;
+  margin-inline: 0;
+  opacity: 0.45;
 }
 .plan-connector.status-done {
   background: var(--ha-yellow);
@@ -502,35 +511,44 @@ export default {
   background: linear-gradient(90deg, var(--ha-yellow) 0%, #d7e1ea 100%);
 }
 .plan-label {
-  flex: 1 1 clamp(3rem, 9vw, 9.5rem);
-  max-width: clamp(4rem, 16vw, 11rem);
+  flex: 1 1 clamp(4.5rem, 11vw, 12rem);
+  max-width: clamp(5.5rem, 18vw, 13.5rem);
   text-align: center;
-  font-size: clamp(0.7rem, 0.64rem + 0.2vw, 0.85rem);
+  font-size: clamp(0.72rem, 0.66rem + 0.2vw, 0.9rem);
   font-weight: 700;
   letter-spacing: 0.01em;
-  line-height: 1.24;
+  line-height: 1.35;
   color: var(--ha-card-fg);
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  min-height: 1.24em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-height: clamp(1.6rem, 1.1rem + 0.9vw, 2.1rem);
+  padding: clamp(0.2rem, 0.16rem + 0.25vw, 0.45rem)
+    clamp(0.4rem, 0.3rem + 0.5vw, 0.9rem);
+  border-radius: 999rem;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0.35rem 0.9rem rgba(16, 32, 16, 0.08);
+  overflow: visible;
+  white-space: normal;
+  text-overflow: initial;
 }
 .plan-label.is-collapsed {
-  display: none;
+  opacity: 0.72;
 }
 .plan-label.status-done {
   color: #0f240f;
+  background: rgba(144, 202, 80, 0.22);
+  box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
+    0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
 }
 .plan-label.status-current {
-  color: var(--ha-card-fg);
-  opacity: 0.88;
+  color: #0f240f;
+  background: rgba(144, 202, 80, 0.35);
+  box-shadow: 0 0.35rem 0.95rem rgba(16, 64, 16, 0.12);
 }
 .plan-label.status-upcoming {
-  color: var(--ha-card-fg);
-  opacity: 0.65;
+  color: rgba(15, 36, 15, 0.78);
+  background: rgba(215, 225, 234, 0.32);
 }
 .plan-tip.small {
   opacity: 0.8;

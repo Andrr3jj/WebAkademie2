@@ -80,22 +80,42 @@ function stageKeyFrom(stage) {
 
 function markStageCompleted(stage) {
   const key = stageKeyFrom(stage);
-  if (!key) return;
-  if (state.completedStageKeys.includes(key)) return;
-  state.completedStageKeys = state.completedStageKeys.concat([key]);
+  const normalized = normalizeStageKey(key);
+  if (!normalized) return;
+  if (state.completedStageKeys.includes(normalized)) return;
+  state.completedStageKeys = state.completedStageKeys.concat([normalized]);
 }
 
 function branchContext(stage = null) {
-  const keys = Array.from(new Set(state.completedStageKeys));
+  const normalizedKeys = Array.from(
+    new Set(
+      (Array.isArray(state.completedStageKeys) ? state.completedStageKeys : [])
+        .map((key) => normalizeStageKey(key))
+        .filter((key) => Boolean(key))
+    )
+  );
+
+  const hasCompleted = (key) => {
+    if (!key) return false;
+    const normalized = normalizeStageKey(key);
+    if (!normalized) return false;
+    return normalizedKeys.includes(normalized);
+  };
+
+  const hasCompletedAny = (...candidates) => {
+    const list = [];
+    candidates.forEach((candidate) => {
+      if (Array.isArray(candidate)) list.push(...candidate);
+      else if (candidate != null) list.push(candidate);
+    });
+    return list.some((candidate) => hasCompleted(candidate));
+  };
+
   return {
     stage,
-    completedKeys: keys,
-    hasCompleted: (key) => {
-      if (!key) return false;
-      const normalized = normalizeStageKey(key);
-      if (!normalized) return false;
-      return keys.includes(normalized);
-    },
+    completedKeys: normalizedKeys,
+    hasCompleted,
+    hasCompletedAny,
   };
 }
 

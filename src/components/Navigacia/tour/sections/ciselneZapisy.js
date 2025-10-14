@@ -183,8 +183,19 @@ export function steps() {
 export function branch(ctx = {}) {
   const hasCompleted =
     typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
-  const videoDone = hasCompleted("video");
-  const classroomDone = hasCompleted("ucebna");
+  const hasCompletedAny =
+    typeof ctx.hasCompletedAny === "function"
+      ? ctx.hasCompletedAny
+      : (...keys) => {
+          const list = [];
+          keys.forEach((key) => {
+            if (Array.isArray(key)) list.push(...key);
+            else if (key != null) list.push(key);
+          });
+          return list.some((key) => hasCompleted(key));
+        };
+  const videoDone = hasCompletedAny(["video", "naucne-videa"]);
+  const classroomDone = hasCompletedAny(["ucebna", "moja-ucebna"]);
 
   const options = [];
   let text = "Ako chceš pokračovať? Vyber si ďalší krok.";
@@ -194,6 +205,7 @@ export function branch(ctx = {}) {
     options.push({
       label: "Pokračovať na Náučné videá",
       goto: "/naucne-videa",
+      key: "video",
       name: "video",
       planLabel: "Náučné videá",
       steps: videoSteps,
@@ -206,6 +218,7 @@ export function branch(ctx = {}) {
     options.push({
       label: "Pokračovať do Mojej učebne",
       goto: "/ucebna",
+      key: "ucebna",
       name: "ucebna",
       planLabel: "Moja učebňa",
       steps: classroomSteps,

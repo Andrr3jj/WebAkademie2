@@ -122,8 +122,19 @@ export function steps() {
 export function branch(ctx = {}) {
   const hasCompleted =
     typeof ctx.hasCompleted === "function" ? ctx.hasCompleted : () => false;
-  const zapisyDone = hasCompleted("zapisy");
-  const classroomDone = hasCompleted("ucebna");
+  const hasCompletedAny =
+    typeof ctx.hasCompletedAny === "function"
+      ? ctx.hasCompletedAny
+      : (...keys) => {
+          const list = [];
+          keys.forEach((key) => {
+            if (Array.isArray(key)) list.push(...key);
+            else if (key != null) list.push(key);
+          });
+          return list.some((key) => hasCompleted(key));
+        };
+  const zapisyDone = hasCompletedAny(["zapisy", "ciselne-zapisy"]);
+  const classroomDone = hasCompletedAny(["ucebna", "moja-ucebna"]);
 
   const options = [];
   let text = "Vyber si, ako chceš pokračovať v ďalšom kroku.";
@@ -133,6 +144,7 @@ export function branch(ctx = {}) {
     options.push({
       label: "Pokračovať na Číselné zápisy",
       goto: "/ciselne-zapisy",
+      key: "zapisy",
       name: "zapisy",
       planLabel: "Číselné zápisy",
       steps: zapisySteps,
@@ -145,6 +157,7 @@ export function branch(ctx = {}) {
     options.push({
       label: "Pokračovať do Mojej učebne",
       goto: "/ucebna",
+      key: "ucebna",
       name: "ucebna",
       planLabel: "Moja učebňa",
       steps: classroomSteps,
