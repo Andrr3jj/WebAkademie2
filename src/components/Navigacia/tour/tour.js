@@ -830,6 +830,20 @@ export const tour = {
     const insertAt = state.steps.length; // index, kde začína nová etapa
 
     const newStageIndex = state.program.stages.length;
+
+    const previousStage =
+      newStageIndex > 0 ? state.program.stages[newStageIndex - 1] : null;
+    if (previousStage) {
+      const chosenLabel =
+        (typeof opt.planLabel === "string" && opt.planLabel.trim()) ||
+        (typeof opt.label === "string" && opt.label.trim()) ||
+        (typeof opt.name === "string" && opt.name.trim()) ||
+        "";
+      if (chosenLabel) {
+        previousStage.bridgeLabel = chosenLabel;
+      }
+    }
+
     const rawKey =
       opt.key || opt.name || opt.to || opt.planLabel || opt.label || "";
     const stageKey =

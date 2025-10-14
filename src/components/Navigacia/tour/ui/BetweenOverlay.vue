@@ -62,19 +62,28 @@
                 <span
                   class="plan-summary__icon"
                   :class="`status-${item.status}`"
-                >
-                  <span
-                    v-if="item.status === 'done'"
-                    class="icon"
-                    aria-hidden="true"
-                    >✓</span
-                  >
-                  <span
-                    v-else-if="item.status === 'current'"
-                    class="icon current"
-                    aria-hidden="true"
-                  ></span>
-                  <span v-else class="icon upcoming" aria-hidden="true"></span>
+                  :aria-label="`${idx + 1}. ${item.label}`"
+                ></span>
+                <span
+                  v-if="idx < planBridges.length"
+                  :key="`connector-${idx}`"
+                  class="plan-connector"
+                  :class="{
+                    'status-done': planBridges[idx].status === 'done',
+                    'status-current': planBridges[idx].status === 'current',
+                  }"
+                  aria-hidden="true"
+                ></span>
+              </template>
+            </div>
+            <div class="plan-labels">
+              <template
+                v-for="(bridge, idx) in planBridges"
+                :key="`label-${idx}`"
+              >
+                <span class="plan-label-spacer" aria-hidden="true"></span>
+                <span class="plan-label" :class="`status-${bridge.status}`">
+                  {{ bridge.label || "\u00A0" }}
                 </span>
                 <div class="plan-summary__text">
                   <span class="plan-summary__title">{{ item.label }}</span>
@@ -158,9 +167,9 @@ export default {
       return items.slice(0, -1).map((item, idx) => {
         const next = items[idx + 1] || null;
         const rawLabel =
-          (typeof item?.bridgeLabel === "string"
-            ? item.bridgeLabel.trim()
-            : "") || (typeof next?.label === "string" ? next.label.trim() : "");
+          (typeof item?.bridgeLabel === "string" && item.bridgeLabel.trim()) ||
+          (typeof next?.label === "string" && next.label.trim()) ||
+          "";
         const prevStatus = item?.status || "upcoming";
         const nextStatus = next?.status || "upcoming";
 
@@ -170,16 +179,22 @@ export default {
           prevStatus === "done" ||
           prevStatus === "current" ||
           nextStatus === "current"
-        )
+        ) {
           status = "current";
+        }
 
-        const showLabel = rawLabel && status !== "upcoming";
+        const showLabel =
+          rawLabel &&
+          (status !== "upcoming" ||
+            item?.placeholder ||
+            next?.placeholder ||
+            nextStatus === "current");
 
         return {
           index: item?.index ?? idx,
           status,
           label: showLabel ? rawLabel : "",
-          collapsed: status === "done",
+          placeholder: Boolean(item?.placeholder || next?.placeholder),
         };
       });
     });
@@ -260,9 +275,9 @@ export default {
   --intro-dur: 420ms;
   --intro-out: 340ms;
 
-  --intro-gap: clamp(0.35rem, 1.6vw, 0.95rem);
-  --intro-avatar-w: clamp(10.94rem, 15.4vw, 14.44rem);
-  --intro-bubble-w: clamp(18.38rem, 29.4vw, 31.5rem);
+  --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
+  --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
+  --intro-bubble-w: clamp(18.375rem, 29.4vw, 31.5rem);
 }
 
 /* vrstva */
@@ -462,38 +477,38 @@ export default {
   margin: 0 auto clamp(0.9rem, 1.4vw, 1.45rem);
   padding: 0 clamp(0.4rem, 1.4vw, 1.15rem);
   box-sizing: border-box;
+  overflow: hidden;
 }
-.plan-summary {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.plan-track {
+  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
+  --plan-dot-size: clamp(0.875rem, 1.6vw, 0.98rem);
   display: flex;
-  flex-direction: column;
-  gap: clamp(0.55rem, 0.8vw, 0.9rem);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  gap: var(--plan-gap);
+  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+  box-sizing: border-box;
 }
-.plan-summary__item {
+.plan-labels {
+  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
+  --plan-dot-size: clamp(0.875rem, 1.6vw, 0.98rem);
   display: flex;
   align-items: flex-start;
-  gap: clamp(0.6rem, 1vw, 0.95rem);
-  padding: clamp(0.5rem, 0.6rem + 0.4vw, 0.95rem)
-    clamp(0.7rem, 0.9rem + 0.6vw, 1.5rem);
-  border-radius: 1.15rem;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0.85rem 2.1rem rgba(12, 24, 12, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  min-width: 0;
+  gap: var(--plan-gap);
+  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+  box-sizing: border-box;
 }
-.plan-summary__item.status-current {
-  transform: translateY(-0.1rem);
-  box-shadow: 0 1.1rem 2.4rem rgba(12, 24, 12, 0.12);
-  background: rgba(255, 255, 255, 0.94);
+.plan-label-spacer {
+  flex: 0 0 var(--plan-dot-size);
+  height: 0;
 }
-.plan-summary__item.status-done {
-  background: rgba(144, 202, 80, 0.18);
-}
-.plan-summary__icon {
-  flex: 0 0 clamp(2.1rem, 2.6vw, 2.45rem);
-  width: clamp(2.1rem, 2.6vw, 2.45rem);
-  height: clamp(2.1rem, 2.6vw, 2.45rem);
+.plan-dot {
+  flex: 0 0 var(--plan-dot-size);
+  width: var(--plan-dot-size);
+  height: var(--plan-dot-size);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -513,15 +528,16 @@ export default {
   box-shadow: inset 0 0 0 0.1875rem var(--ha-yellow),
     0 0 0 0.0625rem rgba(15, 36, 15, 0.08);
 }
-.plan-summary__icon .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.plan-connector {
+  flex: 1 1 clamp(1.875rem, 6vw, 6.25rem);
+  min-width: clamp(1.75rem, 4.5vw, 4.5rem);
+  width: 100%;
+  height: 0.325rem;
+  border-radius: 999rem;
+  background: #d7e1ea;
+  transition: background 0.25s ease;
 }
-.plan-summary__icon .icon.current {
-  width: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
-  height: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
-  border-radius: 50%;
+.plan-connector.status-done {
   background: var(--ha-yellow);
   box-shadow: 0 0 0 0.1875rem rgba(144, 202, 80, 0.32);
 }
@@ -531,15 +547,14 @@ export default {
   border-radius: 50%;
   background: rgba(15, 36, 15, 0.25);
 }
-.plan-summary__text {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.25rem, 0.35vw, 0.35rem);
-}
-.plan-summary__title {
-  font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.28rem);
-  font-weight: 800;
+.plan-label {
+  flex: 1 1 clamp(2.5rem, 12vw, 9rem);
+  max-width: clamp(3.25rem, 18vw, 9rem);
+  text-align: center;
+  font-size: clamp(0.78rem, 0.72rem + 0.2vw, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.24;
   color: var(--ha-card-fg);
   line-height: 1.35;
 }
@@ -554,15 +569,13 @@ export default {
 }
 .plan-summary__status {
   display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.65rem;
-  border-radius: 999rem;
-  background: rgba(15, 36, 15, 0.08);
-}
-.plan-summary__item.status-done .plan-summary__status {
-  background: rgba(144, 202, 80, 0.28);
-  color: #0f240f;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 1.24em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
 }
 .plan-summary__item.status-current .plan-summary__status {
   background: rgba(144, 202, 80, 0.22);
