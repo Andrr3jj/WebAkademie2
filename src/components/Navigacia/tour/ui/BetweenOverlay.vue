@@ -409,24 +409,31 @@ export default {
   gap: clamp(0.375rem, 0.6vw, 0.875rem);
   width: 100%;
   margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
+  padding: 0 clamp(0.5rem, 1.6vw, 1.25rem);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .plan-track {
-  --plan-gap: clamp(0.5rem, 1.2vw, 1rem);
-  --plan-dot-size: 1.125rem;
+  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
+  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
   display: flex;
   align-items: center;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
+  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+  box-sizing: border-box;
 }
 .plan-labels {
-  --plan-gap: clamp(0.5rem, 1.2vw, 1rem);
-  --plan-dot-size: 1.125rem;
+  --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
+  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
   display: flex;
   align-items: flex-start;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
+  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+  box-sizing: border-box;
 }
 .plan-label-spacer {
   flex: 0 0 var(--plan-dot-size);
@@ -450,10 +457,10 @@ export default {
   transform: scale(1.08);
 }
 .plan-connector {
-  flex: 1 1 clamp(3rem, 10vw, 10rem);
-  min-width: clamp(2.75rem, 8vw, 7.5rem);
+  flex: 1 1 clamp(2.5rem, 8vw, 8.5rem);
+  min-width: clamp(2.25rem, 6.5vw, 6.5rem);
   width: 100%;
-  height: 0.375rem;
+  height: 0.325rem;
   border-radius: 999rem;
   background: #d7e1ea;
   transition: background 0.25s ease;
@@ -466,18 +473,20 @@ export default {
 }
 .plan-label {
   flex: 1 1 clamp(3rem, 10vw, 10rem);
-  max-width: clamp(4.5rem, 24vw, 13.75rem);
+  max-width: clamp(4.25rem, 20vw, 12.5rem);
   text-align: center;
-  font-size: clamp(0.84rem, 0.78rem + 0.25vw, 0.98rem);
+  font-size: clamp(0.78rem, 0.72rem + 0.2vw, 0.92rem);
   font-weight: 700;
   letter-spacing: 0.01em;
-  line-height: 1.32;
+  line-height: 1.24;
   color: var(--ha-card-fg);
-  word-break: break-word;
   display: inline-flex;
   align-items: flex-start;
   justify-content: center;
-  min-height: 1.32em;
+  min-height: 1.24em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .plan-label.status-done {
   color: #0f240f;
