@@ -60,26 +60,22 @@
                   v-if="idx < planBridges.length"
                   :key="`connector-${idx}`"
                   class="plan-connector"
-                  :class="[
-                    `status-${planBridges[idx].status}`,
-                    { 'is-collapsed': planBridges[idx].collapsed },
-                  ]"
+                  :class="{
+                    'status-done': planBridges[idx].status === 'done',
+                    'status-current': planBridges[idx].status === 'current',
+                  }"
                   aria-hidden="true"
                 ></span>
               </template>
             </div>
             <div class="plan-labels">
-              <template v-for="(item, idx) in planItems" :key="`label-${idx}`">
+              <template
+                v-for="(bridge, idx) in planBridges"
+                :key="`label-${idx}`"
+              >
                 <span class="plan-label-spacer" aria-hidden="true"></span>
-                <span
-                  v-if="idx < planBridges.length"
-                  class="plan-label"
-                  :class="[
-                    `status-${planBridges[idx].status}`,
-                    { 'is-collapsed': planBridges[idx].collapsed },
-                  ]"
-                >
-                  {{ planBridges[idx].label || "\u00A0" }}
+                <span class="plan-label" :class="`status-${bridge.status}`">
+                  {{ bridge.label || "\u00A0" }}
                 </span>
               </template>
             </div>
@@ -152,9 +148,9 @@ export default {
       return items.slice(0, -1).map((item, idx) => {
         const next = items[idx + 1] || null;
         const rawLabel =
-          (typeof item?.bridgeLabel === "string"
-            ? item.bridgeLabel.trim()
-            : "") || (typeof next?.label === "string" ? next.label.trim() : "");
+          (typeof item?.bridgeLabel === "string" && item.bridgeLabel.trim()) ||
+          (typeof next?.label === "string" && next.label.trim()) ||
+          "";
         const prevStatus = item?.status || "upcoming";
         const nextStatus = next?.status || "upcoming";
 
@@ -164,16 +160,22 @@ export default {
           prevStatus === "done" ||
           prevStatus === "current" ||
           nextStatus === "current"
-        )
+        ) {
           status = "current";
+        }
 
-        const showLabel = rawLabel && status !== "upcoming";
+        const showLabel =
+          rawLabel &&
+          (status !== "upcoming" ||
+            item?.placeholder ||
+            next?.placeholder ||
+            nextStatus === "current");
 
         return {
           index: item?.index ?? idx,
           status,
           label: showLabel ? rawLabel : "",
-          collapsed: status === "done",
+          placeholder: Boolean(item?.placeholder || next?.placeholder),
         };
       });
     });
@@ -227,7 +229,7 @@ export default {
 
   --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
   --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
-  --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
+  --intro-bubble-w: clamp(18.375rem, 29.4vw, 31.5rem);
 }
 
 /* vrstva */
@@ -430,16 +432,12 @@ export default {
   padding: 0 clamp(0.5rem, 1.6vw, 1.25rem);
   box-sizing: border-box;
   overflow: hidden;
-  justify-items: center;
-  text-align: center;
-  margin-inline: auto;
 }
 .plan-track {
   --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
-  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
+  --plan-dot-size: clamp(0.875rem, 1.6vw, 0.98rem);
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
@@ -448,10 +446,9 @@ export default {
 }
 .plan-labels {
   --plan-gap: clamp(0.35rem, 0.9vw, 0.75rem);
-  --plan-dot-size: clamp(0.875rem, 1.8vw, 1.05rem);
+  --plan-dot-size: clamp(0.875rem, 1.6vw, 0.98rem);
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   width: 100%;
   min-width: 0;
   gap: var(--plan-gap);
@@ -480,20 +477,13 @@ export default {
   transform: scale(1.08);
 }
 .plan-connector {
-  flex: 1 1 clamp(2.5rem, 8vw, 8.5rem);
-  min-width: clamp(2.25rem, 6.5vw, 6.5rem);
+  flex: 1 1 clamp(1.875rem, 6vw, 6.25rem);
+  min-width: clamp(1.75rem, 4.5vw, 4.5rem);
   width: 100%;
   height: 0.325rem;
   border-radius: 999rem;
   background: #d7e1ea;
   transition: background 0.25s ease;
-}
-.plan-connector.is-collapsed {
-  flex: 0 0 0;
-  width: 0;
-  min-width: 0;
-  margin-inline: calc(var(--plan-gap) * -0.5);
-  opacity: 0;
 }
 .plan-connector.status-done {
   background: var(--ha-yellow);
@@ -502,10 +492,10 @@ export default {
   background: linear-gradient(90deg, var(--ha-yellow) 0%, #d7e1ea 100%);
 }
 .plan-label {
-  flex: 1 1 clamp(3rem, 9vw, 9.5rem);
-  max-width: clamp(4rem, 16vw, 11rem);
+  flex: 1 1 clamp(2.5rem, 12vw, 9rem);
+  max-width: clamp(3.25rem, 18vw, 9rem);
   text-align: center;
-  font-size: clamp(0.7rem, 0.64rem + 0.2vw, 0.85rem);
+  font-size: clamp(0.78rem, 0.72rem + 0.2vw, 0.92rem);
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.24;
@@ -516,10 +506,8 @@ export default {
   min-height: 1.24em;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.plan-label.is-collapsed {
-  display: none;
+  white-space: normal;
+  word-break: break-word;
 }
 .plan-label.status-done {
   color: #0f240f;

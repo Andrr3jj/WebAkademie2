@@ -91,6 +91,151 @@ export default {
       { label: "Hotovo", bridgeLabel: "" },
     ];
 
+    const DIACRITIC_REGEX = new RegExp(
+      "[ÁÄĂÀÂÃÅĄÆČĆĎÉĚËÈÊĘÍÌÎÏĹĽŁŇŃÓÒÔÖÕŐŘŔŚŠŤÚÙÛÜŮÝŸŹŻŽáäăàâãåąæčćďéěëèêęíìîïĺľłňńóòôöõőřŕśšťťúùûüůýÿźżžßẞ]",
+      "g"
+    );
+    const DIACRITIC_MAP = {
+      Á: "A",
+      Ä: "A",
+      Ă: "A",
+      À: "A",
+      Â: "A",
+      Ã: "A",
+      Å: "A",
+      Ą: "A",
+      Æ: "AE",
+      Č: "C",
+      Ć: "C",
+      Ď: "D",
+      É: "E",
+      Ě: "E",
+      Ë: "E",
+      È: "E",
+      Ê: "E",
+      Ę: "E",
+      Í: "I",
+      Ì: "I",
+      Î: "I",
+      Ï: "I",
+      Ĺ: "L",
+      Ľ: "L",
+      Ł: "L",
+      Ň: "N",
+      Ń: "N",
+      Ó: "O",
+      Ò: "O",
+      Ô: "O",
+      Ö: "O",
+      Õ: "O",
+      Ő: "O",
+      Ř: "R",
+      Ŕ: "R",
+      Ś: "S",
+      Š: "S",
+      Ť: "T",
+      Ú: "U",
+      Ù: "U",
+      Û: "U",
+      Ü: "U",
+      Ů: "U",
+      Ý: "Y",
+      Ÿ: "Y",
+      Ź: "Z",
+      Ż: "Z",
+      Ž: "Z",
+      á: "a",
+      ä: "a",
+      ă: "a",
+      à: "a",
+      â: "a",
+      ã: "a",
+      å: "a",
+      ą: "a",
+      æ: "ae",
+      č: "c",
+      ć: "c",
+      ď: "d",
+      é: "e",
+      ě: "e",
+      ë: "e",
+      è: "e",
+      ê: "e",
+      ę: "e",
+      í: "i",
+      ì: "i",
+      î: "i",
+      ï: "i",
+      ĺ: "l",
+      ľ: "l",
+      ł: "l",
+      ň: "n",
+      ń: "n",
+      ó: "o",
+      ò: "o",
+      ô: "o",
+      ö: "o",
+      õ: "o",
+      ő: "o",
+      ř: "r",
+      ŕ: "r",
+      ś: "s",
+      š: "s",
+      ť: "t",
+      ú: "u",
+      ù: "u",
+      û: "u",
+      ü: "u",
+      ů: "u",
+      ý: "y",
+      ÿ: "y",
+      ź: "z",
+      ż: "z",
+      ž: "z",
+      ß: "ss",
+      ẞ: "ss",
+    };
+
+    const stripDiacritics = (value) => {
+      const str = String(value || "");
+      let ascii = str;
+
+      if (typeof ascii.normalize === "function") {
+        try {
+          ascii = ascii.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        } catch (error) {
+          ascii = str;
+        }
+      }
+
+      return ascii.replace(
+        DIACRITIC_REGEX,
+        (char) => DIACRITIC_MAP[char] || char
+      );
+    };
+
+    const normalizeKey = (raw) =>
+      stripDiacritics(raw)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
+    const stageKeyFrom = (stage, idx) => {
+      if (!stage) return `stage-${idx + 1}`;
+      if (stage.key) return stage.key;
+      if (stage.name) return stage.name;
+      if (stage.label) return stage.label;
+      return `stage-${idx + 1}`;
+    };
+
+    const baseLabelFor = (stage, idx) => {
+      if (stage?.label && String(stage.label).trim()) return stage.label.trim();
+      if (stage?.name && String(stage.name).trim()) return stage.name.trim();
+      const fallback = PLAN_BLUEPRINT[idx]?.label;
+      if (fallback && String(fallback).trim()) return fallback.trim();
+      return `Etapa ${idx + 1}`;
+    };
+
     const planItems = computed(() => {
       if (!hasRealSteps.value) return [];
 
@@ -104,53 +249,84 @@ export default {
         ? tour.state.program.stages
         : [];
 
-      const minLength = PLAN_BLUEPRINT.length;
-      const total = Math.max(minLength, programStages.length, stageIndex + 2);
+      const completedKeys = new Set(
+        (Array.isArray(tour.state.completedStageKeys)
+          ? tour.state.completedStageKeys
+          : []
+        )
+          .map((key) => normalizeKey(key))
+          .filter(Boolean)
+      );
 
-      const baseItems = Array.from({ length: total }, (_, idx) => {
-        const stage = programStages[idx] || null;
-        const blueprint = PLAN_BLUEPRINT[idx] || {};
-
-        const label =
-          (typeof stage?.label === "string" && stage.label.trim()) ||
-          (typeof stage?.name === "string" && stage.name.trim()) ||
-          (typeof blueprint.label === "string" && blueprint.label.trim()) ||
-          `Etapa ${idx + 1}`;
-
+      const items = programStages.map((stage, idx) => {
+        const key = normalizeKey(stageKeyFrom(stage, idx));
+        const label = baseLabelFor(stage, idx);
         const bridgeLabel =
           (typeof stage?.bridgeLabel === "string" &&
             stage.bridgeLabel.trim()) ||
           (typeof stage?.branch?.planBridgeLabel === "string" &&
             stage.branch.planBridgeLabel.trim()) ||
-          (typeof blueprint.bridgeLabel === "string" &&
-            blueprint.bridgeLabel.trim()) ||
+          (typeof PLAN_BLUEPRINT[idx]?.bridgeLabel === "string" &&
+            PLAN_BLUEPRINT[idx].bridgeLabel.trim()) ||
           "";
 
-        return {
+        const item = {
+          key,
           index: idx,
           label,
           bridgeLabel,
+          status: "upcoming",
         };
+
+        if (completedKeys.has(key)) {
+          item.status = "done";
+        } else if (!isBetween && idx === stageIndex) {
+          item.status = "current";
+        }
+
+        return item;
       });
 
-      const completedCount = Math.min(
-        baseItems.length,
-        stageIndex + (isBetween ? 1 : 0)
-      );
-      const activeIndex = Math.min(
-        baseItems.length - 1,
-        isBetween ? stageIndex + 1 : stageIndex
-      );
+      if (!items.length) {
+        const fallbackLabel = baseLabelFor(null, 0);
+        return [
+          {
+            key: normalizeKey(stageKeyFrom(null, 0)),
+            index: 0,
+            label: fallbackLabel,
+            bridgeLabel:
+              (typeof PLAN_BLUEPRINT[0]?.bridgeLabel === "string" &&
+                PLAN_BLUEPRINT[0].bridgeLabel.trim()) ||
+              "",
+            status: "current",
+          },
+        ];
+      }
 
-      return baseItems.map((item, idx) => ({
-        ...item,
-        status:
-          idx < completedCount
-            ? "done"
-            : idx === activeIndex
-            ? "current"
-            : "upcoming",
-      }));
+      // During between screens add a placeholder tile for the upcoming area.
+      if (isBetween) {
+        const currentStage =
+          programStages[Math.min(stageIndex, items.length - 1)] || null;
+        const placeholderLabel =
+          (typeof currentStage?.bridgeLabel === "string" &&
+            currentStage.bridgeLabel.trim()) ||
+          (typeof PLAN_BLUEPRINT[items.length]?.label === "string" &&
+            PLAN_BLUEPRINT[items.length].label.trim()) ||
+          "";
+
+        if (placeholderLabel) {
+          items.push({
+            key: `placeholder-${items.length}`,
+            index: items.length,
+            label: placeholderLabel,
+            bridgeLabel: "",
+            status: "upcoming",
+            placeholder: true,
+          });
+        }
+      }
+
+      return items;
     });
 
     const planSummary = computed(() => {
@@ -163,7 +339,9 @@ export default {
     });
 
     const planHint = computed(() => {
-      const active = planItems.value.find((item) => item.status === "current");
+      const active = planItems.value.find(
+        (item) => item.status === "current" && !item.placeholder
+      );
       if (!active) return "";
       return `${active.index + 1}. ${active.label}`;
     });
