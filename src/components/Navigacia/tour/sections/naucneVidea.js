@@ -52,6 +52,8 @@ export function steps() {
 
     // === OZNAČIŤ AKO ZVLÁDNUTÉ ===
     {
+      goto: "/ucebna/zadarmo-video",
+      selector: sel.markComplete,
       waitFor: 400,
       bind: { text: "Označiť ako zvládnuté" }, // (nájde to aj stav „Zvládnuté“ cez aria-label)
       closest: ".button, [data-tour='mark-complete']",
@@ -65,6 +67,7 @@ export function steps() {
     // === TEXT PIESNE ===
     {
       goto: "/ucebna/zadarmo-video",
+      selector: sel.lyricsToggle,
       waitFor: 800, // nech sa dotiahne DOM
       // vyhľadá podľa textu na [role="button"] a [aria-label]
       bind: { text: "Text piesne" },
