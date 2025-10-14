@@ -83,45 +83,66 @@ export default {
         : steps.value.length;
     });
 
-    const PLAN_PLACEHOLDERS = [
-      "Domovská stránka",
-      "Ďalšia oblasť",
-      "Ďalšia sekcia",
-      "Precvičovanie",
-      "Hotovo",
+    const PLAN_BLUEPRINT = [
+      { label: "Domovská stránka", bridgeLabel: "Ďalšia oblasť" },
+      { label: "Číselné zápisy", bridgeLabel: "Náučné videá" },
+      { label: "Náučné videá", bridgeLabel: "Hotovo" },
+      { label: "Hotovo", bridgeLabel: "" },
     ];
 
     const planItems = computed(() => {
       if (!hasRealSteps.value) return [];
 
-      const desired = PLAN_PLACEHOLDERS.length;
+      const rawStageIndex = Number(tour.state.stageIndex);
+      const stageIndex = Math.max(
+        0,
+        Number.isFinite(rawStageIndex) ? rawStageIndex : 0
+      );
+      const isBetween = tour.state.mode === "between";
       const programStages = Array.isArray(tour.state.program?.stages)
         ? tour.state.program.stages
         : [];
 
-      const labels = Array.from({ length: desired }, (_, idx) => {
+      const minLength = PLAN_BLUEPRINT.length;
+      const total = Math.max(minLength, programStages.length, stageIndex + 2);
+
+      const baseItems = Array.from({ length: total }, (_, idx) => {
         const stage = programStages[idx] || null;
-        const fallback = PLAN_PLACEHOLDERS[idx] || `Etapa ${idx + 1}`;
-        return stage?.label || stage?.name || fallback;
+        const blueprint = PLAN_BLUEPRINT[idx] || {};
+
+        const label =
+          (typeof stage?.label === "string" && stage.label.trim()) ||
+          (typeof stage?.name === "string" && stage.name.trim()) ||
+          (typeof blueprint.label === "string" && blueprint.label.trim()) ||
+          `Etapa ${idx + 1}`;
+
+        const bridgeLabel =
+          (typeof stage?.bridgeLabel === "string" &&
+            stage.bridgeLabel.trim()) ||
+          (typeof stage?.branch?.planBridgeLabel === "string" &&
+            stage.branch.planBridgeLabel.trim()) ||
+          (typeof blueprint.bridgeLabel === "string" &&
+            blueprint.bridgeLabel.trim()) ||
+          "";
+
+        return {
+          index: idx,
+          label,
+          bridgeLabel,
+        };
       });
 
-      const stageIndex = Math.max(
-        0,
-        Math.min(Number(tour.state.stageIndex || 0), desired - 1)
-      );
-      const isBetween = tour.state.mode === "between";
       const completedCount = Math.min(
-        desired,
+        baseItems.length,
         stageIndex + (isBetween ? 1 : 0)
       );
       const activeIndex = Math.min(
-        desired - 1,
+        baseItems.length - 1,
         isBetween ? stageIndex + 1 : stageIndex
       );
 
-      return labels.map((label, idx) => ({
-        index: idx,
-        label,
+      return baseItems.map((item, idx) => ({
+        ...item,
         status:
           idx < completedCount
             ? "done"

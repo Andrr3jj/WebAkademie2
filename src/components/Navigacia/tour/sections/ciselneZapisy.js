@@ -140,13 +140,16 @@ export function steps() {
     // F) Podstránka /ucebna/moje-piesne
     {
       goto: "/ucebna/moje-piesne",
-      selector: "[data-tour='owned-songs-list']",
-      closest: "section.computer.mobile",
+      selectors: [
+        "section.computer.mobile .scroll h1",
+        "section.computer.mobile .scroll h5",
+      ],
       title: "Moje piesne",
       text: "Tu je tvoja osobná zbierka. Každý zakúpený alebo získaný zápis sa okamžite zobrazí v Zozname piesní.",
       side: "top",
       pad: { x: 24, y: 16 },
       radius: 18,
+      waitFor: 480,
     },
 
     // G) Konkrétny vlastnený zápis
@@ -157,6 +160,7 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 16,
+      waitFor: 520,
     },
 
     // H) Tlačidlo Hrať na vlastnenom zápise
@@ -167,6 +171,7 @@ export function steps() {
       side: "left",
       pad: { x: 18, y: 12 },
       radius: 12,
+      waitFor: 520,
     },
   ];
 }
@@ -175,6 +180,7 @@ export const branch = {
   title: "Skvelé, číselné zápisy máš prejdené",
   text: "Ako chceš pokračovať? Vyber si ďalší krok alebo prehliadku ukonči.",
   avatar: avatarLike,
+  planBridgeLabel: "Náučné videá",
   options: [
     {
       label: "Pozrieť náučné videá",
@@ -182,6 +188,7 @@ export const branch = {
       steps: videoSteps,
       branch: videoBranch,
       planLabel: "Náučné videá",
+      planBridgeLabel: "Hotovo",
     },
     {
       label: "Dokončiť prehliadku",
