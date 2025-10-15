@@ -17,6 +17,16 @@
             >Vyskúšať zadarmo</router-link
           >
         </router-link>
+        <button
+          v-if="isGuideButtonVisible"
+          type="button"
+          class="login button sm-br guide-tour-button"
+          @click="startHomeTour"
+          aria-label="Spustiť krátky návod"
+        >
+          <span class="guide-tour-icon" aria-hidden="true">?</span>
+          <span class="guide-tour-label">Spustiť návod</span>
+        </button>
       </div>
     </div>
     <div class="right">
@@ -79,6 +89,16 @@
             src="@/assets/images/gallery/JurajAAndrejVelkeHlavy.png"
             alt="Heligonkáry Juraj a Andrej zo zväčšenými hlavami"
           />
+          <button
+            v-if="isGuideButtonVisible"
+            type="button"
+            class="login button sm-br guide-tour-button guide-tour-button--mobile"
+            @click="startHomeTour"
+            aria-label="Spustiť krátky návod"
+          >
+            <span class="guide-tour-icon" aria-hidden="true">?</span>
+            <span class="guide-tour-label">Spustiť návod</span>
+          </button>
         </div>
       </section>
 
@@ -190,12 +210,13 @@
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import TheHeadline from "@/components/Menu/TheHeadline.vue";
 import NewsList from "@/components/ucebna/NewsList.vue";
+import { tour } from "@/components/Navigacia/tour/tour";
 
 export default {
   name: "DomovStranka",
@@ -277,6 +298,37 @@ export default {
       checkId();
     });
 
+    const startHomeTour = async () => {
+      const doStart = async () => {
+        await tour.start({
+          mode: "full",
+          startIndex: 0,
+        });
+
+        if (window.haTour?.start) {
+          window.haTour.start(0);
+        } else {
+          try {
+            window.dispatchEvent(
+              new CustomEvent("ha.tour.start", { detail: { index: 0 } })
+            );
+          } catch (e) {}
+        }
+      };
+
+      if (window.__haTourReady) {
+        await doStart();
+      } else {
+        const onReady = async () => {
+          window.removeEventListener("ha.tour.ready", onReady);
+          await doStart();
+        };
+        window.addEventListener("ha.tour.ready", onReady, { once: true });
+      }
+    };
+
+    const isGuideButtonVisible = computed(() => !tour.state.open);
+
     function checkId() {
       const id = route.query.id;
       if (!id) return;
@@ -309,7 +361,13 @@ export default {
         .catch((err) => console.error(err));
     }
 
-    return { showMoreBook, toggleBook, bookSection };
+    return {
+      showMoreBook,
+      toggleBook,
+      bookSection,
+      startHomeTour,
+      isGuideButtonVisible,
+    };
   },
 };
 </script>
@@ -344,6 +402,65 @@ h5 {
 }
 .left {
   width: 90%;
+}
+
+.guide-tour-button {
+  position: relative;
+  border: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  gap: 0;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: padding 0.3s ease, gap 0.3s ease, transform 0.2s ease;
+
+  &:focus-visible {
+    outline: 2px solid rgba(0, 0, 0, 0.6);
+    outline-offset: 3px;
+  }
+}
+
+.guide-tour-button:not(.guide-tour-button--mobile):hover,
+.guide-tour-button:not(.guide-tour-button--mobile):focus-visible {
+  padding: 0.9rem 1.6rem;
+  gap: 0.6em;
+}
+
+.guide-tour-button .guide-tour-icon {
+  font-size: 1.15em;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.guide-tour-button .guide-tour-label {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+  transition: max-width 0.3s ease, opacity 0.25s ease, margin-left 0.3s ease;
+  white-space: nowrap;
+}
+
+.guide-tour-button:not(.guide-tour-button--mobile):hover .guide-tour-label,
+.guide-tour-button:not(.guide-tour-button--mobile):focus-visible .guide-tour-label {
+  max-width: 12rem;
+  opacity: 1;
+  margin-left: 0.7em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-tour-button {
+    transition: none;
+  }
+
+  .guide-tour-button .guide-tour-label {
+    transition: none;
+  }
 }
 
 section {
@@ -438,6 +555,15 @@ section {
   }
 }
 
+@media screen and (max-width: 768px) {
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+  }
+}
+
 @media screen and (max-width: 950px) {
   .second {
     font-size: 70%;
@@ -508,6 +634,7 @@ section {
   /* obrázok vpravo – nech sa správa ako v 450-verzii */
   .right {
     width: 99%;
+    position: relative;
   }
   .right img {
     width: 47vw; /* z 450-verzie (odstránená pevná height) */
@@ -555,6 +682,42 @@ section {
     text-align: center;
     margin: 1.5em auto 0;
     width: 85%;
+  }
+
+  .guide-tour-button--mobile {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 2.9rem;
+    height: 2.9rem;
+    padding: 0;
+    gap: 0;
+    font-size: 1.45rem;
+    transition: transform 0.2s ease;
+  }
+
+  .guide-tour-button--mobile:hover,
+  .guide-tour-button--mobile:focus-visible {
+    transform: translateY(-2px);
+    outline-offset: 3px;
+  }
+
+  .guide-tour-button--mobile .guide-tour-icon {
+    transform: none;
+  }
+
+  .guide-tour-button--mobile .guide-tour-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    max-width: 1px;
+    opacity: 0;
   }
 }
 
