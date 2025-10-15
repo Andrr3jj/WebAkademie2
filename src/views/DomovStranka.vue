@@ -34,6 +34,15 @@
         src="@/assets/images/gallery/JurajAAndrejVelkeHlavy.png"
         alt="Učitelia Heligónkovej Akadémie s heligónkami – online kurzy a náučné videá"
       />
+      <button
+        v-if="isGuideButtonVisible"
+        type="button"
+        class="guide-tour-button"
+        @click="startHomeTour"
+        aria-label="Spustiť krátky návod"
+      >
+        Spustiť návod
+      </button>
     </div>
   </section>
 
