@@ -24,6 +24,15 @@
         src="@/assets/images/gallery/JurajAAndrejVelkeHlavy.png"
         alt="Učitelia Heligónkovej Akadémie s heligónkami – online kurzy a náučné videá"
       />
+      <button
+        v-if="isGuideButtonVisible"
+        type="button"
+        class="guide-tour-button"
+        @click="startHomeTour"
+        aria-label="Spustiť krátky návod"
+      >
+        Spustiť návod
+      </button>
     </div>
   </section>
 
@@ -79,6 +88,15 @@
             src="@/assets/images/gallery/JurajAAndrejVelkeHlavy.png"
             alt="Heligonkáry Juraj a Andrej zo zväčšenými hlavami"
           />
+          <button
+            v-if="isGuideButtonVisible"
+            type="button"
+            class="guide-tour-button"
+            @click="startHomeTour"
+            aria-label="Spustiť krátky návod"
+          >
+            Spustiť návod
+          </button>
         </div>
       </section>
 
@@ -190,12 +208,13 @@
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import TheHeadline from "@/components/Menu/TheHeadline.vue";
 import NewsList from "@/components/ucebna/NewsList.vue";
+import { tour } from "@/components/Navigacia/tour/tour";
 
 export default {
   name: "DomovStranka",
@@ -277,6 +296,37 @@ export default {
       checkId();
     });
 
+    const startHomeTour = async () => {
+      const doStart = async () => {
+        await tour.start({
+          mode: "full",
+          startIndex: 0,
+        });
+
+        if (window.haTour?.start) {
+          window.haTour.start(0);
+        } else {
+          try {
+            window.dispatchEvent(
+              new CustomEvent("ha.tour.start", { detail: { index: 0 } })
+            );
+          } catch (e) {}
+        }
+      };
+
+      if (window.__haTourReady) {
+        await doStart();
+      } else {
+        const onReady = async () => {
+          window.removeEventListener("ha.tour.ready", onReady);
+          await doStart();
+        };
+        window.addEventListener("ha.tour.ready", onReady, { once: true });
+      }
+    };
+
+    const isGuideButtonVisible = computed(() => !tour.state.open);
+
     function checkId() {
       const id = route.query.id;
       if (!id) return;
@@ -309,7 +359,13 @@ export default {
         .catch((err) => console.error(err));
     }
 
-    return { showMoreBook, toggleBook, bookSection };
+    return {
+      showMoreBook,
+      toggleBook,
+      bookSection,
+      startHomeTour,
+      isGuideButtonVisible,
+    };
   },
 };
 </script>
@@ -344,6 +400,36 @@ h5 {
 }
 .left {
   width: 90%;
+}
+
+.guide-tour-button {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  padding: 0.9rem 1.6rem;
+  border: none;
+  border-radius: 999px;
+  background-color: $txt-clr;
+  color: $blck-clr;
+  font-family: "Adumu", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  }
 }
 
 section {
@@ -435,6 +521,23 @@ section {
 @media screen and (max-width: 1000px) {
   .box-item:first-child {
     margin-bottom: 2em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .guide-tour-button {
+    position: static;
+    margin-top: 1.25rem;
+    align-self: flex-end;
+    padding: 0.85rem 1.4rem;
+    font-size: 1rem;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
 }
 
