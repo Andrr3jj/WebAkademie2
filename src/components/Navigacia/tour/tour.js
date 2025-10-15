@@ -25,6 +25,10 @@ const state = reactive({
   // UI mód pre GuideOverlay prepínač
   mode: "steps", // 'steps' | 'between'
   between: null, // { title, text, options: [...] }
+
+  // ochrana proti rýchlemu preklikávaniu
+  transitioning: false,
+  navigationLocked: false,
 });
 
 function firstRealIndex() {
@@ -567,48 +571,120 @@ function buildProgram() {
 // ⬇️ MINI utilita
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function goTo(i) {
-  state.index = i;
-  const s = state.steps[i];
-  if (!s) return;
+const STEP_TRANSITION_GUARD_MS = 2200;
 
-  if (s.goto) {
-    await safePush(s.goto);
-    await nextTick();
+let navigationTimer = null;
+let furthestVisitedIndex = -1;
+
+function resetGuardProgress(firstReal = null) {
+  const base =
+    typeof firstReal === "number" && Number.isFinite(firstReal)
+      ? Math.max(-1, Math.floor(firstReal) - 1)
+      : -1;
+  furthestVisitedIndex = base;
+}
+
+function markVisitedIndex(index) {
+  if (typeof index !== "number" || !Number.isFinite(index)) return;
+  furthestVisitedIndex = Math.max(furthestVisitedIndex, Math.floor(index));
+}
+
+function shouldGuardStep(index, step) {
+  if (!step || step.type === "intro") return false;
+  if (typeof index !== "number" || !Number.isFinite(index)) return false;
+  return Math.floor(index) > furthestVisitedIndex;
+}
+
+function unlockNavigation() {
+  if (navigationTimer) {
+    clearTimeout(navigationTimer);
+    navigationTimer = null;
   }
+  state.navigationLocked = false;
+}
 
-  if (s.waitFor) {
-    await sleep(Number(s.waitFor) || 0);
-    await nextTick();
-    // po čakaní skúsiť zaskrolovať na cieľ (ak je mimo viewportu)
-    try {
-      const target =
-        resolveBind(s.bind) ||
-        (s.selector ? document.querySelector(s.selector) : null);
-      if (target && typeof target.scrollIntoView === "function") {
-        const behavior =
-          s.scrollBehavior && typeof s.scrollBehavior === "string"
-            ? s.scrollBehavior
-            : "auto";
-        const block =
-          s.scrollMode && typeof s.scrollMode === "string"
-            ? s.scrollMode
-            : "center";
-        const inline =
-          s.scrollInline && typeof s.scrollInline === "string"
-            ? s.scrollInline
-            : block === "nearest"
-            ? "nearest"
-            : "center";
-        target.scrollIntoView({ behavior, block, inline });
+function lockNavigation(duration = STEP_TRANSITION_GUARD_MS) {
+  unlockNavigation();
+  const safeDuration = Math.max(0, Number(duration) || 0);
+  if (!safeDuration) return;
+  state.navigationLocked = true;
+  navigationTimer = setTimeout(() => {
+    navigationTimer = null;
+    state.navigationLocked = false;
+  }, safeDuration);
+}
+
+function canNavigate(force = false) {
+  if (force) return true;
+  if (state.transitioning) return false;
+  return !state.navigationLocked;
+}
+
+async function goTo(i) {
+  state.transitioning = true;
+  let s = null;
+
+  try {
+    state.index = i;
+    s = state.steps[i];
+    if (!s) return;
+
+    if (s.goto) {
+      await safePush(s.goto);
+      await nextTick();
+    }
+
+    if (s.waitFor) {
+      await sleep(Number(s.waitFor) || 0);
+      await nextTick();
+      // po čakaní skúsiť zaskrolovať na cieľ (ak je mimo viewportu)
+      try {
+        const target =
+          resolveBind(s.bind) ||
+          (s.selector ? document.querySelector(s.selector) : null);
+        if (target && typeof target.scrollIntoView === "function") {
+          const behavior =
+            s.scrollBehavior && typeof s.scrollBehavior === "string"
+              ? s.scrollBehavior
+              : "auto";
+          const block =
+            s.scrollMode && typeof s.scrollMode === "string"
+              ? s.scrollMode
+              : "center";
+          const inline =
+            s.scrollInline && typeof s.scrollInline === "string"
+              ? s.scrollInline
+              : block === "nearest"
+              ? "nearest"
+              : "center";
+          target.scrollIntoView({ behavior, block, inline });
+        }
+      } catch (e) {
+        /* no-op */
       }
-    } catch (e) {
-      /* no-op */
+    }
+
+    bindStepAt(i);
+    scheduleRecalc();
+  } finally {
+    state.transitioning = false;
+    if (s && state.mode !== "between") {
+      const shouldGuard = shouldGuardStep(i, s);
+      const requestedGuard = Math.max(
+        Number(s.minGuard) || 0,
+        Number(s.guardFor) || 0,
+        STEP_TRANSITION_GUARD_MS
+      );
+      if (shouldGuard && requestedGuard > 0) {
+        lockNavigation(requestedGuard);
+      } else {
+        unlockNavigation();
+      }
+      markVisitedIndex(i);
+    } else {
+      unlockNavigation();
     }
   }
-
-  bindStepAt(i);
-  scheduleRecalc();
 }
 
 function stageStartIndex(stageIdx) {
@@ -664,6 +740,7 @@ async function advanceStageIfNeeded() {
       avatar: branchConfig.avatar || currentStage.branch?.avatar || null,
       options: branchConfig.options.map((o) => ({ ...o })),
     };
+    unlockNavigation();
     return;
   }
 }
@@ -700,6 +777,7 @@ export const tour = {
           options: (n0.options || []).map((o) => ({ ...o })),
         };
         state.completedStageKeys = [];
+        resetGuardProgress();
         if (typeof window !== "undefined") window.__haTourSteps = [];
         return; // ⬅️ nologged mód zobrazený, končíme
       }
@@ -742,12 +820,15 @@ export const tour = {
       window.__haTourSteps = state.steps;
     }
 
+    resetGuardProgress(firstRealIndex());
     attachViewportWatchers();
+    unlockNavigation();
     await goTo(Math.max(0, Math.min(startIndex, state.steps.length - 1)));
   },
 
-  async next() {
+  async next(opts = {}) {
     if (state.mode === "between") return;
+    if (!canNavigate(opts.force)) return;
 
     const current = state.steps[state.index];
     const shouldRunGotoAfter = current && !current.__skipped;
@@ -773,14 +854,16 @@ export const tour = {
     }
   },
 
-  async prev() {
+  async prev(opts = {}) {
     if (state.mode === "between") return;
+    if (!canNavigate(opts.force)) return;
     const prevIndex = findPrevAvailableIndex(state.index);
     if (prevIndex !== null) await goTo(prevIndex);
   },
 
-  async goto(i = 0) {
+  async goto(i = 0, opts = {}) {
     if (state.mode === "between") return;
+    if (!canNavigate(opts.force)) return;
     if (!state.steps.length) return;
     const firstReal = firstRealIndex();
     let target = Math.max(0, Math.min(i, state.steps.length - 1));
@@ -803,6 +886,9 @@ export const tour = {
     detachViewportWatchers();
     state.mode = "steps";
     state.between = null;
+    state.transitioning = false;
+    unlockNavigation();
+    resetGuardProgress();
   },
 
   // callback z BetweenOverlay (medzikrok po etape)
@@ -894,7 +980,7 @@ export const tour = {
   async skipCurrentStep() {
     if (state.mode === "between") return false;
     if (!markStepSkippedAt(state.index)) return false;
-    await this.next();
+    await this.next({ force: true });
     return true;
   },
 
