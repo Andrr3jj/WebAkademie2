@@ -597,21 +597,14 @@ export default {
   justify-content: center;
   isolation: isolate;
 }
-.guide-btn-wrap::before {
+.guide-btn-wrap::before,
+.guide-btn-wrap::after {
   content: "";
   position: absolute;
   inset: -0.35rem;
   border-radius: 1.25rem;
   pointer-events: none;
   opacity: 0;
-  --guide-progress: 0deg;
-  background: conic-gradient(
-    from -90deg,
-    rgba(144, 202, 80, 0.85) 0deg,
-    rgba(144, 202, 80, 0.85) var(--guide-progress),
-    rgba(144, 202, 80, 0.22) var(--guide-progress),
-    rgba(144, 202, 80, 0.22) 360deg
-  );
   mask: radial-gradient(
     farthest-side,
     transparent calc(100% - 0.1875rem),
@@ -624,20 +617,41 @@ export default {
   );
   transition: opacity 0.18s ease;
 }
-.guide-btn-wrap.locked::before {
-  opacity: 1;
-  animation: guide-lock-fill 1.2s ease-in-out infinite;
+
+.guide-btn-wrap::before {
+  background: rgba(144, 202, 80, 0.22);
 }
 
-@keyframes guide-lock-fill {
+.guide-btn-wrap::after {
+  background: conic-gradient(
+    from -90deg,
+    transparent 0deg,
+    transparent 292deg,
+    rgba(254, 243, 90, 0.96) 292deg,
+    rgba(144, 202, 80, 0.9) 324deg,
+    transparent 324deg,
+    transparent 360deg
+  );
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  will-change: transform;
+}
+
+.guide-btn-wrap.locked::before,
+.guide-btn-wrap.locked::after {
+  opacity: 1;
+}
+
+.guide-btn-wrap.locked::after {
+  animation: guide-lock-snake 1.05s linear infinite;
+}
+
+@keyframes guide-lock-snake {
   0% {
-    --guide-progress: 0deg;
-  }
-  78% {
-    --guide-progress: 360deg;
+    transform: rotate(-90deg);
   }
   100% {
-    --guide-progress: 360deg;
+    transform: rotate(270deg);
   }
 }
 
