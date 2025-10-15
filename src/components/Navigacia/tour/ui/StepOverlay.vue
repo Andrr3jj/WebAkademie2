@@ -21,7 +21,7 @@
           class="guide-btn ghost"
           type="button"
           @click.stop="prev"
-          :disabled="!hasPrev"
+          :disabled="!hasPrev || isLocked"
         >
           Späť
         </button>
@@ -30,7 +30,12 @@
           Preskočiť
         </button>
 
-        <button class="guide-btn primary" type="button" @click.stop="next">
+        <button
+          class="guide-btn primary"
+          type="button"
+          @click.stop="next"
+          :disabled="isLocked"
+        >
           {{ isLast ? "Dokončiť" : "Ďalej" }}
         </button>
       </div>
@@ -121,7 +126,8 @@ export default {
         const skipped = await tour.skipCurrentStep();
         if (skipped) return;
       }
-      if (index.value < steps.value.length - 1) await tour.next();
+      if (index.value < steps.value.length - 1)
+        await tour.next({ force: true });
       else tour.close();
     }
 
@@ -354,8 +360,18 @@ export default {
     }
 
     // ovládanie
-    const next = () => tour.next();
-    const prev = () => tour.prev();
+    const isLocked = computed(
+      () => tour.state.transitioning || tour.state.navigationLocked
+    );
+
+    const next = () => {
+      if (isLocked.value) return;
+      tour.next();
+    };
+    const prev = () => {
+      if (isLocked.value) return;
+      tour.prev();
+    };
     const close = () => tour.close();
 
     function onKeydown(e) {
@@ -404,6 +420,7 @@ export default {
       spotStyle,
       tooltipStyle,
       tooltipSide,
+      isLocked,
       prev,
       next,
       close,
