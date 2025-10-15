@@ -59,19 +59,6 @@
   <!-- Globálny guide overlay (jedenkrát v appke) -->
   <GuideOverlay />
 
-  <!-- Globálne FAB tlačidlo – spustí tour -->
-  <transition name="fab-fade" appear>
-    <button
-      v-if="guideFabVisible"
-      class="guide-fab"
-      type="button"
-      @click="startGlobalTour"
-      aria-label="Spustiť krátky návod"
-    >
-      ?
-    </button>
-  </transition>
-
   <div class="version">
     <version-show />
   </div>
@@ -90,7 +77,6 @@ import GratulaciaOznamenie from "@/components/Functionality/GratulaciaOznamenie.
 import TheInfoMenu from "@/components/Edupage/TheInfoMenu.vue";
 import VersionShow from "./components/Helicas/Fungovanie/VersionShow.vue";
 import GuideOverlay from "@/components/Navigacia/GuideOverlay.vue";
-import { tour } from "@/components/Navigacia/tour/tour"; // <-- TOUR API
 
 const apiFriend = axios.create({
   baseURL: "/api/friend",
@@ -139,53 +125,8 @@ export default {
     gratulation() {
       return this.$store.state.info.gratulation;
     },
-    guideFabVisible() {
-      return !tour.state.open;
-    },
   },
   methods: {
-    /* ---------------- TOUR spúšťač (hlavná zmena) ---------------- */
-    // Pomocný runner: čaká na GuideOverlay a spustí tour + otvorí overlay
-    async runTour({ mode = "full", startIndex = 0, steps = null } = {}) {
-      const doStart = async () => {
-        await tour.start({
-          mode, // "home" | "menu" | "full"
-          startIndex,
-          steps, // ak pošleš vlastné kroky, použijú sa tie
-        });
-        // otvor vizuálny overlay (GuideOverlay)
-        if (window.haTour?.start) {
-          window.haTour.start(0);
-        } else {
-          // fallback: eventom
-          try {
-            window.dispatchEvent(
-              new CustomEvent("ha.tour.start", { detail: { index: 0 } })
-            );
-          } catch (e) {}
-        }
-      };
-
-      if (window.__haTourReady) {
-        await doStart();
-      } else {
-        const onReady = async () => {
-          window.removeEventListener("ha.tour.ready", onReady);
-          await doStart();
-        };
-        window.addEventListener("ha.tour.ready", onReady, { once: true });
-      }
-    },
-
-    startGlobalTour() {
-      // full = domovská etapa + menubar (presety sú už v tour.js)
-      this.runTour({
-        mode: "full",
-        startIndex: 0,
-        // steps: [...tour.presets.defaultHomeSteps(), ...tour.presets.menuSteps()], // ak chceš natvrdo
-      });
-    },
-
     /* ---------------- zvyšok tvojich metód bez zmeny ---------------- */
     randomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -633,42 +574,6 @@ body.admin-unlocked * {
   user-select: auto !important;
   -webkit-user-select: auto !important;
   -ms-user-select: auto !important;
-}
-
-.guide-fab {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 4000;
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  border: 1px solid #e6ecf2;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  font-weight: 900;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.guide-fab:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
-}
-.fab-fade-enter-active,
-.fab-fade-leave-active {
-  transition: opacity 0.24s cubic-bezier(0.18, 0.72, 0.32, 1),
-    transform 0.24s cubic-bezier(0.18, 0.72, 0.32, 1);
-}
-.fab-fade-enter-from,
-.fab-fade-leave-to {
-  opacity: 0;
-  transform: translate3d(0, 12px, 0) scale(0.9);
-}
-.fab-fade-enter-to,
-.fab-fade-leave-from {
-  opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
 }
 
 @media print {
