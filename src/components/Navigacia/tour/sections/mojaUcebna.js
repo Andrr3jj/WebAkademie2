@@ -4,6 +4,11 @@ import avatarCelebration from "@/assets/images/gallery/avatar-like.png";
 export function steps() {
   const waitShort = 520;
   const waitMedium = 640;
+  const smoothScroll = {
+    scrollMode: "nearest",
+    scrollInline: "nearest",
+    scrollBehavior: "smooth",
+  };
 
   return [
     {
@@ -18,6 +23,7 @@ export function steps() {
       pad: { x: 26, y: 20 },
       radius: 20,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -30,6 +36,7 @@ export function steps() {
       pad: { x: 24, y: 18 },
       radius: 18,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -42,6 +49,7 @@ export function steps() {
       pad: { x: 26, y: 22 },
       radius: 22,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [".computer .column-left .news-list", ".mobile .news-list"],
@@ -51,6 +59,7 @@ export function steps() {
       pad: { x: 22, y: 18 },
       radius: 18,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -63,6 +72,7 @@ export function steps() {
       pad: { x: 24, y: 20 },
       radius: 20,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -75,6 +85,7 @@ export function steps() {
       pad: { x: 26, y: 22 },
       radius: 24,
       waitFor: waitMedium,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -88,6 +99,7 @@ export function steps() {
       pad: { x: 22, y: 18 },
       radius: 18,
       waitFor: waitShort,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -101,6 +113,7 @@ export function steps() {
       pad: { x: 22, y: 18 },
       radius: 18,
       waitFor: waitShort,
+      ...smoothScroll,
     },
     {
       selectors: [
@@ -113,6 +126,7 @@ export function steps() {
       pad: { x: 26, y: 20 },
       radius: 20,
       waitFor: waitShort,
+      ...smoothScroll,
     },
     {
       selectors: [".bottom-nav-wrapper .bottom-bar"],
@@ -123,6 +137,7 @@ export function steps() {
       pad: { x: 28, y: 24 },
       radius: 28,
       waitFor: waitShort,
+      ...smoothScroll,
     },
   ];
 }

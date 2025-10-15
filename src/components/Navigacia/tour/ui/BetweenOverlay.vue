@@ -21,111 +21,120 @@
         </div>
 
         <!-- Bublina -->
-        <section class="intro-bubble" :class="[`st-${stage}`]">
-          <button
-            class="guide-close intro-close"
-            type="button"
-            @click="$emit('close')"
-            aria-label="Ukončiť"
-          >
-            ✕
-          </button>
-          <h2 class="intro-title">
-            <template v-if="variant === 'intro'">
-              Ahoj, som Andrej <span class="wave">👋</span>
-            </template>
-            <template v-else>
-              {{ title || "Skvelé! Domovská stránka je hotová 🎉" }}
-            </template>
-          </h2>
-
-          <p class="intro-lead" v-if="variant === 'intro'">
-            Prevediem ťa krátkym návodom, aby ti na našej stránke nič nešlo
-            mimo.
-          </p>
-          <p class="intro-lead" v-else-if="text">
-            {{ text }}
-          </p>
-
-          <!-- plánik – ponecháme aj pre medzikrok -->
-          <div class="intro-plan" v-if="planSegments.length">
-            <ol class="plan-summary" :aria-label="planSummary">
-              <li
-                v-for="(item, idx) in planSegments"
-                :key="`plan-${idx}`"
-                class="plan-summary__item"
-                :class="`status-${item.status}`"
-                :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
-                  item.status
-                )}`"
-              >
-                <span
-                  class="plan-summary__icon"
-                  :class="`status-${item.status}`"
-                >
-                  <span
-                    v-if="item.status === 'done'"
-                    class="icon"
-                    aria-hidden="true"
-                    >✓</span
-                  >
-                  <span
-                    v-else-if="item.status === 'current'"
-                    class="icon current"
-                    aria-hidden="true"
-                  ></span>
-                  <span v-else class="icon upcoming" aria-hidden="true"></span>
-                </span>
-                <div class="plan-summary__text">
-                  <span class="plan-summary__title">{{ item.label }}</span>
-                  <div class="plan-summary__meta">
-                    <span class="plan-summary__status">{{
-                      statusLabel(item.status)
-                    }}</span>
-                    <span v-if="item.bridgeLabel" class="plan-summary__bridge">
-                      Ďalej: {{ item.bridgeLabel }}
-                    </span>
-                  </div>
-                </div>
-              </li>
-            </ol>
-          </div>
-
-          <div
-            class="intro-actions"
-            :class="{ 'is-branch': variant !== 'intro' }"
-          >
-            <p v-if="planItems.length" class="plan-tip small action-tip">
-              Tip: používaj šípky <span class="kbd">←</span>
-              <span class="kbd">→</span> a <span class="kbd">Esc</span> pre
-              zatvorenie.
-            </p>
-            <!-- intro: Začať -->
+        <div class="intro-bubble-wrapper">
+          <section class="intro-bubble" :class="[`st-${stage}`]">
             <button
-              v-if="variant === 'intro'"
-              class="guide-btn primary"
+              class="guide-close intro-close"
               type="button"
-              @click="start"
+              @click="$emit('close')"
+              aria-label="Ukončiť"
             >
-              Začať
+              ✕
             </button>
+            <h2 class="intro-title">
+              <template v-if="variant === 'intro'">
+                Ahoj, som Andrej <span class="wave">👋</span>
+              </template>
+              <template v-else>
+                {{ title || "Skvelé! Domovská stránka je hotová 🎉" }}
+              </template>
+            </h2>
 
-            <!-- medzikrok: voľby -->
-            <template v-else>
-              <div class="branch-options">
-                <button
-                  v-for="(opt, i) in options"
-                  :key="i"
-                  class="guide-btn primary"
-                  type="button"
-                  @click="choose(opt)"
+            <p class="intro-lead" v-if="variant === 'intro'">
+              Prevediem ťa krátkym návodom, aby ti na našej stránke nič nešlo
+              mimo.
+            </p>
+            <p class="intro-lead" v-else-if="text">
+              {{ text }}
+            </p>
+
+            <!-- plánik – ponecháme aj pre medzikrok -->
+            <div class="intro-plan" v-if="planSegments.length">
+              <ol class="plan-summary" :aria-label="planSummary">
+                <li
+                  v-for="(item, idx) in planSegments"
+                  :key="`plan-${idx}`"
+                  class="plan-summary__item"
+                  :class="`status-${item.status}`"
+                  :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
+                    item.status
+                  )}`"
                 >
-                  {{ opt?.label || "Pokračovať" }}
-                </button>
-              </div>
-            </template>
-          </div>
-        </section>
+                  <span
+                    class="plan-summary__icon"
+                    :class="`status-${item.status}`"
+                  >
+                    <span
+                      v-if="item.status === 'done'"
+                      class="icon"
+                      aria-hidden="true"
+                      >✓</span
+                    >
+                    <span
+                      v-else-if="item.status === 'current'"
+                      class="icon current"
+                      aria-hidden="true"
+                    ></span>
+                    <span
+                      v-else
+                      class="icon upcoming"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                  <div class="plan-summary__text">
+                    <span class="plan-summary__title">{{ item.label }}</span>
+                    <div class="plan-summary__meta">
+                      <span class="plan-summary__status">{{
+                        statusLabel(item.status)
+                      }}</span>
+                      <span
+                        v-if="item.bridgeLabel"
+                        class="plan-summary__bridge"
+                      >
+                        Ďalej: {{ item.bridgeLabel }}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div
+              class="intro-actions"
+              :class="{ 'is-branch': variant !== 'intro' }"
+            >
+              <p v-if="planItems.length" class="plan-tip small action-tip">
+                Tip: používaj šípky <span class="kbd">←</span>
+                <span class="kbd">→</span> a <span class="kbd">Esc</span> pre
+                zatvorenie.
+              </p>
+              <!-- intro: Začať -->
+              <button
+                v-if="variant === 'intro'"
+                class="guide-btn primary"
+                type="button"
+                @click="start"
+              >
+                Začať
+              </button>
+
+              <!-- medzikrok: voľby -->
+              <template v-else>
+                <div class="branch-options">
+                  <button
+                    v-for="(opt, i) in options"
+                    :key="i"
+                    class="guide-btn primary"
+                    type="button"
+                    @click="choose(opt)"
+                  >
+                    {{ opt?.label || "Pokračovať" }}
+                  </button>
+                </div>
+              </template>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -263,6 +272,10 @@ export default {
   --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
   --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
   --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
+  --intro-bubble-scale: 0.65;
+  --intro-bubble-visible-w: calc(
+    var(--intro-bubble-w) * var(--intro-bubble-scale)
+  );
 }
 
 /* vrstva */
@@ -297,8 +310,16 @@ export default {
   padding: clamp(0.5rem, 1.4vw, 1rem);
   max-width: min(
     96vw,
-    calc(var(--intro-avatar-w) + var(--intro-gap) + var(--intro-bubble-w))
+    calc(
+      var(--intro-avatar-w) + var(--intro-gap) + var(--intro-bubble-visible-w)
+    )
   );
+}
+
+.intro-bubble-wrapper {
+  flex: 0 0 var(--intro-bubble-visible-w);
+  width: var(--intro-bubble-visible-w);
+  max-width: var(--intro-bubble-visible-w);
 }
 
 /* avatar + efekty */
@@ -395,7 +416,8 @@ export default {
 /* bublina */
 .intro-bubble {
   position: relative;
-  width: var(--intro-bubble-w);
+  width: calc(100% / var(--intro-bubble-scale));
+  max-width: calc(var(--intro-bubble-w) / var(--intro-bubble-scale));
   background: var(--ha-card-bg);
   color: var(--ha-card-fg);
   border: 0.0625rem solid var(--ha-card-border);
@@ -408,7 +430,8 @@ export default {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform: translateY(0.5rem);
+  transform-origin: top left;
+  transform: translateY(0.5rem) scale(var(--intro-bubble-scale));
   transition: -webkit-clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -418,13 +441,13 @@ export default {
   -webkit-clip-path: var(--maskTo);
   clip-path: var(--maskTo);
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(var(--intro-bubble-scale));
 }
 .intro-bubble.st-leave {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform: translateY(0.375rem);
+  transform: translateY(0.375rem) scale(var(--intro-bubble-scale));
   transition-duration: var(--intro-out);
 }
 
@@ -689,8 +712,14 @@ export default {
   .intro-avatar-shell {
     display: none;
   }
+  .intro-bubble-wrapper {
+    flex: 0 0 auto;
+    width: min(92vw, calc(40rem * var(--intro-bubble-scale)));
+    max-width: min(92vw, calc(40rem * var(--intro-bubble-scale)));
+  }
   .intro-bubble {
-    width: min(92vw, 40rem);
+    width: calc(100% / var(--intro-bubble-scale));
+    max-width: calc(min(92vw, 40rem) / var(--intro-bubble-scale));
   }
   .intro-bubble::after {
     left: calc(50% - 0.625rem);
