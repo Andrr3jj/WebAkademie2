@@ -17,6 +17,16 @@
             >Vyskúšať zadarmo</router-link
           >
         </router-link>
+        <button
+          v-if="isGuideButtonVisible"
+          type="button"
+          class="login button sm-br guide-tour-button"
+          @click="startHomeTour"
+          aria-label="Spustiť krátky návod"
+        >
+          <span class="guide-tour-icon" aria-hidden="true">?</span>
+          <span class="guide-tour-label">Spustiť návod</span>
+        </button>
       </div>
     </div>
     <div class="right">
@@ -91,11 +101,12 @@
           <button
             v-if="isGuideButtonVisible"
             type="button"
-            class="guide-tour-button"
+            class="login button sm-br guide-tour-button guide-tour-button--mobile"
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            Spustiť návod
+            <span class="guide-tour-icon" aria-hidden="true">?</span>
+            <span class="guide-tour-label">Spustiť návod</span>
           </button>
         </div>
       </section>
@@ -403,32 +414,61 @@ h5 {
 }
 
 .guide-tour-button {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  padding: 0.9rem 1.6rem;
+  position: relative;
   border: none;
   border-radius: 999px;
-  background-color: $txt-clr;
-  color: $blck-clr;
-  font-family: "Adumu", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  gap: 0;
+  padding: 0.85rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  z-index: 2;
+  transition: padding 0.3s ease, gap 0.3s ease, transform 0.2s ease;
 
-  &:hover,
   &:focus-visible {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    outline: 2px solid rgba(0, 0, 0, 0.6);
+    outline-offset: 3px;
+  }
+}
+
+.guide-tour-button:not(.guide-tour-button--mobile):hover,
+.guide-tour-button:not(.guide-tour-button--mobile):focus-visible {
+  padding: 0.9rem 1.6rem;
+  gap: 0.6em;
+}
+
+.guide-tour-button .guide-tour-icon {
+  font-size: 1.15em;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.guide-tour-button .guide-tour-label {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+  transition: max-width 0.3s ease, opacity 0.25s ease, margin-left 0.3s ease;
+  white-space: nowrap;
+}
+
+.guide-tour-button:not(.guide-tour-button--mobile):hover .guide-tour-label,
+.guide-tour-button:not(.guide-tour-button--mobile):focus-visible .guide-tour-label {
+  max-width: 12rem;
+  opacity: 1;
+  margin-left: 0.7em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-tour-button {
+    transition: none;
   }
 
-  &:active {
-    transform: translateY(0) scale(0.99);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  .guide-tour-button .guide-tour-label {
+    transition: none;
   }
 }
 
@@ -529,15 +569,7 @@ section {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-  }
-
-  .guide-tour-button {
-    position: static;
-    margin-top: 1.25rem;
-    align-self: flex-end;
-    padding: 0.85rem 1.4rem;
-    font-size: 1rem;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    position: relative;
   }
 }
 
@@ -611,6 +643,7 @@ section {
   /* obrázok vpravo – nech sa správa ako v 450-verzii */
   .right {
     width: 99%;
+    position: relative;
   }
   .right img {
     width: 47vw; /* z 450-verzie (odstránená pevná height) */
@@ -658,6 +691,42 @@ section {
     text-align: center;
     margin: 1.5em auto 0;
     width: 85%;
+  }
+
+  .guide-tour-button--mobile {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 2.9rem;
+    height: 2.9rem;
+    padding: 0;
+    gap: 0;
+    font-size: 1.45rem;
+    transition: transform 0.2s ease;
+  }
+
+  .guide-tour-button--mobile:hover,
+  .guide-tour-button--mobile:focus-visible {
+    transform: translateY(-2px);
+    outline-offset: 3px;
+  }
+
+  .guide-tour-button--mobile .guide-tour-icon {
+    transform: none;
+  }
+
+  .guide-tour-button--mobile .guide-tour-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    max-width: 1px;
+    opacity: 0;
   }
 }
 
