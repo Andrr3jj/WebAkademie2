@@ -574,6 +574,26 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const STEP_TRANSITION_GUARD_MS = 2200;
 
 let navigationTimer = null;
+let furthestVisitedIndex = -1;
+
+function resetGuardProgress(firstReal = null) {
+  const base =
+    typeof firstReal === "number" && Number.isFinite(firstReal)
+      ? Math.max(-1, Math.floor(firstReal) - 1)
+      : -1;
+  furthestVisitedIndex = base;
+}
+
+function markVisitedIndex(index) {
+  if (typeof index !== "number" || !Number.isFinite(index)) return;
+  furthestVisitedIndex = Math.max(furthestVisitedIndex, Math.floor(index));
+}
+
+function shouldGuardStep(index, step) {
+  if (!step || step.type === "intro") return false;
+  if (typeof index !== "number" || !Number.isFinite(index)) return false;
+  return Math.floor(index) > furthestVisitedIndex;
+}
 
 function unlockNavigation() {
   if (navigationTimer) {
@@ -649,12 +669,18 @@ async function goTo(i) {
   } finally {
     state.transitioning = false;
     if (s && state.mode !== "between") {
+      const shouldGuard = shouldGuardStep(i, s);
       const requestedGuard = Math.max(
         Number(s.minGuard) || 0,
         Number(s.guardFor) || 0,
         STEP_TRANSITION_GUARD_MS
       );
-      lockNavigation(requestedGuard);
+      if (shouldGuard && requestedGuard > 0) {
+        lockNavigation(requestedGuard);
+      } else {
+        unlockNavigation();
+      }
+      markVisitedIndex(i);
     } else {
       unlockNavigation();
     }
@@ -751,6 +777,7 @@ export const tour = {
           options: (n0.options || []).map((o) => ({ ...o })),
         };
         state.completedStageKeys = [];
+        resetGuardProgress();
         if (typeof window !== "undefined") window.__haTourSteps = [];
         return; // ⬅️ nologged mód zobrazený, končíme
       }
@@ -793,6 +820,7 @@ export const tour = {
       window.__haTourSteps = state.steps;
     }
 
+    resetGuardProgress(firstRealIndex());
     attachViewportWatchers();
     unlockNavigation();
     await goTo(Math.max(0, Math.min(startIndex, state.steps.length - 1)));
@@ -860,6 +888,7 @@ export const tour = {
     state.between = null;
     state.transitioning = false;
     unlockNavigation();
+    resetGuardProgress();
   },
 
   // callback z BetweenOverlay (medzikrok po etape)

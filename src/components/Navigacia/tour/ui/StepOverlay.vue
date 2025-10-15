@@ -30,14 +30,17 @@
           Preskočiť
         </button>
 
-        <button
-          class="guide-btn primary"
-          type="button"
-          @click.stop="next"
-          :disabled="isLocked"
-        >
-          {{ isLast ? "Dokončiť" : "Ďalej" }}
-        </button>
+        <div class="guide-btn-wrap" :class="{ locked: isNavigationLocked }">
+          <button
+            class="guide-btn primary"
+            type="button"
+            @click.stop="next"
+            :disabled="isLocked"
+            :aria-busy="isLocked ? 'true' : 'false'"
+          >
+            {{ isLast ? "Dokončiť" : "Ďalej" }}
+          </button>
+        </div>
       </div>
 
       <button
@@ -363,6 +366,7 @@ export default {
     const isLocked = computed(
       () => tour.state.transitioning || tour.state.navigationLocked
     );
+    const isNavigationLocked = computed(() => tour.state.navigationLocked);
 
     const next = () => {
       if (isLocked.value) return;
@@ -421,6 +425,7 @@ export default {
       tooltipStyle,
       tooltipSide,
       isLocked,
+      isNavigationLocked,
       prev,
       next,
       close,
@@ -545,6 +550,8 @@ export default {
   font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.98rem);
   transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease,
     background 0.14s ease;
+  position: relative;
+  z-index: 1;
 }
 .guide-btn.primary {
   background: var(--ha-yellow);
@@ -581,6 +588,39 @@ export default {
   cursor: default;
   transform: none !important;
   box-shadow: none !important;
+}
+
+.guide-btn-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+.guide-btn-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -0.35rem;
+  border-radius: 1.25rem;
+  border: 0.1875rem solid transparent;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(0deg);
+  transform-origin: center;
+}
+.guide-btn-wrap.locked::before {
+  opacity: 1;
+  border-top-color: rgba(144, 202, 80, 0.9);
+  border-right-color: rgba(144, 202, 80, 0.6);
+  border-bottom-color: rgba(144, 202, 80, 0.38);
+  border-left-color: rgba(144, 202, 80, 0.2);
+  animation: guide-lock-spin 1.15s linear infinite;
+}
+
+@keyframes guide-lock-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .guide-close {
