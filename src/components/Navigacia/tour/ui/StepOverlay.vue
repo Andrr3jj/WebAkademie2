@@ -21,7 +21,7 @@
           class="guide-btn ghost"
           type="button"
           @click.stop="prev"
-          :disabled="!hasPrev"
+          :disabled="!hasPrev || isLocked"
         >
           Späť
         </button>
@@ -30,9 +30,21 @@
           Preskočiť
         </button>
 
-        <button class="guide-btn primary" type="button" @click.stop="next">
-          {{ isLast ? "Dokončiť" : "Ďalej" }}
-        </button>
+        <div
+          class="guide-btn-wrap"
+          :class="{ locked: isNavigationLocked }"
+          :style="lockStyles"
+        >
+          <button
+            class="guide-btn primary"
+            type="button"
+            @click.stop="next"
+            :disabled="isLocked"
+            :aria-busy="isLocked ? 'true' : 'false'"
+          >
+            {{ isLast ? "Dokončiť" : "Ďalej" }}
+          </button>
+        </div>
       </div>
 
       <button
@@ -121,7 +133,8 @@ export default {
         const skipped = await tour.skipCurrentStep();
         if (skipped) return;
       }
-      if (index.value < steps.value.length - 1) await tour.next();
+      if (index.value < steps.value.length - 1)
+        await tour.next({ force: true });
       else tour.close();
     }
 
@@ -354,8 +367,92 @@ export default {
     }
 
     // ovládanie
-    const next = () => tour.next();
-    const prev = () => tour.prev();
+    const isLocked = computed(
+      () => tour.state.transitioning || tour.state.navigationLocked
+    );
+    const isNavigationLocked = computed(() => tour.state.navigationLocked);
+
+    const lockAngle = ref(0);
+    const lockDuration = ref(0);
+    const lockStyles = computed(() => ({
+      "--lock-angle": `${lockAngle.value.toFixed(2)}deg`,
+      "--lock-duration": `${Math.max(0, Math.round(lockDuration.value))}ms`,
+    }));
+
+    let lockRaf = 0;
+
+    function cancelLockAnimation() {
+      if (lockRaf) {
+        cancelAnimationFrame(lockRaf);
+        lockRaf = 0;
+      }
+    }
+
+    const now = () => {
+      if (
+        typeof performance !== "undefined" &&
+        typeof performance.now === "function"
+      ) {
+        return performance.now();
+      }
+      return Date.now();
+    };
+
+    function runLockAnimation(start, duration) {
+      cancelLockAnimation();
+      const safeStart = Number(start) || now();
+      const safeDuration = Math.max(0, Number(duration) || 0);
+      if (!safeDuration) {
+        lockAngle.value = 360;
+        return;
+      }
+
+      lockAngle.value = 0;
+
+      const step = () => {
+        const elapsed = Math.max(0, now() - safeStart);
+        const progress = Math.min(1, safeDuration ? elapsed / safeDuration : 1);
+        lockAngle.value = progress * 360;
+        if (progress < 1 && tour.state.navigationLocked) {
+          lockRaf = requestAnimationFrame(step);
+        } else {
+          lockRaf = 0;
+        }
+      };
+
+      lockRaf = requestAnimationFrame(step);
+    }
+
+    watch(
+      () => [
+        tour.state.navigationLocked,
+        tour.state.navigationLockStart,
+        tour.state.navigationLockDuration,
+      ],
+      ([locked, start, duration]) => {
+        cancelLockAnimation();
+        const safeDuration = Math.max(0, Number(duration) || 0);
+        lockDuration.value = safeDuration;
+
+        if (locked && safeDuration > 0) {
+          runLockAnimation(start, safeDuration);
+        } else if (locked) {
+          lockAngle.value = 360;
+        } else {
+          lockAngle.value = 0;
+        }
+      },
+      { immediate: true }
+    );
+
+    const next = () => {
+      if (isLocked.value) return;
+      tour.next();
+    };
+    const prev = () => {
+      if (isLocked.value) return;
+      tour.prev();
+    };
     const close = () => tour.close();
 
     function onKeydown(e) {
@@ -392,6 +489,7 @@ export default {
       window.removeEventListener("scroll", updateSpotThrottled);
       window.removeEventListener("keydown", onKeydown);
       detachTargetObserver();
+      cancelLockAnimation();
     });
 
     return {
@@ -404,6 +502,9 @@ export default {
       spotStyle,
       tooltipStyle,
       tooltipSide,
+      isLocked,
+      isNavigationLocked,
+      lockStyles,
       prev,
       next,
       close,
@@ -421,6 +522,12 @@ export default {
   --ha-card-border: #e6ecf2;
   --tour-dur: 320ms;
   --tour-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@property --lock-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 /* RING / backdrop */
@@ -528,12 +635,15 @@ export default {
   font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.98rem);
   transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease,
     background 0.14s ease;
+  position: relative;
+  z-index: 1;
 }
 .guide-btn.primary {
   background: var(--ha-yellow);
   color: #0f240f;
   border-color: #90ca50;
   box-shadow: 0 0 0 0.125rem #fff inset;
+  z-index: 0;
 }
 .guide-btn.primary:hover {
   transform: translateY(-0.0625rem);
@@ -564,6 +674,40 @@ export default {
   cursor: default;
   transform: none !important;
   box-shadow: none !important;
+}
+
+.guide-btn-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+.guide-btn.primary::before {
+  content: "";
+  position: absolute;
+  inset: -0.35rem;
+  border-radius: 1.25rem;
+  border: 0.1875rem solid transparent;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  background: linear-gradient(transparent, transparent) padding-box,
+    conic-gradient(
+        from -90deg,
+        rgba(254, 243, 90, 0.85) 0deg,
+        rgba(254, 243, 90, 0.85) var(--lock-angle, 0deg),
+        rgba(144, 202, 80, 0.12) var(--lock-angle, 0deg),
+        rgba(144, 202, 80, 0.12) 360deg
+      )
+      border-box;
+  box-shadow: inset 0 0 0 0.09375rem rgba(144, 202, 80, 0.34),
+    0 0 0 0.1875rem rgba(254, 243, 90, 0.4);
+}
+
+.guide-btn-wrap.locked .guide-btn.primary::before {
+  opacity: 1;
 }
 
 .guide-close {

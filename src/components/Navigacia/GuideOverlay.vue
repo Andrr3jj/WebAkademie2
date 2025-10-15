@@ -359,7 +359,7 @@ export default {
 
     const startFromFirst = async () => {
       const firstReal = steps.value[0]?.type === "intro" ? 1 : 0;
-      await tour.goto(firstReal);
+      await tour.goto(firstReal, { force: true });
     };
 
     const onChoose = async (opt) => {
