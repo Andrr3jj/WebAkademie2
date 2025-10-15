@@ -21,7 +21,7 @@
           class="guide-btn ghost"
           type="button"
           @click.stop="prev"
-          :disabled="!hasPrev"
+          :disabled="!hasPrev || isLocked"
         >
           Späť
         </button>
@@ -30,9 +30,18 @@
           Preskočiť
         </button>
 
-        <button class="guide-btn primary" type="button" @click.stop="next">
-          {{ isLast ? "Dokončiť" : "Ďalej" }}
-        </button>
+        <div class="guide-btn-wrap" :class="{ locked: isNavigationLocked }">
+          <span class="guide-btn-halo" aria-hidden="true"></span>
+          <button
+            class="guide-btn primary"
+            type="button"
+            @click.stop="next"
+            :disabled="isLocked"
+            :aria-busy="isLocked ? 'true' : 'false'"
+          >
+            {{ isLast ? "Dokončiť" : "Ďalej" }}
+          </button>
+        </div>
       </div>
 
       <button
@@ -121,7 +130,8 @@ export default {
         const skipped = await tour.skipCurrentStep();
         if (skipped) return;
       }
-      if (index.value < steps.value.length - 1) await tour.next();
+      if (index.value < steps.value.length - 1)
+        await tour.next({ force: true });
       else tour.close();
     }
 
@@ -354,8 +364,19 @@ export default {
     }
 
     // ovládanie
-    const next = () => tour.next();
-    const prev = () => tour.prev();
+    const isLocked = computed(
+      () => tour.state.transitioning || tour.state.navigationLocked
+    );
+    const isNavigationLocked = computed(() => tour.state.navigationLocked);
+
+    const next = () => {
+      if (isLocked.value) return;
+      tour.next();
+    };
+    const prev = () => {
+      if (isLocked.value) return;
+      tour.prev();
+    };
     const close = () => tour.close();
 
     function onKeydown(e) {
@@ -404,6 +425,8 @@ export default {
       spotStyle,
       tooltipStyle,
       tooltipSide,
+      isLocked,
+      isNavigationLocked,
       prev,
       next,
       close,
@@ -528,6 +551,8 @@ export default {
   font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.98rem);
   transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease,
     background 0.14s ease;
+  position: relative;
+  z-index: 1;
 }
 .guide-btn.primary {
   background: var(--ha-yellow);
@@ -564,6 +589,194 @@ export default {
   cursor: default;
   transform: none !important;
   box-shadow: none !important;
+}
+
+.guide-btn-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+.guide-btn-halo {
+  display: block;
+  position: absolute;
+  inset: -0.35rem;
+  border-radius: 1.25rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  box-shadow: inset 0 0 0 0.09375rem rgba(144, 202, 80, 0.28);
+}
+.guide-btn-halo::before,
+.guide-btn-halo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  outline: 0.1875rem solid rgba(254, 243, 90, 0.95);
+  opacity: 0;
+  animation-duration: 1.2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: left, top, width, height;
+}
+.guide-btn-halo::after {
+  outline-color: rgba(144, 202, 80, 0.92);
+}
+
+.guide-btn-wrap.locked .guide-btn-halo {
+  opacity: 1;
+}
+.guide-btn-wrap.locked .guide-btn-halo::before {
+  opacity: 1;
+  animation-name: guide-lock-snake-head;
+}
+.guide-btn-wrap.locked .guide-btn-halo::after {
+  opacity: 0.9;
+  animation-name: guide-lock-snake-tail;
+}
+
+@keyframes guide-lock-snake-head {
+  0% {
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  14.5% {
+    left: 60%;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  14.6% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  25% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  39.5% {
+    left: 100%;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  39.6% {
+    left: 100%;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  50% {
+    left: 60%;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  64.5% {
+    left: 0;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  64.6% {
+    left: 0;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  75% {
+    left: 0;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  89.5% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  89.6% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  100% {
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+}
+
+@keyframes guide-lock-snake-tail {
+  0% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  10% {
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  24.5% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  39.5% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  49.5% {
+    left: 100%;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  64.5% {
+    left: 0;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  74.5% {
+    left: 0;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  89.5% {
+    left: 0;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
 }
 
 .guide-close {
