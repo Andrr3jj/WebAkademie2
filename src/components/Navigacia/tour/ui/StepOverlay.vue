@@ -602,24 +602,42 @@ export default {
   position: absolute;
   inset: -0.35rem;
   border-radius: 1.25rem;
-  border: 0.1875rem solid transparent;
   pointer-events: none;
   opacity: 0;
-  transform: rotate(0deg);
-  transform-origin: center;
+  --guide-progress: 0deg;
+  background: conic-gradient(
+    from -90deg,
+    rgba(144, 202, 80, 0.85) 0deg,
+    rgba(144, 202, 80, 0.85) var(--guide-progress),
+    rgba(144, 202, 80, 0.22) var(--guide-progress),
+    rgba(144, 202, 80, 0.22) 360deg
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 0.1875rem),
+    #000 calc(100% - 0.1875rem)
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 0.1875rem),
+    #000 calc(100% - 0.1875rem)
+  );
+  transition: opacity 0.18s ease;
 }
 .guide-btn-wrap.locked::before {
   opacity: 1;
-  border-top-color: rgba(144, 202, 80, 0.9);
-  border-right-color: rgba(144, 202, 80, 0.6);
-  border-bottom-color: rgba(144, 202, 80, 0.38);
-  border-left-color: rgba(144, 202, 80, 0.2);
-  animation: guide-lock-spin 1.15s linear infinite;
+  animation: guide-lock-fill 1.2s ease-in-out infinite;
 }
 
-@keyframes guide-lock-spin {
-  to {
-    transform: rotate(360deg);
+@keyframes guide-lock-fill {
+  0% {
+    --guide-progress: 0deg;
+  }
+  78% {
+    --guide-progress: 360deg;
+  }
+  100% {
+    --guide-progress: 360deg;
   }
 }
 
