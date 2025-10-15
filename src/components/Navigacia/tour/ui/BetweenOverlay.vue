@@ -482,8 +482,8 @@ export default {
 
 .intro-plan {
   width: 100%;
-  margin: 0 auto clamp(0.9rem, 1.4vw, 1.45rem);
-  padding: 0 clamp(0.4rem, 1.4vw, 1.15rem);
+  margin: 0 auto clamp(0.75rem, 1.1vw, 1.1rem);
+  padding: 0 clamp(0.3rem, 1vw, 0.85rem);
   box-sizing: border-box;
 }
 .plan-summary {
@@ -492,49 +492,49 @@ export default {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.55rem, 0.8vw, 0.9rem);
+  gap: clamp(0.4rem, 0.6vw, 0.65rem);
 }
 .plan-summary__item {
   display: flex;
   align-items: flex-start;
-  gap: clamp(0.6rem, 1vw, 0.95rem);
-  padding: clamp(0.5rem, 0.6rem + 0.4vw, 0.95rem)
-    clamp(0.7rem, 0.9rem + 0.6vw, 1.5rem);
-  border-radius: 1.15rem;
+  gap: clamp(0.45rem, 0.75vw, 0.75rem);
+  padding: clamp(0.32rem, 0.38rem + 0.28vw, 0.62rem)
+    clamp(0.48rem, 0.55rem + 0.42vw, 0.98rem);
+  border-radius: 0.9rem;
   background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0.85rem 2.1rem rgba(12, 24, 12, 0.08);
+  box-shadow: 0 0.55rem 1.45rem rgba(12, 24, 12, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .plan-summary__item.status-current {
   transform: translateY(-0.1rem);
-  box-shadow: 0 1.1rem 2.4rem rgba(12, 24, 12, 0.12);
+  box-shadow: 0 0.8rem 1.8rem rgba(12, 24, 12, 0.12);
   background: rgba(255, 255, 255, 0.94);
 }
 .plan-summary__item.status-done {
   background: rgba(144, 202, 80, 0.18);
 }
 .plan-summary__icon {
-  flex: 0 0 clamp(2.1rem, 2.6vw, 2.45rem);
-  width: clamp(2.1rem, 2.6vw, 2.45rem);
-  height: clamp(2.1rem, 2.6vw, 2.45rem);
+  flex: 0 0 clamp(1.45rem, 2vw, 1.9rem);
+  width: clamp(1.45rem, 2vw, 1.9rem);
+  height: clamp(1.45rem, 2vw, 1.9rem);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
+  font-size: clamp(0.82rem, 0.78rem + 0.32vw, 1.05rem);
   color: #0f240f;
   background: #e6ecf2;
-  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.12);
+  box-shadow: inset 0 0 0 0.1rem rgba(15, 36, 15, 0.12);
 }
 .plan-summary__icon.status-done {
   background: var(--ha-yellow);
-  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.18);
+  box-shadow: inset 0 0 0 0.1rem rgba(15, 36, 15, 0.18);
 }
 .plan-summary__icon.status-current {
   background: #fff;
-  box-shadow: inset 0 0 0 0.1875rem var(--ha-yellow),
-    0 0 0 0.0625rem rgba(15, 36, 15, 0.08);
+  box-shadow: inset 0 0 0 0.15rem var(--ha-yellow),
+    0 0 0 0.05rem rgba(15, 36, 15, 0.08);
 }
 .plan-summary__icon .icon {
   display: inline-flex;
@@ -542,15 +542,15 @@ export default {
   justify-content: center;
 }
 .plan-summary__icon .icon.current {
-  width: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
-  height: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
+  width: clamp(0.62rem, 0.68rem + 0.18vw, 0.82rem);
+  height: clamp(0.62rem, 0.68rem + 0.18vw, 0.82rem);
   border-radius: 50%;
   background: var(--ha-yellow);
-  box-shadow: 0 0 0 0.1875rem rgba(144, 202, 80, 0.32);
+  box-shadow: 0 0 0 0.14rem rgba(144, 202, 80, 0.32);
 }
 .plan-summary__icon .icon.upcoming {
-  width: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
-  height: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  width: clamp(0.4rem, 0.45rem + 0.16vw, 0.6rem);
+  height: clamp(0.4rem, 0.45rem + 0.16vw, 0.6rem);
   border-radius: 50%;
   background: rgba(15, 36, 15, 0.25);
 }
@@ -558,7 +558,7 @@ export default {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.25rem, 0.35vw, 0.35rem);
+  gap: clamp(0.2rem, 0.3vw, 0.3rem);
 }
 .plan-summary__title {
   font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.28rem);
@@ -570,7 +570,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(0.35rem, 0.45vw, 0.55rem);
+  gap: clamp(0.28rem, 0.4vw, 0.45rem);
   font-size: clamp(0.85rem, 0.82rem + 0.2vw, 0.98rem);
   font-weight: 600;
   color: rgba(15, 36, 15, 0.72);
@@ -578,8 +578,8 @@ export default {
 .plan-summary__status {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.65rem;
+  gap: 0.3rem;
+  padding: 0.16rem 0.52rem;
   border-radius: 999rem;
   background: rgba(15, 36, 15, 0.08);
 }
@@ -591,21 +591,21 @@ export default {
   background: rgba(144, 202, 80, 0.22);
   color: #0f240f;
   background: rgba(144, 202, 80, 0.22);
-  box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
-    0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
+  box-shadow: inset 0 0 0 0.05rem rgba(144, 202, 80, 0.45),
+    0 0.2rem 0.55rem rgba(16, 64, 16, 0.08);
 }
 .plan-summary__bridge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.65rem;
+  gap: 0.28rem;
+  padding: 0.16rem 0.5rem;
   border-radius: 999rem;
   background: rgba(255, 255, 255, 0.75);
-  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
+  box-shadow: inset 0 0 0 0.05rem rgba(15, 36, 15, 0.12);
 }
 .plan-summary__item.status-current .plan-summary__bridge {
   background: rgba(144, 202, 80, 0.18);
-  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
+  box-shadow: inset 0 0 0 0.05rem rgba(15, 36, 15, 0.12);
 }
 
 .plan-tip.small {
