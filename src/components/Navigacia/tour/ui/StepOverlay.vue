@@ -31,6 +31,7 @@
         </button>
 
         <div class="guide-btn-wrap" :class="{ locked: isNavigationLocked }">
+          <span class="guide-btn-halo" aria-hidden="true"></span>
           <button
             class="guide-btn primary"
             type="button"
@@ -597,61 +598,184 @@ export default {
   justify-content: center;
   isolation: isolate;
 }
-.guide-btn-wrap::before,
-.guide-btn-wrap::after {
-  content: "";
+.guide-btn-halo {
+  display: block;
   position: absolute;
   inset: -0.35rem;
   border-radius: 1.25rem;
   pointer-events: none;
   opacity: 0;
-  mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 0.1875rem),
-    #000 calc(100% - 0.1875rem)
-  );
-  -webkit-mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 0.1875rem),
-    #000 calc(100% - 0.1875rem)
-  );
   transition: opacity 0.18s ease;
+  box-shadow: inset 0 0 0 0.09375rem rgba(144, 202, 80, 0.28);
+}
+.guide-btn-halo::before,
+.guide-btn-halo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  outline: 0.1875rem solid rgba(254, 243, 90, 0.95);
+  opacity: 0;
+  animation-duration: 1.2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: left, top, width, height;
+}
+.guide-btn-halo::after {
+  outline-color: rgba(144, 202, 80, 0.92);
 }
 
-.guide-btn-wrap::before {
-  background: rgba(144, 202, 80, 0.22);
-}
-
-.guide-btn-wrap::after {
-  background: conic-gradient(
-    from -90deg,
-    transparent 0deg,
-    transparent 292deg,
-    rgba(254, 243, 90, 0.96) 292deg,
-    rgba(144, 202, 80, 0.9) 324deg,
-    transparent 324deg,
-    transparent 360deg
-  );
-  transform-origin: 50% 50%;
-  transform: rotate(-90deg);
-  will-change: transform;
-}
-
-.guide-btn-wrap.locked::before,
-.guide-btn-wrap.locked::after {
+.guide-btn-wrap.locked .guide-btn-halo {
   opacity: 1;
 }
-
-.guide-btn-wrap.locked::after {
-  animation: guide-lock-snake 1.05s linear infinite;
+.guide-btn-wrap.locked .guide-btn-halo::before {
+  opacity: 1;
+  animation-name: guide-lock-snake-head;
+}
+.guide-btn-wrap.locked .guide-btn-halo::after {
+  opacity: 0.9;
+  animation-name: guide-lock-snake-tail;
 }
 
-@keyframes guide-lock-snake {
+@keyframes guide-lock-snake-head {
   0% {
-    transform: rotate(-90deg);
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  14.5% {
+    left: 60%;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  14.6% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  25% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  39.5% {
+    left: 100%;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  39.6% {
+    left: 100%;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  50% {
+    left: 60%;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  64.5% {
+    left: 0;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  64.6% {
+    left: 0;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  75% {
+    left: 0;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  89.5% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  89.6% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
   }
   100% {
-    transform: rotate(270deg);
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+}
+
+@keyframes guide-lock-snake-tail {
+  0% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  10% {
+    left: 0;
+    top: 0;
+    width: 40%;
+    height: 0;
+  }
+  24.5% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 0;
+  }
+  39.5% {
+    left: 100%;
+    top: 0;
+    width: 0;
+    height: 40%;
+  }
+  49.5% {
+    left: 100%;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  64.5% {
+    left: 0;
+    top: 100%;
+    width: 40%;
+    height: 0;
+  }
+  74.5% {
+    left: 0;
+    top: 100%;
+    width: 0;
+    height: 0;
+  }
+  89.5% {
+    left: 0;
+    top: 60%;
+    width: 0;
+    height: 40%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
   }
 }
 
