@@ -29,6 +29,8 @@ const state = reactive({
   // ochrana proti rýchlemu preklikávaniu
   transitioning: false,
   navigationLocked: false,
+  navigationLockDuration: 0,
+  navigationLockStart: 0,
 });
 
 function firstRealIndex() {
@@ -576,6 +578,11 @@ const STEP_TRANSITION_GUARD_MS = 2200;
 let navigationTimer = null;
 let furthestVisitedIndex = -1;
 
+const now = () =>
+  typeof performance !== "undefined" && typeof performance.now === "function"
+    ? performance.now()
+    : Date.now();
+
 function resetGuardProgress(firstReal = null) {
   const base =
     typeof firstReal === "number" && Number.isFinite(firstReal)
@@ -601,16 +608,22 @@ function unlockNavigation() {
     navigationTimer = null;
   }
   state.navigationLocked = false;
+  state.navigationLockDuration = 0;
+  state.navigationLockStart = 0;
 }
 
 function lockNavigation(duration = STEP_TRANSITION_GUARD_MS) {
   unlockNavigation();
   const safeDuration = Math.max(0, Number(duration) || 0);
   if (!safeDuration) return;
+  state.navigationLockDuration = safeDuration;
+  state.navigationLockStart = now();
   state.navigationLocked = true;
   navigationTimer = setTimeout(() => {
     navigationTimer = null;
     state.navigationLocked = false;
+    state.navigationLockDuration = 0;
+    state.navigationLockStart = 0;
   }, safeDuration);
 }
 
