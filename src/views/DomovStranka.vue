@@ -27,11 +27,11 @@
       <button
         v-if="isGuideButtonVisible"
         type="button"
-        class="guide-tour-button"
+        class="login button sm-br guide-tour-button"
         @click="startHomeTour"
         aria-label="Spustiť krátky návod"
       >
-        Spustiť návod
+        ?
       </button>
     </div>
   </section>
@@ -91,11 +91,11 @@
           <button
             v-if="isGuideButtonVisible"
             type="button"
-            class="guide-tour-button"
+            class="login button sm-br guide-tour-button"
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            Spustiť návod
+            ?
           </button>
         </div>
       </section>
@@ -406,30 +406,8 @@ h5 {
   position: absolute;
   right: 1.5rem;
   bottom: 1.5rem;
-  padding: 0.9rem 1.6rem;
-  border: none;
-  border-radius: 999px;
-  background-color: $txt-clr;
-  color: $blck-clr;
-  font-family: "Adumu", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  justify-content: center;
   z-index: 2;
-
-  &:hover,
-  &:focus-visible {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0) scale(0.99);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
-  }
 }
 
 section {
@@ -535,9 +513,6 @@ section {
     position: static;
     margin-top: 1.25rem;
     align-self: flex-end;
-    padding: 0.85rem 1.4rem;
-    font-size: 1rem;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
 }
 
