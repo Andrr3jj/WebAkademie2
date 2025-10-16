@@ -21,129 +21,111 @@
         </div>
 
         <!-- Bublina -->
-        <div class="intro-bubble-wrapper">
-          <section class="intro-bubble" :class="[`st-${stage}`]">
-            <button
-              class="guide-close intro-close"
-              type="button"
-              @click="$emit('close')"
-              aria-label="Ukončiť"
-            >
-              ✕
-            </button>
-            <h2 class="intro-title">
-              <template v-if="variant === 'intro'">
-                Ahoj, som Andrej <span class="wave">👋</span>
-              </template>
-              <template v-else>
-                {{ title || "Skvelé! Domovská stránka je hotová 🎉" }}
-              </template>
-            </h2>
+        <section class="intro-bubble" :class="[`st-${stage}`]">
+          <button
+            class="guide-close intro-close"
+            type="button"
+            @click="$emit('close')"
+            aria-label="Ukončiť"
+          >
+            ✕
+          </button>
+          <h2 class="intro-title">
+            <template v-if="variant === 'intro'">
+              Ahoj, som Andrej <span class="wave">👋</span>
+            </template>
+            <template v-else>
+              {{ title || "Skvelé! Domovská stránka je hotová 🎉" }}
+            </template>
+          </h2>
 
-            <p class="intro-lead" v-if="variant === 'intro'">
-              Prevediem ťa krátkym návodom, aby ti na našej stránke nič nešlo
-              mimo.
-            </p>
-            <p class="intro-lead" v-else-if="text">
-              {{ text }}
-            </p>
+          <p class="intro-lead" v-if="variant === 'intro'">
+            Prevediem ťa krátkym návodom, aby ti na našej stránke nič nešlo
+            mimo.
+          </p>
+          <p class="intro-lead" v-else-if="text">
+            {{ text }}
+          </p>
 
-            <!-- plánik – ponecháme aj pre medzikrok -->
-            <div class="intro-plan" v-if="planSegments.length">
-              <ol class="plan-summary" :aria-label="planSummary">
-                <li
-                  v-for="(item, idx) in planSegments"
-                  :key="`plan-${idx}`"
-                  class="plan-summary__item"
+          <!-- plánik – ponecháme aj pre medzikrok -->
+          <div class="intro-plan" v-if="planSegments.length">
+            <ol class="plan-summary" :aria-label="planSummary">
+              <li
+                v-for="(item, idx) in planSegments"
+                :key="`plan-${idx}`"
+                class="plan-summary__item"
+                :class="`status-${item.status}`"
+                :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
+                  item.status
+                )}`"
+              >
+                <span
+                  class="plan-summary__icon"
                   :class="`status-${item.status}`"
-                  :aria-label="`${idx + 1}. ${item.label} – ${statusLabel(
-                    item.status
-                  )}`"
                 >
                   <span
-                    class="plan-summary__icon"
-                    :class="`status-${item.status}`"
+                    v-if="item.status === 'done'"
+                    class="icon"
+                    aria-hidden="true"
+                    >✓</span
                   >
-                    <span
-                      v-if="item.status === 'done'"
-                      class="icon"
-                      aria-hidden="true"
-                      >✓</span
-                    >
-                    <span
-                      v-else-if="item.status === 'current'"
-                      class="icon current"
-                      aria-hidden="true"
-                    ></span>
-                    <span
-                      v-else
-                      class="icon upcoming"
-                      aria-hidden="true"
-                    ></span>
-                  </span>
-                  <div class="plan-summary__text">
-                    <span class="plan-summary__title">{{ item.label }}</span>
-                    <div class="plan-summary__footer">
-                      <div class="plan-summary__meta">
-                        <span class="plan-summary__status">{{
-                          statusLabel(item.status)
-                        }}</span>
-                        <span
-                          v-if="item.bridgeLabel"
-                          class="plan-summary__bridge"
-                        >
-                          Ďalej: {{ item.bridgeLabel }}
-                        </span>
-                      </div>
-                      <span
-                        v-if="item.pointsLabel"
-                        class="plan-summary__points"
-                        :aria-label="item.pointsAnnounce || item.pointsLabel"
-                      >
-                        {{ item.pointsLabel }}
-                      </span>
-                    </div>
+                  <span
+                    v-else-if="item.status === 'current'"
+                    class="icon current"
+                    aria-hidden="true"
+                  ></span>
+                  <span v-else class="icon upcoming" aria-hidden="true"></span>
+                </span>
+                <div class="plan-summary__text">
+                  <span class="plan-summary__title">{{ item.label }}</span>
+                  <div class="plan-summary__meta">
+                    <span class="plan-summary__status">{{
+                      statusLabel(item.status)
+                    }}</span>
+                    <span v-if="item.bridgeLabel" class="plan-summary__bridge">
+                      Ďalej: {{ item.bridgeLabel }}
+                    </span>
                   </div>
-                </li>
-              </ol>
-            </div>
-
-            <div
-              class="intro-actions"
-              :class="{ 'is-branch': variant !== 'intro' }"
-            >
-              <p v-if="planItems.length" class="plan-tip small action-tip">
-                Tip: používaj šípky <span class="kbd">←</span>
-                <span class="kbd">→</span> a <span class="kbd">Esc</span> pre
-                zatvorenie.
-              </p>
-              <!-- intro: Začať -->
-              <button
-                v-if="variant === 'intro'"
-                class="guide-btn primary"
-                type="button"
-                @click="start"
-              >
-                Začať
-              </button>
-
-              <!-- medzikrok: voľby -->
-              <template v-else>
-                <div class="branch-options">
-                  <button
-                    v-for="(opt, i) in options"
-                    :key="i"
-                    class="guide-btn primary"
-                    type="button"
-                    @click="choose(opt)"
-                  >
-                    {{ opt?.label || "Pokračovať" }}
-                  </button>
                 </div>
-              </template>
-            </div>
-          </section>
-        </div>
+              </li>
+            </ol>
+          </div>
+
+          <div
+            class="intro-actions"
+            :class="{ 'is-branch': variant !== 'intro' }"
+          >
+            <p v-if="planItems.length" class="plan-tip small action-tip">
+              Tip: používaj šípky <span class="kbd">←</span>
+              <span class="kbd">→</span> a <span class="kbd">Esc</span> pre
+              zatvorenie.
+            </p>
+            <!-- intro: Začať -->
+            <button
+              v-if="variant === 'intro'"
+              class="guide-btn primary"
+              type="button"
+              @click="start"
+            >
+              Začať
+            </button>
+
+            <!-- medzikrok: voľby -->
+            <template v-else>
+              <div class="branch-options">
+                <button
+                  v-for="(opt, i) in options"
+                  :key="i"
+                  class="guide-btn primary"
+                  type="button"
+                  @click="choose(opt)"
+                >
+                  {{ opt?.label || "Pokračovať" }}
+                </button>
+              </div>
+            </template>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -168,29 +150,6 @@ export default {
   emits: ["start", "choose", "close"],
   setup(props, { emit }) {
     const stage = ref("enter"); // enter -> ready -> leave
-
-    const normalizePoints = (value) => {
-      const num = Number(value);
-      if (Number.isFinite(num) && num > 0) return Math.round(num);
-      return null;
-    };
-
-    const formatPoints = (value) => {
-      const points = normalizePoints(value);
-      if (!points) return "";
-
-      const absPoints = Math.abs(points);
-      const lastTwo = absPoints % 100;
-      let suffix = "bodov";
-
-      if (lastTwo < 10 || lastTwo > 20) {
-        const last = absPoints % 10;
-        if (last === 1) suffix = "bod";
-        else if (last >= 2 && last <= 4) suffix = "body";
-      }
-
-      return `Získaš ${points} ${suffix}`;
-    };
 
     const planBridges = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
@@ -265,22 +224,12 @@ export default {
           (typeof item?.label === "string" && item.label.trim()) ||
           `Etapa ${idx + 1}`;
         const status = item?.status || "upcoming";
-        const points = normalizePoints(item?.points);
-        const rawPointsLabel =
-          typeof item?.pointsLabel === "string" ? item.pointsLabel.trim() : "";
-        const pointsLabel = rawPointsLabel || formatPoints(points);
         return {
           ...item,
           index: item?.index ?? idx,
           label,
           status,
           bridgeLabel: bridges[idx]?.label || "",
-          points,
-          pointsLabel,
-          pointsAnnounce:
-            typeof item?.pointsAnnounce === "string"
-              ? item.pointsAnnounce.trim()
-              : pointsLabel,
         };
       });
     });
@@ -296,14 +245,7 @@ export default {
       }
     };
 
-    return {
-      stage,
-      start,
-      choose,
-      planBridges,
-      planSegments,
-      statusLabel,
-    };
+    return { stage, start, choose, planBridges, planSegments, statusLabel };
   },
 };
 </script>
@@ -319,12 +261,8 @@ export default {
   --intro-out: 340ms;
 
   --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
-  --intro-avatar-w: clamp(17.969rem, 25.3vw, 23.719rem);
-  --intro-bubble-w: clamp(30.188rem, 48.3vw, 51.75rem);
-  --intro-bubble-scale: 0.75;
-  --intro-bubble-visible-w: calc(
-    var(--intro-bubble-w) * var(--intro-bubble-scale)
-  );
+  --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
+  --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
 }
 
 /* vrstva */
@@ -359,16 +297,8 @@ export default {
   padding: clamp(0.5rem, 1.4vw, 1rem);
   max-width: min(
     96vw,
-    calc(
-      var(--intro-avatar-w) + var(--intro-gap) + var(--intro-bubble-visible-w)
-    )
+    calc(var(--intro-avatar-w) + var(--intro-gap) + var(--intro-bubble-w))
   );
-}
-
-.intro-bubble-wrapper {
-  flex: 0 0 var(--intro-bubble-visible-w);
-  width: var(--intro-bubble-visible-w);
-  max-width: var(--intro-bubble-visible-w);
 }
 
 /* avatar + efekty */
@@ -465,8 +395,7 @@ export default {
 /* bublina */
 .intro-bubble {
   position: relative;
-  width: calc(100% / var(--intro-bubble-scale));
-  max-width: calc(var(--intro-bubble-w) / var(--intro-bubble-scale));
+  width: var(--intro-bubble-w);
   background: var(--ha-card-bg);
   color: var(--ha-card-fg);
   border: 0.0625rem solid var(--ha-card-border);
@@ -479,8 +408,7 @@ export default {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform-origin: top left;
-  transform: translateY(0.5rem) scale(var(--intro-bubble-scale));
+  transform: translateY(0.5rem);
   transition: -webkit-clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -490,13 +418,13 @@ export default {
   -webkit-clip-path: var(--maskTo);
   clip-path: var(--maskTo);
   opacity: 1;
-  transform: translateY(0) scale(var(--intro-bubble-scale));
+  transform: translateY(0);
 }
 .intro-bubble.st-leave {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform: translateY(0.375rem) scale(var(--intro-bubble-scale));
+  transform: translateY(0.375rem);
   transition-duration: var(--intro-out);
 }
 
@@ -531,8 +459,8 @@ export default {
 
 .intro-plan {
   width: 100%;
-  margin: 0 auto clamp(0.75rem, 1.1vw, 1.1rem);
-  padding: 0 clamp(0.3rem, 1vw, 0.85rem);
+  margin: 0 auto clamp(0.9rem, 1.4vw, 1.45rem);
+  padding: 0 clamp(0.4rem, 1.4vw, 1.15rem);
   box-sizing: border-box;
 }
 .plan-summary {
@@ -541,49 +469,49 @@ export default {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.4rem, 0.6vw, 0.65rem);
+  gap: clamp(0.55rem, 0.8vw, 0.9rem);
 }
 .plan-summary__item {
   display: flex;
   align-items: flex-start;
-  gap: clamp(0.45rem, 0.75vw, 0.75rem);
-  padding: clamp(0.32rem, 0.38rem + 0.28vw, 0.62rem)
-    clamp(0.48rem, 0.55rem + 0.42vw, 0.98rem);
-  border-radius: 0.9rem;
+  gap: clamp(0.6rem, 1vw, 0.95rem);
+  padding: clamp(0.5rem, 0.6rem + 0.4vw, 0.95rem)
+    clamp(0.7rem, 0.9rem + 0.6vw, 1.5rem);
+  border-radius: 1.15rem;
   background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 0.55rem 1.45rem rgba(12, 24, 12, 0.08);
+  box-shadow: 0 0.85rem 2.1rem rgba(12, 24, 12, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .plan-summary__item.status-current {
   transform: translateY(-0.1rem);
-  box-shadow: 0 0.8rem 1.8rem rgba(12, 24, 12, 0.12);
+  box-shadow: 0 1.1rem 2.4rem rgba(12, 24, 12, 0.12);
   background: rgba(255, 255, 255, 0.94);
 }
 .plan-summary__item.status-done {
   background: rgba(144, 202, 80, 0.18);
 }
 .plan-summary__icon {
-  flex: 0 0 clamp(1.45rem, 2vw, 1.9rem);
-  width: clamp(1.45rem, 2vw, 1.9rem);
-  height: clamp(1.45rem, 2vw, 1.9rem);
+  flex: 0 0 clamp(2.1rem, 2.6vw, 2.45rem);
+  width: clamp(2.1rem, 2.6vw, 2.45rem);
+  height: clamp(2.1rem, 2.6vw, 2.45rem);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: clamp(0.82rem, 0.78rem + 0.32vw, 1.05rem);
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.35rem);
   color: #0f240f;
   background: #e6ecf2;
-  box-shadow: inset 0 0 0 0.1rem rgba(15, 36, 15, 0.12);
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.12);
 }
 .plan-summary__icon.status-done {
   background: var(--ha-yellow);
-  box-shadow: inset 0 0 0 0.1rem rgba(15, 36, 15, 0.18);
+  box-shadow: inset 0 0 0 0.125rem rgba(15, 36, 15, 0.18);
 }
 .plan-summary__icon.status-current {
   background: #fff;
-  box-shadow: inset 0 0 0 0.15rem var(--ha-yellow),
-    0 0 0 0.05rem rgba(15, 36, 15, 0.08);
+  box-shadow: inset 0 0 0 0.1875rem var(--ha-yellow),
+    0 0 0 0.0625rem rgba(15, 36, 15, 0.08);
 }
 .plan-summary__icon .icon {
   display: inline-flex;
@@ -591,15 +519,15 @@ export default {
   justify-content: center;
 }
 .plan-summary__icon .icon.current {
-  width: clamp(0.62rem, 0.68rem + 0.18vw, 0.82rem);
-  height: clamp(0.62rem, 0.68rem + 0.18vw, 0.82rem);
+  width: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
+  height: clamp(0.85rem, 0.9rem + 0.2vw, 1.05rem);
   border-radius: 50%;
   background: var(--ha-yellow);
-  box-shadow: 0 0 0 0.14rem rgba(144, 202, 80, 0.32);
+  box-shadow: 0 0 0 0.1875rem rgba(144, 202, 80, 0.32);
 }
 .plan-summary__icon .icon.upcoming {
-  width: clamp(0.4rem, 0.45rem + 0.16vw, 0.6rem);
-  height: clamp(0.4rem, 0.45rem + 0.16vw, 0.6rem);
+  width: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
+  height: clamp(0.55rem, 0.6rem + 0.2vw, 0.75rem);
   border-radius: 50%;
   background: rgba(15, 36, 15, 0.25);
 }
@@ -607,8 +535,7 @@ export default {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.2rem, 0.3vw, 0.3rem);
-  text-align: left;
+  gap: clamp(0.25rem, 0.35vw, 0.35rem);
 }
 .plan-summary__title {
   font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.28rem);
@@ -616,31 +543,20 @@ export default {
   color: var(--ha-card-fg);
   line-height: 1.35;
 }
-.plan-summary__footer {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: clamp(0.4rem, 0.6vw, 0.7rem);
-  row-gap: clamp(0.32rem, 0.45vw, 0.55rem);
-  flex-wrap: wrap;
-  width: 100%;
-}
 .plan-summary__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(0.28rem, 0.4vw, 0.45rem);
+  gap: clamp(0.35rem, 0.45vw, 0.55rem);
   font-size: clamp(0.85rem, 0.82rem + 0.2vw, 0.98rem);
   font-weight: 600;
   color: rgba(15, 36, 15, 0.72);
-  flex: 1 1 auto;
-  min-width: 8.75rem;
 }
 .plan-summary__status {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.16rem 0.52rem;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 999rem;
   background: rgba(15, 36, 15, 0.08);
 }
@@ -652,34 +568,21 @@ export default {
   background: rgba(144, 202, 80, 0.22);
   color: #0f240f;
   background: rgba(144, 202, 80, 0.22);
-  box-shadow: inset 0 0 0 0.05rem rgba(144, 202, 80, 0.45),
-    0 0.2rem 0.55rem rgba(16, 64, 16, 0.08);
+  box-shadow: inset 0 0 0 0.0625rem rgba(144, 202, 80, 0.45),
+    0 0.25rem 0.7rem rgba(16, 64, 16, 0.08);
 }
 .plan-summary__bridge {
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
-  padding: 0.16rem 0.5rem;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 999rem;
   background: rgba(255, 255, 255, 0.75);
-  box-shadow: inset 0 0 0 0.05rem rgba(15, 36, 15, 0.12);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
 .plan-summary__item.status-current .plan-summary__bridge {
   background: rgba(144, 202, 80, 0.18);
-  box-shadow: inset 0 0 0 0.05rem rgba(15, 36, 15, 0.12);
-}
-.plan-summary__points {
-  margin-left: auto;
-  font-size: clamp(0.92rem, 0.88rem + 0.24vw, 1.08rem);
-  font-weight: 700;
-  color: rgba(15, 36, 15, 0.85);
-  white-space: nowrap;
-}
-.plan-summary__item.status-current .plan-summary__points {
-  color: #0f240f;
-}
-.plan-summary__item.status-done .plan-summary__points {
-  color: rgba(15, 36, 15, 0.75);
+  box-shadow: inset 0 0 0 0.0625rem rgba(15, 36, 15, 0.12);
 }
 
 .plan-tip.small {
@@ -786,14 +689,8 @@ export default {
   .intro-avatar-shell {
     display: none;
   }
-  .intro-bubble-wrapper {
-    flex: 0 0 auto;
-    width: min(92vw, calc(46rem * var(--intro-bubble-scale)));
-    max-width: min(92vw, calc(46rem * var(--intro-bubble-scale)));
-  }
   .intro-bubble {
-    width: calc(100% / var(--intro-bubble-scale));
-    max-width: calc(min(92vw, 46rem) / var(--intro-bubble-scale));
+    width: min(92vw, 40rem);
   }
   .intro-bubble::after {
     left: calc(50% - 0.625rem);
