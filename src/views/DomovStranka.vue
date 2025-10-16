@@ -31,7 +31,7 @@
         @click="startHomeTour"
         aria-label="Spustiť krátky návod"
       >
-        Spustiť návod
+        ?
       </button>
     </div>
   </section>
@@ -95,7 +95,7 @@
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            Spustiť návod
+            ?
           </button>
         </div>
       </section>
