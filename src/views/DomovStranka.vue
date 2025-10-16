@@ -31,7 +31,7 @@
         @click="startHomeTour"
         aria-label="Spustiť krátky návod"
       >
-        ?
+        <span aria-hidden="true" class="guide-tour-button__icon">?</span>
       </button>
     </div>
   </section>
@@ -95,7 +95,7 @@
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            ?
+            <span aria-hidden="true" class="guide-tour-button__icon">?</span>
           </button>
         </div>
       </section>
@@ -407,7 +407,18 @@ h5 {
   right: 1.5rem;
   bottom: 1.5rem;
   justify-content: center;
+  padding: 0.35em 1.25em;
+  font-size: 1.35em;
+  line-height: 1;
   z-index: 2;
+}
+
+.guide-tour-button__icon {
+  display: block;
+  font-family: Adumu;
+  font-size: 1em;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 section {
