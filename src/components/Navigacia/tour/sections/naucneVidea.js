@@ -21,24 +21,26 @@ export function steps() {
     {
       goto: "/naucne-videa",
       selector: sel.heading,
-      title: "Náučné videá",
-      text: "Tu nájdete všetky informácie o online kurzoch a ich obsahu.",
+      title: "🎥 Náučné videá",
+      text:
+        "Tu nájdeš všetky online lekcie zoradené podľa tém a úrovne. Vyber si, čo chceš trénovať.",
       side: "left",
       pad: 24,
       radius: 26,
     },
     {
       selector: sel.subscription,
-      title: "Predplatné",
-      text: "Zakúpte si prístup ku kompletnej knižnici videí.",
+      title: "💳 Predplatné",
+      text:
+        "Zakúp si prístup ku kompletnej knižnici videí a uč sa bez obmedzení. Každý deň môžeš objavovať nové tipy.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
     },
     {
       selector: sel.freePreview,
-      title: "Video zadarmo",
-      text: "Pozrite si ukážkové video bez záväzkov.",
+      title: "🎁 Video zadarmo",
+      text: "Chceš si to len vyskúšať? Pozri si ukážkové video bez záväzkov.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -50,8 +52,9 @@ export function steps() {
       selector: sel.video,
       waitFor: 800, // nech sa DOM dotiahne
       closest: "video, .lesson-video, .plyr__video-wrapper, .video-wrapper",
-      title: "Ukážkové video",
-      text: "Spustite si ukážku, aby ste videli, ako prebieha lekcia.",
+      title: "👀 Ukážkové video",
+      text:
+        "Spusti ukážku, aby si videl, ako prebieha lekcia. Zistíš, že učiť sa dá aj s úsmevom.",
       side: "left",
       pad: 24,
       radius: 26,
@@ -64,8 +67,8 @@ export function steps() {
       waitFor: 400,
       bind: { text: "Označiť ako zvládnuté" }, // (nájde to aj stav „Zvládnuté“ cez aria-label)
       closest: ".button, [data-tour='mark-complete']",
-      title: "Označiť ako zvládnuté",
-      text: "Keď máš hotovo, označ lekciu a sleduj progres.",
+      title: "✅ Označiť ako zvládnuté",
+      text: "Po dokončení lekcie si ju označ ako „zvládnutú“ a sleduj svoj pokrok v čase.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -80,8 +83,9 @@ export function steps() {
       bind: { text: "Text piesne" },
       // ring nasadíme na celý box
       closest: ".button, [data-tour='lyrics-toggle']",
-      title: "Text piesne",
-      text: "Zobraz si text skladby a precvičuj rovno s hudbou.",
+      title: "🎤 Text piesne",
+      text:
+        "Zobraz si text skladby a spievaj spolu s heligónkou. Pomôže ti to lepšie zapamätať rytmus.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -90,8 +94,8 @@ export function steps() {
     // MENU
     {
       bind: { where: "menu", text: "Online výučba", hrefLike: "moje-kurzy" },
-      title: "Menu: Online výučba",
-      text: "Kedykoľvek sa vieš vrátiť späť k celej ponuke videí.",
+      title: "🎓 Menu: Online výučba",
+      text: "Kedykoľvek sa môžeš vrátiť späť k celej ponuke videí. Vyber si nové, keď zvládneš predchádzajúce.",
       side: "left",
       pad: 18,
     },
@@ -100,16 +104,17 @@ export function steps() {
       selector: sel.onlineDifficulty,
       waitFor: 600,
       closest: ".box-item.oblubene.narocnost",
-      title: "Vyber si náročnosť",
-      text: "Tu si zvolíš, či chceš lekcie pre začiatočníkov, pokročilejších alebo profíkov.",
+      title: "🎚️ Vyber si náročnosť",
+      text:
+        "Začiatočník, pokročilý alebo profík – vyber si úroveň, ktorá ti sedí. Každý rastie svojím tempom.",
       side: "left",
       pad: 24,
       radius: 24,
     },
     {
       selector: sel.onlineSongsHeading,
-      title: "Zoznam piesní v kurze",
-      text: "Podľa zvolenej úrovne sa ti tu zobrazia skladby pripravené na štúdium.",
+      title: "🎼 Zoznam piesní v kurze",
+      text: "Tu sa zobrazia skladby, ktoré patria do tvojho zvoleného kurzu. Cvič podľa poradia a sleduj zlepšenie.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 14,
