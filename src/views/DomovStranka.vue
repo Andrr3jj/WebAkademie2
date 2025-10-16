@@ -410,35 +410,48 @@ h5 {
   position: absolute;
   right: 1.5rem;
   bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
   padding: 0.35em 1.25em;
   font-size: 1.35em;
   line-height: 1;
   z-index: 2;
-  overflow: hidden;
+  overflow: visible;
   transition: transform 0.3s ease;
   --guide-label-width: 8rem;
+  --guide-label-gap: 0.75rem;
 }
 
 .guide-tour-button__label {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + var(--guide-label-gap));
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
   width: var(--guide-label-width);
-  padding-right: 0.75em;
+  padding-right: 0.25em;
   white-space: nowrap;
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(100%) translateY(-50%);
   transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
 }
 
-.computer .guide-tour-button:hover {
-  transform: translateX(calc(-1 * var(--guide-label-width)));
-}
+@media (hover: hover) and (pointer: fine) {
+  .computer .guide-tour-button {
+    will-change: transform;
+  }
 
-.computer .guide-tour-button:hover .guide-tour-button__label {
-  transform: translateX(0);
-  opacity: 1;
+  .computer .guide-tour-button:hover {
+    transform: translateX(calc(-1 * (var(--guide-label-width) + var(--guide-label-gap))));
+  }
+
+  .computer .guide-tour-button:hover .guide-tour-button__label {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+  }
 }
 
 .guide-tour-button__icon {
