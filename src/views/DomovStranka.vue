@@ -310,7 +310,9 @@ export default {
             window.dispatchEvent(
               new CustomEvent("ha.tour.start", { detail: { index: 0 } })
             );
-          } catch (e) {}
+          } catch (e) {
+            console.error("Failed to dispatch tour start event", e);
+          }
         }
       };
 
