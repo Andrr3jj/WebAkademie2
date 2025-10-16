@@ -98,17 +98,7 @@ export default {
     let rafId = 0;
     let targetRO = null;
 
-    const clamp = (value, min, max) => {
-      const v =
-        typeof value === "number" && Number.isFinite(value) ? value : 0;
-      const lo =
-        typeof min === "number" && Number.isFinite(min) ? min : 0;
-      const hi =
-        typeof max === "number" && Number.isFinite(max) ? max : lo;
-      const lower = Math.min(lo, hi);
-      const upper = Math.max(lo, hi);
-      return Math.min(Math.max(v, lower), upper);
-    };
+    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
     const safeNumber = (value) =>
       typeof value === "number" && Number.isFinite(value) ? value : 0;
     const toVw = (value) =>
@@ -281,20 +271,12 @@ export default {
     function placeTooltip(ring, preferred) {
       const MARGIN = 8;
       const GAP = 18;
-      const viewportW = Math.max(window.innerWidth || 0, 1);
-      const viewportH = Math.max(window.innerHeight || 0, 1);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
       const card = document.querySelector(".guide-tooltip");
-      const availableWidth = Math.max(viewportW - MARGIN * 2, 120);
-      const availableHeight = Math.max(viewportH - MARGIN * 2, 140);
-      const fallbackWidth = Math.min(availableWidth, 320);
-      const fallbackHeight = Math.min(availableHeight, 260);
-      const cardRect = card?.getBoundingClientRect?.();
-      const cw =
-        (cardRect?.width || card?.offsetWidth || fallbackWidth) ?? fallbackWidth;
-      const ch =
-        (cardRect?.height || card?.offsetHeight || fallbackHeight) ??
-        fallbackHeight;
+      const cw = card?.offsetWidth || 380;
+      const ch = card?.offsetHeight || 180;
 
       const order = ["bottom", "top", "right", "left"];
       const candidates = [preferred, ...order.filter((s) => s !== preferred)];
@@ -302,41 +284,25 @@ export default {
       const coords = (side) => {
         if (side === "top") {
           return {
-            left: clamp(
-              ring.x + ring.w / 2 - cw / 2,
-              MARGIN,
-              viewportW - cw - MARGIN
-            ),
+            left: clamp(ring.x + ring.w / 2 - cw / 2, MARGIN, vw - cw - MARGIN),
             top: ring.y - GAP - ch,
           };
         }
         if (side === "bottom") {
           return {
-            left: clamp(
-              ring.x + ring.w / 2 - cw / 2,
-              MARGIN,
-              viewportW - cw - MARGIN
-            ),
+            left: clamp(ring.x + ring.w / 2 - cw / 2, MARGIN, vw - cw - MARGIN),
             top: ring.y + ring.h + GAP,
           };
         }
         if (side === "left") {
           return {
             left: ring.x - GAP - cw,
-            top: clamp(
-              ring.y + ring.h / 2 - ch / 2,
-              MARGIN,
-              viewportH - ch - MARGIN
-            ),
+            top: clamp(ring.y + ring.h / 2 - ch / 2, MARGIN, vh - ch - MARGIN),
           };
         }
         return {
           left: ring.x + ring.w + GAP,
-          top: clamp(
-            ring.y + ring.h / 2 - ch / 2,
-            MARGIN,
-            viewportH - ch - MARGIN
-          ),
+          top: clamp(ring.y + ring.h / 2 - ch / 2, MARGIN, vh - ch - MARGIN),
         };
       };
 
@@ -345,8 +311,8 @@ export default {
         return (
           p.left >= MARGIN &&
           p.top >= MARGIN &&
-          p.left + cw <= viewportW - MARGIN &&
-          p.top + ch <= viewportH - MARGIN
+          p.left + cw <= vw - MARGIN &&
+          p.top + ch <= vh - MARGIN
         );
       };
 
@@ -591,11 +557,9 @@ export default {
 .guide-tooltip.light {
   position: fixed;
   z-index: 4001;
-  width: min(94vw, 26.25rem);
-  max-width: 26.25rem;
-  box-sizing: border-box;
-  padding: clamp(0.75rem, 2.8vw, 1.05rem) clamp(0.9rem, 4.8vw, 1.5rem)
-    clamp(0.75rem, 2.6vw, 1rem) clamp(0.9rem, 4.8vw, 1.5rem);
+  max-width: min(92vw, 26.25rem);
+  padding: clamp(0.625rem, 2.5vw, 0.875rem) clamp(2.125rem, 7vw, 0rem)
+    clamp(0.625rem, 2.2vw, 0.75rem) clamp(0.625rem, 2.5vw, 1.875rem);
   border-radius: clamp(0.75rem, 2.4vw, 1.125rem);
   background: var(--ha-card-bg);
   color: var(--ha-card-fg);
@@ -650,7 +614,6 @@ export default {
 }
 .guide-actions {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-end;
   align-items: center;
@@ -670,11 +633,6 @@ export default {
     clamp(0.7rem, 0.55rem + 0.8vw, 0.9rem);
   font-weight: 800;
   font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.98rem);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  text-align: center;
   transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease,
     background 0.14s ease;
   position: relative;
@@ -768,61 +726,6 @@ export default {
 .guide-close:hover {
   transform: translateY(-0.0625rem);
   box-shadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.12);
-}
-
-@media (max-width: 40rem) {
-  .guide-tooltip.light {
-    width: calc(100vw - 1.5rem);
-    max-width: none;
-    padding: clamp(0.8rem, 3.4vw, 1.1rem) clamp(0.85rem, 5vw, 1.35rem)
-      clamp(0.85rem, 3.2vw, 1.1rem) clamp(0.85rem, 5vw, 1.35rem);
-  }
-
-  .guide-title {
-    font-size: clamp(1rem, 4vw, 1.2rem);
-  }
-
-  .guide-text {
-    font-size: clamp(0.94rem, 3.6vw, 1.05rem);
-    margin-bottom: 0.75rem;
-  }
-
-  .guide-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.55rem;
-  }
-
-  .guide-progress {
-    order: -1;
-    margin-right: 0;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 0.2rem;
-  }
-
-  .guide-btn-wrap {
-    width: 100%;
-  }
-
-  .guide-actions .guide-btn,
-  .guide-btn-wrap .guide-btn {
-    width: 100%;
-  }
-
-  .guide-btn.skip {
-    order: 3;
-    width: 100%;
-  }
-
-  .guide-btn.ghost {
-    order: 2;
-  }
-
-  .guide-close {
-    top: 0.5rem;
-    right: 0.5rem;
-  }
 }
 
 /* hint */
