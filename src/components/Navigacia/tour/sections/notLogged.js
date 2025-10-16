@@ -6,10 +6,9 @@ export function steps() {
   return [
     {
       type: "between",
-      title: "Ahoj, som Andrej 👋",
+      title: "🙋‍♂️ Ahoj, som Andrej!",
       text:
-        "Vitaj na Heligónkovej akadémii! Aby sme mohli pokračovať v návode, " +
-        "potrebuješ mať účet. Môžeš sa prihlásiť alebo si vytvoriť nový účet.",
+        "Vitaj na Heligónkovej Akadémii 👋 Ak chceš pokračovať v prehliadke, prihlás sa alebo si vytvor nový účet.",
       options: [
         {
           label: "Registrovať",
@@ -18,8 +17,9 @@ export function steps() {
           steps: () => [
             {
               id: "reg-basics",
-              title: "Vyplň základné údaje",
-              text: "Tu zadaj meno, priezvisko, e-mail a heslá. Potom vyber krajinu.",
+              title: "📝 Vyplň základné údaje",
+              text:
+                "Zadaj svoje meno, priezvisko, e-mail a heslo. Potom vyber krajinu – a si pripravený na hudobnú cestu.",
               side: "right",
               radius: 16,
               pad: { x: 20, y: 16 },
@@ -106,10 +106,9 @@ export function steps() {
                 ".login-form",
                 "form[name*='login']",
               ],
-              title: "Prihlás sa do účtu",
+              title: "🔑 Prihlás sa do účtu",
               text:
-                "Zadaj svoj e-mail a heslo. Ak si heslo nepamätáš, použi „Zabudnuté heslo“. " +
-                "Potom klikni na „Prihlásiť“.",
+                "Zadaj svoj e-mail a heslo. Ak si ho nepamätáš, klikni na „Zabudnuté heslo“. Po prihlásení ťa čaká celý svet heligónky!",
               side: "right",
               pad: { x: 24, y: 20 },
               radius: 16,
