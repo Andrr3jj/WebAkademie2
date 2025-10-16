@@ -84,12 +84,32 @@ export default {
     });
 
     const PLAN_BLUEPRINT = [
-      { label: "Domovská stránka", bridgeLabel: "Ďalšia oblasť" },
-      { label: "Číselné zápisy", bridgeLabel: "Náučné videá" },
-      { label: "Náučné videá", bridgeLabel: "Moja učebňa" },
-      { label: "Moja učebňa", bridgeLabel: "Hotovo" },
-      { label: "Hotovo", bridgeLabel: "" },
+      { label: "Domovská stránka", bridgeLabel: "Ďalšia oblasť", points: 30 },
+      { label: "Číselné zápisy", bridgeLabel: "Náučné videá", points: 40 },
+      { label: "Náučné videá", bridgeLabel: "Moja učebňa", points: 50 },
+      { label: "Moja učebňa", bridgeLabel: "Hotovo", points: 100 },
+      { label: "Hotovo", bridgeLabel: "", points: null },
     ];
+
+    const tryParsePoints = (value) => {
+      const num = Number(value);
+      if (Number.isFinite(num) && num > 0) return Math.round(num);
+      return null;
+    };
+
+    const resolvePoints = (stage, idx) => {
+      if (stage && typeof stage === "object") {
+        const direct = tryParsePoints(stage.points);
+        if (direct !== null) return direct;
+        const reward = tryParsePoints(stage.rewardPoints);
+        if (reward !== null) return reward;
+        const alt = tryParsePoints(stage.pointsReward);
+        if (alt !== null) return alt;
+      }
+
+      const fallback = tryParsePoints(PLAN_BLUEPRINT[idx]?.points);
+      return fallback;
+    };
 
     const DIACRITIC_REGEX = new RegExp(
       "[ÁÄĂÀÂÃÅĄÆČĆĎÉĚËÈÊĘÍÌÎÏĹĽŁŇŃÓÒÔÖÕŐŘŔŚŠŤÚÙÛÜŮÝŸŹŻŽáäăàâãåąæčćďéěëèêęíìîïĺľłňńóòôöõőřŕśšťťúùûüůýÿźżžßẞ]",
@@ -276,6 +296,7 @@ export default {
           label,
           bridgeLabel,
           status: "upcoming",
+          points: resolvePoints(stage, idx),
         };
 
         if (completedKeys.has(key)) {
@@ -299,6 +320,7 @@ export default {
                 PLAN_BLUEPRINT[0].bridgeLabel.trim()) ||
               "",
             status: "current",
+            points: resolvePoints(null, 0),
           },
         ];
       }
@@ -322,6 +344,7 @@ export default {
             bridgeLabel: "",
             status: "upcoming",
             placeholder: true,
+            points: resolvePoints(null, items.length),
           });
         }
       }
