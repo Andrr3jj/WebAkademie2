@@ -406,13 +406,14 @@ h5 {
 
 .guide-tour-button {
   position: absolute;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: 1.3rem;
+  bottom: 1rem;
   justify-content: center;
-  padding: 0.35em 1.25em;
+  padding: 0.35em 0.7em;
   font-size: 1.35em;
   line-height: 1;
   z-index: 2;
+  border-radius: 0.5em;
 }
 
 .guide-tour-button__icon {
