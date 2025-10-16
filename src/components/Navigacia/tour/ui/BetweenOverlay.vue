@@ -321,7 +321,7 @@ export default {
   --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
   --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
   --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
-  --intro-bubble-scale: 0.65;
+  --intro-bubble-scale: 0.75;
   --intro-bubble-visible-w: calc(
     var(--intro-bubble-w) * var(--intro-bubble-scale)
   );
