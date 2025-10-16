@@ -98,6 +98,7 @@
                       <span
                         v-if="item.pointsLabel"
                         class="plan-summary__points"
+                        :aria-label="item.pointsAnnounce || item.pointsLabel"
                       >
                         {{ item.pointsLabel }}
                       </span>
@@ -265,6 +266,9 @@ export default {
           `Etapa ${idx + 1}`;
         const status = item?.status || "upcoming";
         const points = normalizePoints(item?.points);
+        const rawPointsLabel =
+          typeof item?.pointsLabel === "string" ? item.pointsLabel.trim() : "";
+        const pointsLabel = rawPointsLabel || formatPoints(points);
         return {
           ...item,
           index: item?.index ?? idx,
@@ -272,7 +276,11 @@ export default {
           status,
           bridgeLabel: bridges[idx]?.label || "",
           points,
-          pointsLabel: formatPoints(points),
+          pointsLabel,
+          pointsAnnounce:
+            typeof item?.pointsAnnounce === "string"
+              ? item.pointsAnnounce.trim()
+              : pointsLabel,
         };
       });
     });
@@ -610,9 +618,12 @@ export default {
 }
 .plan-summary__footer {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: clamp(0.4rem, 0.6vw, 0.7rem);
+  row-gap: clamp(0.32rem, 0.45vw, 0.55rem);
   flex-wrap: wrap;
+  width: 100%;
 }
 .plan-summary__meta {
   display: flex;
@@ -623,6 +634,7 @@ export default {
   font-weight: 600;
   color: rgba(15, 36, 15, 0.72);
   flex: 1 1 auto;
+  min-width: 8.75rem;
 }
 .plan-summary__status {
   display: inline-flex;
