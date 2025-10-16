@@ -27,11 +27,11 @@
       <button
         v-if="isGuideButtonVisible"
         type="button"
-        class="guide-tour-button"
+        class="login button sm-br guide-tour-button"
         @click="startHomeTour"
         aria-label="Spustiť krátky návod"
       >
-        Spustiť návod
+        <span aria-hidden="true" class="guide-tour-button__icon">?</span>
       </button>
     </div>
   </section>
@@ -91,11 +91,11 @@
           <button
             v-if="isGuideButtonVisible"
             type="button"
-            class="guide-tour-button"
+            class="login button sm-br guide-tour-button"
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            Spustiť návod
+            <span aria-hidden="true" class="guide-tour-button__icon">?</span>
           </button>
         </div>
       </section>
@@ -310,7 +310,9 @@ export default {
             window.dispatchEvent(
               new CustomEvent("ha.tour.start", { detail: { index: 0 } })
             );
-          } catch (e) {}
+          } catch (e) {
+            console.error("Failed to dispatch tour start event", e);
+          }
         }
       };
 
@@ -406,30 +408,19 @@ h5 {
   position: absolute;
   right: 1.5rem;
   bottom: 1.5rem;
-  padding: 0.9rem 1.6rem;
-  border: none;
-  border-radius: 999px;
-  background-color: $txt-clr;
-  color: $blck-clr;
-  font-family: "Adumu", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  justify-content: center;
+  padding: 0.35em 1.25em;
+  font-size: 1.35em;
+  line-height: 1;
   z-index: 2;
+}
 
-  &:hover,
-  &:focus-visible {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0) scale(0.99);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
-  }
+.guide-tour-button__icon {
+  display: block;
+  font-family: Adumu;
+  font-size: 1em;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 section {
@@ -525,19 +516,12 @@ section {
 }
 
 @media screen and (max-width: 768px) {
-  .right {
-    display: flex;
+  .mobile .right {
+    display: inline-flex;
     flex-direction: column;
     align-items: flex-end;
-  }
-
-  .guide-tour-button {
-    position: static;
-    margin-top: 1.25rem;
-    align-self: flex-end;
-    padding: 0.85rem 1.4rem;
-    font-size: 1rem;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: auto;
   }
 }
 
@@ -609,13 +593,29 @@ section {
   }
 
   /* obrázok vpravo – nech sa správa ako v 450-verzii */
-  .right {
-    width: 99%;
+  .mobile .right {
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+    display: inline-flex;
+    justify-content: flex-end;
   }
-  .right img {
+  .mobile .right img {
+    position: relative;
+    right: 0;
+    bottom: 0;
     width: 47vw; /* z 450-verzie (odstránená pevná height) */
     height: auto;
     filter: drop-shadow(5px 2px 3px rgba(0, 0, 0, 0.5));
+  }
+
+  .mobile .guide-tour-button {
+    position: absolute;
+    right: clamp(0.75rem, 3vw, 1.25rem);
+    bottom: clamp(0.75rem, 3vw, 1.25rem);
+    padding: 0.35em 1em;
+    font-size: clamp(1rem, 3.6vw, 1.2rem);
+    margin-top: 0;
   }
 
   /* veľkosť tlačidiel a medzery ako v 450-verzii */
