@@ -83,15 +83,24 @@
                   </span>
                   <div class="plan-summary__text">
                     <span class="plan-summary__title">{{ item.label }}</span>
-                    <div class="plan-summary__meta">
-                      <span class="plan-summary__status">{{
-                        statusLabel(item.status)
-                      }}</span>
+                    <div class="plan-summary__footer">
+                      <div class="plan-summary__meta">
+                        <span class="plan-summary__status">{{
+                          statusLabel(item.status)
+                        }}</span>
+                        <span
+                          v-if="item.bridgeLabel"
+                          class="plan-summary__bridge"
+                        >
+                          Ďalej: {{ item.bridgeLabel }}
+                        </span>
+                      </div>
                       <span
-                        v-if="item.bridgeLabel"
-                        class="plan-summary__bridge"
+                        v-if="item.pointsLabel"
+                        class="plan-summary__points"
+                        :aria-label="item.pointsAnnounce || item.pointsLabel"
                       >
-                        Ďalej: {{ item.bridgeLabel }}
+                        {{ item.pointsLabel }}
                       </span>
                     </div>
                   </div>
@@ -159,6 +168,29 @@ export default {
   emits: ["start", "choose", "close"],
   setup(props, { emit }) {
     const stage = ref("enter"); // enter -> ready -> leave
+
+    const normalizePoints = (value) => {
+      const num = Number(value);
+      if (Number.isFinite(num) && num > 0) return Math.round(num);
+      return null;
+    };
+
+    const formatPoints = (value) => {
+      const points = normalizePoints(value);
+      if (!points) return "";
+
+      const absPoints = Math.abs(points);
+      const lastTwo = absPoints % 100;
+      let suffix = "bodov";
+
+      if (lastTwo < 10 || lastTwo > 20) {
+        const last = absPoints % 10;
+        if (last === 1) suffix = "bod";
+        else if (last >= 2 && last <= 4) suffix = "body";
+      }
+
+      return `Získaš ${points} ${suffix}`;
+    };
 
     const planBridges = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
@@ -233,12 +265,22 @@ export default {
           (typeof item?.label === "string" && item.label.trim()) ||
           `Etapa ${idx + 1}`;
         const status = item?.status || "upcoming";
+        const points = normalizePoints(item?.points);
+        const rawPointsLabel =
+          typeof item?.pointsLabel === "string" ? item.pointsLabel.trim() : "";
+        const pointsLabel = rawPointsLabel || formatPoints(points);
         return {
           ...item,
           index: item?.index ?? idx,
           label,
           status,
           bridgeLabel: bridges[idx]?.label || "",
+          points,
+          pointsLabel,
+          pointsAnnounce:
+            typeof item?.pointsAnnounce === "string"
+              ? item.pointsAnnounce.trim()
+              : pointsLabel,
         };
       });
     });
@@ -254,7 +296,14 @@ export default {
       }
     };
 
-    return { stage, start, choose, planBridges, planSegments, statusLabel };
+    return {
+      stage,
+      start,
+      choose,
+      planBridges,
+      planSegments,
+      statusLabel,
+    };
   },
 };
 </script>
@@ -559,12 +608,22 @@ export default {
   display: flex;
   flex-direction: column;
   gap: clamp(0.2rem, 0.3vw, 0.3rem);
+  text-align: left;
 }
 .plan-summary__title {
   font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.28rem);
   font-weight: 800;
   color: var(--ha-card-fg);
   line-height: 1.35;
+}
+.plan-summary__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(0.4rem, 0.6vw, 0.7rem);
+  row-gap: clamp(0.32rem, 0.45vw, 0.55rem);
+  flex-wrap: wrap;
+  width: 100%;
 }
 .plan-summary__meta {
   display: flex;
@@ -574,6 +633,8 @@ export default {
   font-size: clamp(0.85rem, 0.82rem + 0.2vw, 0.98rem);
   font-weight: 600;
   color: rgba(15, 36, 15, 0.72);
+  flex: 1 1 auto;
+  min-width: 8.75rem;
 }
 .plan-summary__status {
   display: inline-flex;
@@ -606,6 +667,19 @@ export default {
 .plan-summary__item.status-current .plan-summary__bridge {
   background: rgba(144, 202, 80, 0.18);
   box-shadow: inset 0 0 0 0.05rem rgba(15, 36, 15, 0.12);
+}
+.plan-summary__points {
+  margin-left: auto;
+  font-size: clamp(0.92rem, 0.88rem + 0.24vw, 1.08rem);
+  font-weight: 700;
+  color: rgba(15, 36, 15, 0.85);
+  white-space: nowrap;
+}
+.plan-summary__item.status-current .plan-summary__points {
+  color: #0f240f;
+}
+.plan-summary__item.status-done .plan-summary__points {
+  color: rgba(15, 36, 15, 0.75);
 }
 
 .plan-tip.small {
