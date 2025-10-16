@@ -319,8 +319,8 @@ export default {
   --intro-out: 340ms;
 
   --intro-gap: clamp(0.5rem, 2.2vw, 1.375rem);
-  --intro-avatar-w: clamp(15.625rem, 22vw, 20.625rem);
-  --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
+  --intro-avatar-w: clamp(17.969rem, 25.3vw, 23.719rem);
+  --intro-bubble-w: clamp(30.188rem, 48.3vw, 51.75rem);
   --intro-bubble-scale: 0.75;
   --intro-bubble-visible-w: calc(
     var(--intro-bubble-w) * var(--intro-bubble-scale)
@@ -788,12 +788,12 @@ export default {
   }
   .intro-bubble-wrapper {
     flex: 0 0 auto;
-    width: min(92vw, calc(40rem * var(--intro-bubble-scale)));
-    max-width: min(92vw, calc(40rem * var(--intro-bubble-scale)));
+    width: min(92vw, calc(46rem * var(--intro-bubble-scale)));
+    max-width: min(92vw, calc(46rem * var(--intro-bubble-scale)));
   }
   .intro-bubble {
     width: calc(100% / var(--intro-bubble-scale));
-    max-width: calc(min(92vw, 40rem) / var(--intro-bubble-scale));
+    max-width: calc(min(92vw, 46rem) / var(--intro-bubble-scale));
   }
   .intro-bubble::after {
     left: calc(50% - 0.625rem);
