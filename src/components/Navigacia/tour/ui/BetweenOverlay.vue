@@ -210,11 +210,46 @@ export default {
       }
     };
 
+    let restoreBodyScroll = null;
+
+    const lockBodyScroll = () => {
+      if (typeof window === "undefined") return;
+      const body = document.body;
+      const doc = document.documentElement;
+      if (!body || !doc) return;
+
+      const previous = {
+        bodyOverflow: body.style.overflow,
+        bodyTouch: body.style.touchAction,
+        docOverflow: doc.style.overflow,
+        docTouch: doc.style.touchAction,
+      };
+
+      restoreBodyScroll = () => {
+        body.style.overflow = previous.bodyOverflow;
+        body.style.touchAction = previous.bodyTouch;
+        doc.style.overflow = previous.docOverflow;
+        doc.style.touchAction = previous.docTouch;
+      };
+
+      body.style.overflow = "hidden";
+      body.style.touchAction = "none";
+      doc.style.overflow = "hidden";
+      doc.style.touchAction = "none";
+    };
+
     onMounted(() => {
       requestAnimationFrame(() => (stage.value = "ready"));
       window.addEventListener("keydown", onKey);
+      lockBodyScroll();
     });
-    onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", onKey);
+      if (typeof restoreBodyScroll === "function") {
+        restoreBodyScroll();
+      }
+    });
 
     const planSegments = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
@@ -730,38 +765,42 @@ export default {
 
 @media (max-width: 40rem) {
   .intro-layer {
-    overflow-y: auto;
-    padding: clamp(0.75rem, 4vw, 1.5rem) 0;
+    overflow: hidden;
+    padding: clamp(0.85rem, 5vw, 1.6rem) clamp(0.75rem, 6vw, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .intro-center {
-    position: relative;
+    position: static;
     inset: auto;
-    min-height: 100%;
-    align-items: stretch;
-    padding: 0 clamp(0.6rem, 4.5vw, 1.25rem) clamp(1.5rem, 6vw, 2.5rem);
+    min-height: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 
   .intro-group {
     width: 100%;
-    max-width: min(100%, 32rem);
+    max-width: min(100%, 26rem);
     padding: 0;
-    gap: clamp(0.75rem, 5vw, 1.5rem);
+    gap: clamp(0.65rem, 4.6vw, 1.35rem);
   }
 
   .intro-avatar-shell {
-    width: clamp(9.5rem, 42vw, 12.5rem);
+    width: clamp(8.75rem, 40vw, 11.5rem);
     margin: 0 auto;
   }
 
   .intro-bubble {
     width: 100%;
-    max-width: 100%;
+    max-width: min(94vw, 24rem);
     text-align: left;
-    padding: clamp(1rem, 6vw, 1.4rem) clamp(0.9rem, 6vw, 1.35rem);
-    border-radius: 1rem;
-    max-height: min(82vh, 36rem);
-    overflow-y: auto;
+    padding: clamp(0.85rem, 5.2vw, 1.2rem) clamp(0.85rem, 5.8vw, 1.3rem);
+    border-radius: 0.9rem;
+    max-height: none;
+    overflow: visible;
   }
 
   .intro-bubble::after {
@@ -769,29 +808,38 @@ export default {
   }
 
   .intro-title {
-    font-size: clamp(1.22rem, 6vw, 1.55rem);
+    font-size: clamp(1.2rem, 5.6vw, 1.5rem);
   }
 
   .intro-lead {
-    font-size: clamp(0.92rem, 4.8vw, 1.05rem);
+    font-size: clamp(0.9rem, 4.6vw, 1.03rem);
+  }
+
+  .intro-plan {
+    margin-bottom: clamp(0.6rem, 3.8vw, 1rem);
+    padding: 0 clamp(0.35rem, 4.2vw, 0.85rem);
+  }
+
+  .plan-summary {
+    gap: clamp(0.45rem, 3.4vw, 0.8rem);
   }
 
   .plan-summary__item {
-    padding: clamp(0.55rem, 4.2vw, 0.85rem) clamp(0.6rem, 5.4vw, 1rem);
+    padding: clamp(0.5rem, 3.8vw, 0.8rem) clamp(0.55rem, 4.8vw, 0.95rem);
   }
 
   .plan-summary__title {
-    font-size: clamp(0.96rem, 4.8vw, 1.15rem);
+    font-size: clamp(0.94rem, 4.4vw, 1.12rem);
   }
 
   .plan-summary__meta {
-    font-size: clamp(0.8rem, 4.2vw, 0.92rem);
+    font-size: clamp(0.78rem, 4vw, 0.9rem);
   }
 
   .intro-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: clamp(0.5rem, 4vw, 0.75rem);
+    gap: clamp(0.45rem, 3.6vw, 0.7rem);
     text-align: left;
   }
 
@@ -808,7 +856,7 @@ export default {
   .branch-options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: clamp(0.5rem, 4vw, 0.75rem);
+    gap: clamp(0.45rem, 3.6vw, 0.7rem);
   }
 
   .branch-options .guide-btn {

@@ -97,14 +97,12 @@ export default {
 
     let rafId = 0;
     let targetRO = null;
+    let detachViewportListeners = null;
 
     const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
     const safeNumber = (value) =>
       typeof value === "number" && Number.isFinite(value) ? value : 0;
-    const toVw = (value) =>
-      `${(safeNumber(value) / Math.max(window.innerWidth || 1, 1)) * 100}vw`;
-    const toVh = (value) =>
-      `${(safeNumber(value) / Math.max(window.innerHeight || 1, 1)) * 100}vh`;
+    const toPx = (value) => `${safeNumber(value)}px`;
     const toRem = (value) => `${safeNumber(value) / 16}rem`;
 
     function blurActive() {
@@ -233,7 +231,7 @@ export default {
       const rect = el.getBoundingClientRect();
       const cs = window.getComputedStyle(el);
 
-      const defaultPad = () => (window.innerWidth <= 768 ? 14 : 22);
+      const defaultPad = () => (window.innerWidth <= 768 ? 10 : 18);
       const PAD = s.pad ?? defaultPad();
       const radiusGuess =
         s.radius ??
@@ -257,10 +255,10 @@ export default {
       h += off.h || 0;
 
       spotStyle.value = {
-        left: toVw(x),
-        top: toVh(y),
-        width: toVw(w),
-        height: toVh(h),
+        left: toPx(x),
+        top: toPx(y),
+        width: toPx(w),
+        height: toPx(h),
         borderRadius: toRem(radiusGuess),
       };
 
@@ -330,8 +328,8 @@ export default {
 
       tooltipSide.value = side;
       tooltipStyle.value = {
-        left: toVw(pos.left),
-        top: toVh(pos.top),
+        left: toPx(pos.left),
+        top: toPx(pos.top),
         "--arrow-x": toRem(arrowX),
         "--arrow-y": toRem(arrowY),
       };
@@ -344,6 +342,19 @@ export default {
         rafId = 0;
         await updateSpot(false);
       });
+    }
+
+    function attachVisualViewportListener() {
+      if (!window.visualViewport) return;
+      const vv = window.visualViewport;
+      const handler = () => updateSpotThrottled();
+      vv.addEventListener("resize", handler, { passive: true });
+      vv.addEventListener("scroll", handler, { passive: true });
+      detachViewportListeners = () => {
+        vv.removeEventListener("resize", handler);
+        vv.removeEventListener("scroll", handler);
+        detachViewportListeners = null;
+      };
     }
 
     // ✅ bezpečné pripájanie/odpájanie observera
@@ -523,6 +534,7 @@ export default {
       window.addEventListener("resize", updateSpotThrottled, { passive: true });
       window.addEventListener("scroll", updateSpotThrottled, { passive: true });
       window.addEventListener("keydown", onKeydown);
+      attachVisualViewportListener();
 
       await nextTick();
       await updateSpot(true);
@@ -535,6 +547,8 @@ export default {
       detachTargetObserver();
       cancelLockAnimation();
       toggleScrollLock(false);
+      if (typeof detachViewportListeners === "function")
+        detachViewportListeners();
     });
 
     return {
