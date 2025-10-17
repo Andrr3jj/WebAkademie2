@@ -2,42 +2,48 @@
   <!-- rozbalené menu (dropdown) -->
   <div v-if="menuOpenValue" class="navigation-more">
     <ul>
-      <li @click="menuOpenValue = false">
+      <li
+        @click="menuOpenValue = false"
+        data-tour-id="home-menu-mobile-lessons"
+      >
         <div class="icon">
           <img src="@/assets/images/icons/naucneVidea.svg" alt="" />
         </div>
         <router-link to="/naucne-videa">Náučné videá</router-link>
       </li>
 
-      <li @click="menuOpenValue = false">
+      <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-texty">
         <div class="icon">
           <img src="@/assets/images/icons/textyPiesni.svg" alt="" />
         </div>
         <router-link to="/spevnik">Texty piesní</router-link>
       </li>
 
-      <li @click="menuOpenValue = false">
+      <li
+        @click="menuOpenValue = false"
+        data-tour-id="home-menu-mobile-helifest"
+      >
         <div class="icon">
           <img src="@/assets/images/icons/helifest.svg" alt="" />
         </div>
         <router-link to="/helifest">HeliFest</router-link>
       </li>
 
-      <li @click="menuOpenValue = false">
+      <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-shop">
         <div class="icon">
           <img src="@/assets/images/icons/merch.svg" alt="" />
         </div>
         <router-link to="/helishop">HeliShop</router-link>
       </li>
 
-      <li @click="menuOpenValue = false">
+      <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-about">
         <div class="icon">
           <img src="@/assets/images/icons/oNas.svg" alt="" />
         </div>
         <router-link to="/onas">O nás</router-link>
       </li>
 
-      <li @click="menuOpenValue = false">
+      <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-help">
         <div class="icon">
           <img src="@/assets/images/icons/pomoc.svg" alt="" />
         </div>
@@ -80,7 +86,11 @@
       <div class="top-nav">
         <ul>
           <!-- Košík -->
-          <li @click="menuOpenValue = false" class="cart-li">
+          <li
+            @click="menuOpenValue = false"
+            class="cart-li"
+            data-tour-id="home-menu-mobile-cart"
+          >
             <router-link to="/kosik">
               <div class="icon">
                 <img src="@/assets/images/icons/kosik.svg" alt="Košík" />
@@ -90,7 +100,11 @@
           </li>
 
           <!-- Admin alebo Číselné zápisy -->
-          <li @click="menuOpenValue = false" v-if="$store.state.user?.isAdmin">
+          <li
+            @click="menuOpenValue = false"
+            v-if="$store.state.user?.isAdmin"
+            data-tour-id="home-menu-mobile-admin"
+          >
             <router-link to="/admin">
               <div class="icon">
                 <img
@@ -100,7 +114,11 @@
               </div>
             </router-link>
           </li>
-          <li @click="menuOpenValue = false" v-else>
+          <li
+            @click="menuOpenValue = false"
+            v-else
+            data-tour-id="home-menu-mobile-scores"
+          >
             <router-link to="/ciselne-zapisy">
               <div class="icon">
                 <img
@@ -112,7 +130,7 @@
           </li>
 
           <!-- Menu toggle -->
-          <li>
+          <li data-tour-id="home-menu-mobile-toggle">
             <div @click="menuOpen" v-show="menuOpenValue" class="icon">
               <img
                 src="@/assets/images/icons/menuOpen.svg"
@@ -128,7 +146,11 @@
           </li>
 
           <!-- Moje piesne / Spevník v spodnej lište -->
-          <li @click="menuOpenValue = false" class="songs-li">
+          <li
+            @click="menuOpenValue = false"
+            class="songs-li"
+            data-tour-id="home-menu-mobile-songs"
+          >
             <router-link v-if="$store.state.user == null" to="/spevnik">
               <div class="icon">
                 <img
@@ -153,7 +175,10 @@
           </li>
 
           <!-- Domov -->
-          <li @click="menuOpenValue = false">
+          <li
+            @click="menuOpenValue = false"
+            data-tour-id="home-menu-mobile-home"
+          >
             <router-link to="/">
               <div class="icon">
                 <img src="@/assets/images/icons/domov.svg" alt="Domov" />

@@ -22,8 +22,7 @@ export function steps() {
       goto: "/naucne-videa",
       selector: sel.heading,
       title: "🎥 Náučné videá",
-      text:
-        "Tu nájdeš všetky online lekcie zoradené podľa tém a úrovne. Vyber si, čo chceš trénovať.",
+      text: "Tu nájdeš všetky online lekcie zoradené podľa tém a úrovne. Vyber si, čo chceš trénovať.",
       side: "left",
       pad: 24,
       radius: 26,
@@ -31,8 +30,7 @@ export function steps() {
     {
       selector: sel.subscription,
       title: "💳 Predplatné",
-      text:
-        "Zakúp si prístup ku kompletnej knižnici videí a uč sa bez obmedzení. Každý deň môžeš objavovať nové tipy.",
+      text: "Zakúp si prístup ku kompletnej knižnici videí a uč sa bez obmedzení. Každý deň môžeš objavovať nové tipy.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -53,8 +51,7 @@ export function steps() {
       waitFor: 800, // nech sa DOM dotiahne
       closest: "video, .lesson-video, .plyr__video-wrapper, .video-wrapper",
       title: "👀 Ukážkové video",
-      text:
-        "Spusti ukážku, aby si videl, ako prebieha lekcia. Zistíš, že učiť sa dá aj s úsmevom.",
+      text: "Spusti ukážku, aby si videl, ako prebieha lekcia. Zistíš, že učiť sa dá aj s úsmevom.",
       side: "left",
       pad: 24,
       radius: 26,
@@ -84,8 +81,7 @@ export function steps() {
       // ring nasadíme na celý box
       closest: ".button, [data-tour='lyrics-toggle']",
       title: "🎤 Text piesne",
-      text:
-        "Zobraz si text skladby a spievaj spolu s heligónkou. Pomôže ti to lepšie zapamätať rytmus.",
+      text: "Zobraz si text skladby a spievaj spolu s heligónkou. Pomôže ti to lepšie zapamätať rytmus.",
       side: "top",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -105,8 +101,7 @@ export function steps() {
       waitFor: 600,
       closest: ".box-item.oblubene.narocnost",
       title: "🎚️ Vyber si náročnosť",
-      text:
-        "Začiatočník, pokročilý alebo profík – vyber si úroveň, ktorá ti sedí. Každý rastie svojím tempom.",
+      text: "Začiatočník, pokročilý alebo profík – vyber si úroveň, ktorá ti sedí. Každý rastie svojím tempom.",
       side: "left",
       pad: 24,
       radius: 24,
