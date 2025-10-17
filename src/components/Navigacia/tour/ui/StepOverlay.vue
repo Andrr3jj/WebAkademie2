@@ -17,6 +17,10 @@
           >Krok {{ index + 1 - firstReal }}/{{ total }}</span
         >
 
+        <button class="guide-btn skip" type="button" @click.stop="close">
+          Preskočiť
+        </button>
+
         <button
           class="guide-btn ghost"
           type="button"
@@ -702,6 +706,18 @@ export default {
   background: #fff;
   box-shadow: 0 0.5rem 1.125rem rgba(0, 0, 0, 0.1);
 }
+.guide-btn.skip {
+  background: transparent;
+  border-color: transparent;
+  color: #4b5563;
+  font-weight: 700;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+}
+.guide-btn.skip:hover {
+  color: #1f2937;
+  text-decoration: underline;
+}
 .guide-btn:disabled {
   opacity: 0.55;
   cursor: default;
@@ -780,7 +796,7 @@ export default {
   }
 
   .guide-actions {
-    gap: clamp(0.35rem, 2.8vw, 0.55rem);
+    gap: clamp(0.3rem, 2.4vw, 0.5rem);
     flex-wrap: nowrap;
   }
 
@@ -792,6 +808,11 @@ export default {
   .guide-btn {
     padding: clamp(0.4rem, 3.4vw, 0.52rem) clamp(0.6rem, 4.8vw, 0.85rem);
     font-size: clamp(0.8rem, 3.8vw, 0.92rem);
+  }
+
+  .guide-btn.skip {
+    padding: clamp(0.25rem, 2.4vw, 0.4rem) clamp(0.2rem, 2.2vw, 0.35rem);
+    font-size: clamp(0.74rem, 3.4vw, 0.86rem);
   }
 
   .guide-close {
