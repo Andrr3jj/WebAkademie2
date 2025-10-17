@@ -686,17 +686,38 @@ export default {
 }
 
 @media (max-width: 56.25rem) {
-  .intro-avatar-shell {
-    display: none;
+  .intro-center {
+    align-items: flex-end;
+    padding: clamp(1rem, 4vw, 2.5rem) 0;
   }
+
+  .intro-group {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(0.75rem, 3vw, 1.75rem);
+    max-width: min(92vw, 40rem);
+  }
+
   .intro-bubble {
+    order: 1;
     width: min(92vw, 40rem);
+    text-align: center;
   }
+
   .intro-bubble::after {
+    top: auto;
+    bottom: -0.625rem;
     left: calc(50% - 0.625rem);
-    top: -0.625rem;
     transform: rotate(45deg);
     box-shadow: 0.1875rem 0.1875rem 0.375rem rgba(0, 0, 0, 0.06);
+  }
+
+  .intro-avatar-shell {
+    order: 2;
+    width: min(60vw, 16.5rem);
+    min-width: 0;
+    transform-origin: 50% 75%;
   }
 }
 </style>
