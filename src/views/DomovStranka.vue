@@ -1,9 +1,9 @@
 <template>
   <section class="computer hero-section" :id="$route.name">
-    <div class="i18n-corner">
-      <LanguageSwitcher />
-    </div>
     <div class="left">
+      <div class="i18n-corner">
+        <LanguageSwitcher />
+      </div>
       <TheHeadline />
       <div class="buttons-group">
         <router-link to="/zistit-viac" class="login button sm-br">
@@ -76,11 +76,11 @@
   <div class="mobile" :id="$route.name">
     <div class="scroll">
       <section class="hero-section">
-        <div class="i18n-corner">
-          <LanguageSwitcher />
-        </div>
-        <TheHeadline />
         <div class="left">
+          <div class="i18n-corner">
+            <LanguageSwitcher />
+          </div>
+          <TheHeadline />
           <router-link to="/zistit-viac" class="login button sm-br">
             <router-link to="/zistit-viac">{{ $t("home.cta.learnMore") }}</router-link>
           </router-link>
@@ -404,9 +404,9 @@ export default {
 }
 
 .i18n-corner {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
   z-index: 50;
 }
 
@@ -425,6 +425,7 @@ h5 {
   width: 40%;
 }
 .left {
+  position: relative;
   width: 90%;
 }
 
