@@ -1,5 +1,8 @@
 <template>
-  <section class="computer" :id="$route.name">
+  <section class="computer hero-section" :id="$route.name">
+    <div class="i18n-corner">
+      <LanguageSwitcher />
+    </div>
     <div class="left">
       <TheHeadline />
       <div class="buttons-group">
@@ -7,14 +10,14 @@
           <router-link
             to="/zistit-viac"
             alt="Zistiť viac o Heligónkovej Akadémii a našich kurzoch heligónky"
-            >Zistiť viac</router-link
+            >{{ $t("home.cta.learnMore") }}</router-link
           >
         </router-link>
         <router-link to="/zistit-viac" class="login button sm-br">
           <router-link
             to="/ucebna/zadarmo-video"
             alt="Vyskúšajte zdarma ukážkové náučné video na heligónku – krok po kroku"
-            >Vyskúšať zadarmo</router-link
+            >{{ $t("home.cta.tryFree") }}</router-link
           >
         </router-link>
       </div>
@@ -72,17 +75,20 @@
 
   <div class="mobile" :id="$route.name">
     <div class="scroll">
-      <section>
+      <section class="hero-section">
+        <div class="i18n-corner">
+          <LanguageSwitcher />
+        </div>
         <TheHeadline />
         <div class="left">
           <router-link to="/zistit-viac" class="login button sm-br">
-            <router-link to="/zistit-viac">Zistiť viac</router-link>
+            <router-link to="/zistit-viac">{{ $t("home.cta.learnMore") }}</router-link>
           </router-link>
           <router-link to="/zistit-viac" class="login button sm-br">
             <router-link
               to="/ucebna/zadarmo-video"
               alt="Vyskúšajte zdarma ukážkové náučkové video na heligónku – krok po kroku"
-              >Vyskúšať zadarmo</router-link
+              >{{ $t("home.cta.tryFree") }}</router-link
             >
           </router-link>
         </div>
@@ -221,10 +227,11 @@ import { useStore } from "vuex";
 import TheHeadline from "@/components/Menu/TheHeadline.vue";
 import NewsList from "@/components/ucebna/NewsList.vue";
 import { tour } from "@/components/Navigacia/tour/tour";
+import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 
 export default {
   name: "DomovStranka",
-  components: { TheHeadline, NewsList },
+  components: { TheHeadline, NewsList, LanguageSwitcher },
 
   metaInfo() {
     return {
@@ -390,6 +397,17 @@ export default {
   height: 36vw;
   max-height: 35em;
   filter: drop-shadow(10px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.hero-section {
+  position: relative;
+}
+
+.i18n-corner {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 50;
 }
 
 h5 {

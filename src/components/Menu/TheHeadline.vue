@@ -13,7 +13,7 @@
   </h1>
 
   <h1 v-if="$route.name == 'Heligonková Akadémia'" class="no-default">
-    Heligónková Akadémia
+    {{ $t("home.hero.title") }}
   </h1>
   <h1 v-if="$route.name == 'Heličas úlohy'" class="no-default">
     HeliČas úlohy
@@ -28,7 +28,7 @@
 
   <!-- Podnadpis -->
   <h5 v-if="$route.name == 'Heligonková Akadémia'" class="podnadpis no-default">
-    {{ podnadpis }}
+    {{ $t("home.hero.subtitle") }}
   </h5>
   <h5 v-else class="podnadpis">
     {{ podnadpis }}
