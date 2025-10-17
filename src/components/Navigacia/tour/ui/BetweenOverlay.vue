@@ -210,11 +210,46 @@ export default {
       }
     };
 
+    let restoreBodyScroll = null;
+
+    const lockBodyScroll = () => {
+      if (typeof window === "undefined") return;
+      const body = document.body;
+      const doc = document.documentElement;
+      if (!body || !doc) return;
+
+      const previous = {
+        bodyOverflow: body.style.overflow,
+        bodyTouch: body.style.touchAction,
+        docOverflow: doc.style.overflow,
+        docTouch: doc.style.touchAction,
+      };
+
+      restoreBodyScroll = () => {
+        body.style.overflow = previous.bodyOverflow;
+        body.style.touchAction = previous.bodyTouch;
+        doc.style.overflow = previous.docOverflow;
+        doc.style.touchAction = previous.docTouch;
+      };
+
+      body.style.overflow = "hidden";
+      body.style.touchAction = "none";
+      doc.style.overflow = "hidden";
+      doc.style.touchAction = "none";
+    };
+
     onMounted(() => {
       requestAnimationFrame(() => (stage.value = "ready"));
       window.addEventListener("keydown", onKey);
+      lockBodyScroll();
     });
-    onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", onKey);
+      if (typeof restoreBodyScroll === "function") {
+        restoreBodyScroll();
+      }
+    });
 
     const planSegments = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
