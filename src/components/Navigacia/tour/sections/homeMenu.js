@@ -170,6 +170,45 @@ export function steps() {
       mobileMenuDelay: 200,
     },
     {
+      selector: [
+        "[data-tour-id='home-menu-mobile-scores']",
+        "[data-tour-id='home-menu-mobile-admin']",
+      ].join(","),
+      title: "🎼 Menu: Číselné zápisy",
+      text: "Nájdeš tu všetky naše číselné zápisy. Ak si admin, ťuknutím otvoríš administračný systém.",
+      side: "top",
+      pad: { x: 18, y: 14 },
+      radius: 32,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+      waitFor: 200,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-songs']",
+      title: "🎶 Menu: Moje piesne",
+      text: "Tu máš uložené všetky tvoje obľúbené piesne. Ak ešte nemáš účet, otvorí sa ti Spevník s textami piesní.",
+      side: "top",
+      pad: { x: 18, y: 14 },
+      radius: 32,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+      waitFor: 200,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-home']",
+      title: "🏠 Menu: Domov",
+      text: "Týmto tlačidlom sa vždy vrátiš späť na hlavnú stránku Heligónkovej Akadémie.",
+      side: "top",
+      pad: { x: 18, y: 14 },
+      radius: 32,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+      waitFor: 200,
+    },
+    {
       selector: "[data-tour-id='home-menu-mobile-toggle']",
       title: "📋 Otvor mobilné menu",
       text: "Ťukni sem a rozbaľ ďalšie sekcie Akadémie. V menu nájdeš rýchle odkazy na texty piesní, pomoc či informácie o nás.",

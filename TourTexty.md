@@ -77,6 +77,15 @@ Predstavujeme našu knihu, ktorá ťa prevedie učením na heligónke krok za kr
 ### 📋 Mobilné menu *(mobil)*
 V spodnej lište nájdeš prepínač, ktorý otvorí celé mobilné menu. Odtiaľ sa dostaneš k videám, zápisom, Helifestu aj podpore na pár ťuknutí.
 
+### 🎼 Menu: Číselné zápisy *(mobil)*
+Ťukni sem a zobrazí sa ti zoznam číselných zápisov. Ak máš prístup do administrácie, otvoríš si odtiaľ priamo admin panel.
+
+### 🎶 Menu: Moje piesne *(mobil)*
+Tu máš uložené všetky tvoje obľúbené piesne. Bez účtu sa odtiaľ dostaneš do Spevníka s textami.
+
+### 🏠 Menu: Domov *(mobil)*
+Toto tlačidlo ťa vždy vráti späť na hlavnú stránku Heligónkovej Akadémie.
+
 ### 📜 Menu: Texty piesní
 Ak si rád zaspievaš, tu nájdeš texty k obľúbeným piesňam. Spoj hudbu so spevom a uži si to naplno.
 
