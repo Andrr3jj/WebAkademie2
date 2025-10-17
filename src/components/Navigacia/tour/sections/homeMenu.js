@@ -1,7 +1,7 @@
 // src/components/Navigacia/tour/sections/homeMenu.js
 import { steps as zapisySteps, branch as zapisyBranch } from "./ciselneZapisy";
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
-import { ensureMobileMenuState, isMobileMenuLayout } from "../utils/mobileMenu";
+import { isMobileMenuLayout } from "../utils/mobileMenu";
 
 export function steps() {
   const pad = 18;
@@ -166,9 +166,8 @@ export function steps() {
       side: "top",
       pad: { x: 18, y: 14 },
       radius: 32,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
     },
     {
       selector:
@@ -178,9 +177,8 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 32,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
       waitFor: 200,
     },
     {
@@ -190,9 +188,8 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 36,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "close",
+      mobileMenuDelay: 200,
     },
     {
       selector: "[data-tour-id='home-menu-mobile-songs']",
@@ -201,9 +198,8 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
       waitFor: 200,
     },
     {
@@ -213,9 +209,8 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
       waitFor: 200,
     },
     {
@@ -226,9 +221,8 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenuState(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
       waitFor: 200,
     },
   ];
