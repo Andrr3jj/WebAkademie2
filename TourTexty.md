@@ -65,10 +65,16 @@ Objav našu unikátnu formu zápisu pre heligónku – jednoduché čísla namie
 ### 🛍️ HeliShop  
 Všetko pre heligónkara na jednom mieste – knihy, tričká, vaky, darčeky či doplnky. Nakúp si, čo potrebuješ na svoje hudobné dobrodružstvo.
 
-### 🎉 HeliFest  
+### 🎉 HeliFest
 Festival heligónkarov, kde sa stretávame, hráme, spievame a zabávame. Zisti, kedy a kde sa bude konať najbližší ročník.
 
-### 📜 Menu: Texty piesní  
+### 📰 Novinky na Akadémii *(mobil)*
+V mobilnom zobrazení tu nájdeš všetky čerstvé informácie – nové videá, zápisy aj dôležité oznamy, aby ti nič neušlo.
+
+### 📚 Naša kniha *(mobil)*
+Predstavujeme našu knihu, ktorá ťa prevedie učením na heligónke krok za krokom. Zisti, čo v nej nájdeš a objednaj si ju jedným klikom.
+
+### 📜 Menu: Texty piesní
 Ak si rád zaspievaš, tu nájdeš texty k obľúbeným piesňam. Spoj hudbu so spevom a uži si to naplno.
 
 ### 👨‍🏫 Menu: O nás  
