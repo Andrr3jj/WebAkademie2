@@ -62,7 +62,7 @@ Tu nájdeš videonávody na konkrétne piesne aj techniku hrania. Ideálne miest
 ### 🎵 Číselné zápisy  
 Objav našu unikátnu formu zápisu pre heligónku – jednoduché čísla namiesto nôt. Vyber si pieseň, ktorú máš rád, a nauč sa ju hrať podľa prehľadného zápisu.
 
-### 🛍️ HeliShop  
+### 🛍️ HeliShop
 Všetko pre heligónkara na jednom mieste – knihy, tričká, vaky, darčeky či doplnky. Nakúp si, čo potrebuješ na svoje hudobné dobrodružstvo.
 
 ### 🎉 HeliFest
@@ -74,10 +74,13 @@ V mobilnom zobrazení tu nájdeš všetky čerstvé informácie – nové videá
 ### 📚 Naša kniha *(mobil)*
 Predstavujeme našu knihu, ktorá ťa prevedie učením na heligónke krok za krokom. Zisti, čo v nej nájdeš a objednaj si ju jedným klikom.
 
+### 📋 Mobilné menu *(mobil)*
+V spodnej lište nájdeš prepínač, ktorý otvorí celé mobilné menu. Odtiaľ sa dostaneš k videám, zápisom, Helifestu aj podpore na pár ťuknutí.
+
 ### 📜 Menu: Texty piesní
 Ak si rád zaspievaš, tu nájdeš texty k obľúbeným piesňam. Spoj hudbu so spevom a uži si to naplno.
 
-### 👨‍🏫 Menu: O nás  
+### 👨‍🏫 Menu: O nás
 Zisti, kto stojí za Heligónkovou Akadémiou a prečo to celé robíme. Poznaj ľudí, ktorí ťa sprevádzajú na tvojej hudobnej ceste.
 
 ### 🛒 Menu: Košík  

@@ -11,6 +11,24 @@ function isMobileLayout() {
   }
 }
 
+function ensureMobileMenu(open) {
+  if (typeof document === "undefined") return;
+
+  const wantOpen = !!open;
+  const dropdown = document.querySelector(".navigation-more");
+  const isOpen = !!dropdown;
+  if (wantOpen === isOpen) return;
+
+  const toggleSelector = wantOpen
+    ? ".menu.mobile img[src*='menuClosed']"
+    : ".menu.mobile img[src*='menuOpen']";
+  const toggle = document.querySelector(toggleSelector);
+  if (!toggle) return;
+
+  const icon = toggle.closest(".icon");
+  icon?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+}
+
 export function steps() {
   const pad = 18;
   const mobile = isMobileLayout();
@@ -135,7 +153,7 @@ export function steps() {
     },
   ];
 
-  const menuSteps = [
+  const desktopMenuSteps = [
     {
       bind: { where: "menu", text: "Texty piesní", hrefLike: "spevnik" },
       title: "📜 Menu: Texty piesní",
@@ -166,10 +184,71 @@ export function steps() {
     },
   ];
 
+  const mobileMenuSteps = [
+    {
+      selector: ".menu.mobile .top-nav .cart-li",
+      title: "🛒 Menu: Košík",
+      text: "Tu nájdeš všetky svoje vybrané zápisy, videá a produkty pripravené na nákup. Stačí dokončiť objednávku a môžeš hneď pokračovať v hraní.",
+      side: "top",
+      pad: { x: 18, y: 14 },
+      radius: 32,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+    },
+    {
+      selector: ".menu.mobile .top-nav li:nth-of-type(3)",
+      title: "📋 Mobilné menu",
+      text: "Ťuknutím na ikonu otvoríš celé menu – nájdeš tam Náučné videá, Texty piesní, HeliFest aj ďalšie sekcie.",
+      side: "top",
+      pad: { x: 20, y: 14 },
+      radius: 36,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+    },
+    {
+      selector: ".navigation-more li:nth-of-type(2)",
+      title: "📜 Menu: Texty piesní",
+      text: "Ak si rád zaspievaš, tu nájdeš texty k obľúbeným piesňam. Spoj hudbu so spevom a uži si to naplno.",
+      side: "right",
+      pad: { x: 20, y: 16 },
+      radius: 26,
+      onBeforeEnter() {
+        ensureMobileMenu(true);
+      },
+      waitFor: 200,
+    },
+    {
+      selector: ".navigation-more li:nth-of-type(5)",
+      title: "👨‍🏫 Menu: O nás",
+      text: "Zisti, kto stojí za Heligónkovou Akadémiou a prečo to celé robíme. Poznaj ľudí, ktorí ťa sprevádzajú na tvojej hudobnej ceste.",
+      side: "right",
+      pad: { x: 20, y: 16 },
+      radius: 26,
+      onBeforeEnter() {
+        ensureMobileMenu(true);
+      },
+      waitFor: 200,
+    },
+    {
+      selector: ".navigation-more li:nth-of-type(6)",
+      title: "🆘 Menu: Pomoc",
+      text: "Ak si niekde nevieš rady, napíš nám. Radi ti pomôžeme s prihlásením, platbou alebo čímkoľvek iným.",
+      side: "right",
+      pad: { x: 20, y: 16 },
+      radius: 26,
+      onBeforeEnter() {
+        ensureMobileMenu(true);
+      },
+      waitFor: 200,
+    },
+  ];
+
   return [
     ...commonSteps,
     ...(mobile ? mobileTiles : desktopTiles),
-    ...menuSteps,
+    ...(mobile ? mobileMenuSteps : desktopMenuSteps),
   ];
 }
 
