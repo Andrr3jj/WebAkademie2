@@ -1,37 +1,11 @@
 // src/components/Navigacia/tour/sections/homeMenu.js
 import { steps as zapisySteps, branch as zapisyBranch } from "./ciselneZapisy";
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
-
-function isMobileLayout() {
-  if (typeof window === "undefined") return false;
-  try {
-    return window.matchMedia("(max-width: 750px)").matches;
-  } catch (e) {
-    return window.innerWidth <= 750;
-  }
-}
-
-function ensureMobileMenu(open) {
-  if (typeof document === "undefined") return;
-
-  const wantOpen = !!open;
-  const dropdown = document.querySelector(".navigation-more");
-  const isOpen = !!dropdown;
-  if (wantOpen === isOpen) return;
-
-  const toggleSelector = wantOpen
-    ? "[data-tour-id='home-menu-mobile-toggle'] img[src*='menuClosed']"
-    : "[data-tour-id='home-menu-mobile-toggle'] img[src*='menuOpen']";
-  const toggle = document.querySelector(toggleSelector);
-  if (!toggle) return;
-
-  const icon = toggle.closest(".icon");
-  icon?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-}
+import { isMobileMenuLayout } from "../utils/mobileMenu";
 
 export function steps() {
   const pad = 18;
-  const mobile = isMobileLayout();
+  const mobile = isMobileMenuLayout();
 
   const commonSteps = [
     // 1) Zistiť viac
@@ -192,33 +166,63 @@ export function steps() {
       side: "top",
       pad: { x: 18, y: 14 },
       radius: 32,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
-    },
-    {
-      selector:
-        "[data-tour-id='home-menu-mobile-admin'], [data-tour-id='home-menu-mobile-scores']",
-      title: "🎼 Menu: Číselné zápisy",
-      text: "Nájdeš tu všetky naše číselné zápisy. Vyber si pieseň a hraj podľa nich krok za krokom.",
-      side: "top",
-      pad: { x: 20, y: 14 },
-      radius: 32,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
-      waitFor: 200,
+      mobileMenu: "close",
+      mobileMenuDelay: 200,
     },
     {
       selector: "[data-tour-id='home-menu-mobile-toggle']",
-      title: "📋 Mobilné menu",
-      text: "Ťuknutím na ikonu otvoríš viac možností – v rozšírenom menu sú ďalšie sekcie Akadémie.",
+      title: "📋 Otvor mobilné menu",
+      text: "Ťukni sem a rozbaľ ďalšie sekcie Akadémie. V menu nájdeš rýchle odkazy na texty piesní, pomoc či informácie o nás.",
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 36,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
+      waitFor: 200,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-texty']",
+      title: "📜 Texty piesní",
+      text: "V tejto sekcii nájdeš texty k obľúbeným piesňam. Skvelé, keď chceš spievať spolu s hraním alebo si len osviežiť slová.",
+      side: "right",
+      pad: { x: 18, y: 14 },
+      radius: 30,
+      mobileMenu: "open",
+      mobileMenuDelay: 220,
+      waitFor: 220,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-about']",
+      title: "👨‍🏫 O nás",
+      text: "Zisti, kto stojí za Heligónkovou Akadémiou a prečo ti chceme uľahčiť cestu k heligónke.",
+      side: "right",
+      pad: { x: 18, y: 14 },
+      radius: 30,
+      mobileMenu: "open",
+      mobileMenuDelay: 220,
+      waitFor: 220,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-help']",
+      title: "🆘 Pomoc",
+      text: "Potrebujete poradiť? Tu nám môžeš napísať – radi pomôžeme s prihlásením, platbou aj nastavením aplikácie.",
+      side: "right",
+      pad: { x: 18, y: 14 },
+      radius: 30,
+      mobileMenu: "open",
+      mobileMenuDelay: 220,
+      waitFor: 220,
+    },
+    {
+      selector: "[data-tour-id='home-menu-mobile-toggle']",
+      title: "📂 Zatvor mobilné menu",
+      text: "Keď si pripravený pokračovať, menu môžeš zavrieť a vrátiš sa k spodnej lište s ďalšími skratkami.",
+      side: "top",
+      pad: { x: 20, y: 14 },
+      radius: 36,
+      mobileMenu: "close",
+      mobileMenuDelay: 240,
+      waitFor: 200,
     },
     {
       selector: "[data-tour-id='home-menu-mobile-songs']",
@@ -227,10 +231,9 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
-      waitFor: 200,
+      mobileMenu: "close",
+      mobileMenuDelay: 200,
+      waitFor: 180,
     },
     {
       selector: "[data-tour-id='home-menu-mobile-home']",
@@ -239,10 +242,9 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
-      waitFor: 200,
+      mobileMenu: "close",
+      mobileMenuDelay: 200,
+      waitFor: 180,
     },
     {
       selector:
@@ -252,10 +254,9 @@ export function steps() {
       side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
-      onBeforeEnter() {
-        ensureMobileMenu(false);
-      },
-      waitFor: 200,
+      mobileMenu: "close",
+      mobileMenuDelay: 200,
+      waitFor: 180,
     },
   ];
 

@@ -8,6 +8,12 @@ import { steps as zapisyFlowSteps } from "./sections/ciselneZapisy";
 import { steps as videoFlowSteps } from "./sections/naucneVidea";
 import { steps as classroomFlowSteps } from "./sections/mojaUcebna";
 
+import {
+  ensureMobileMenuState,
+  isMobileMenuLayout,
+  isMobileMenuOpen,
+} from "./utils/mobileMenu";
+
 // === Guest (nologged) – prvý krok musí byť type: "between" ===
 import { steps as notLoggedSteps } from "./sections/notLogged";
 
@@ -573,6 +579,81 @@ function buildProgram() {
 // ⬇️ MINI utilita
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+let forcedMobileMenuOpen = false;
+
+function normalizeMobileMenuRequest(value) {
+  if (value === true) return "open";
+  if (value === false) return "close";
+  if (typeof value === "string") {
+    const normalized = value.toLowerCase().trim();
+    if ("open".startsWith(normalized) || normalized === "show") return "open";
+    if (normalized === "opened" || normalized === "expand") return "open";
+    if ("close".startsWith(normalized) || normalized === "hide") return "close";
+    if (normalized === "closed" || normalized === "collapse") return "close";
+  }
+  return null;
+}
+
+async function prepareMobileMenuForStep(step) {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  if (!isMobileMenuLayout()) {
+    if (forcedMobileMenuOpen && isMobileMenuOpen()) {
+      await ensureMobileMenuState(false, { waitMs: 120, retries: 1 });
+    }
+    forcedMobileMenuOpen = false;
+    return;
+  }
+
+  const request = normalizeMobileMenuRequest(step?.mobileMenu);
+  if (request === "open") {
+    const waitMs = Math.max(
+      0,
+      Number(step?.mobileMenuDelay ?? step?.mobileMenuWait ?? 260)
+    );
+    const retries = Math.max(0, Number(step?.mobileMenuRetries) || 2);
+    const changed = await ensureMobileMenuState(true, { waitMs, retries });
+    if (changed || isMobileMenuOpen()) {
+      forcedMobileMenuOpen = true;
+    }
+    return;
+  }
+
+  if (request === "close") {
+    const waitMs = Math.max(
+      0,
+      Number(step?.mobileMenuDelay ?? step?.mobileMenuWait ?? 200)
+    );
+    const retries = Math.max(0, Number(step?.mobileMenuRetries) || 1);
+    await ensureMobileMenuState(false, { waitMs, retries });
+    forcedMobileMenuOpen = isMobileMenuOpen();
+    return;
+  }
+
+  const wantsMenu =
+    !!step &&
+    step.bind &&
+    typeof step.bind === "object" &&
+    step.bind.where === "menu";
+
+  if (wantsMenu) {
+    const changed = await ensureMobileMenuState(true, {
+      waitMs: 200,
+      retries: 3,
+    });
+    if (changed || isMobileMenuOpen()) {
+      forcedMobileMenuOpen = true;
+    }
+    return;
+  }
+
+  if (!forcedMobileMenuOpen) return;
+
+  await ensureMobileMenuState(false, { waitMs: 140, retries: 2 });
+  if (!isMobileMenuOpen()) {
+    forcedMobileMenuOpen = false;
+  }
+}
+
 const STEP_TRANSITION_GUARD_MS = 2200;
 
 let navigationTimer = null;
@@ -677,6 +758,7 @@ async function goTo(i) {
       }
     }
 
+    await prepareMobileMenuForStep(s);
     bindStepAt(i);
     scheduleRecalc();
   } finally {
@@ -737,6 +819,10 @@ async function advanceStageIfNeeded() {
 
   const branchConfig = resolveBranch(currentStage.branch, currentStage);
   if (branchConfig && branchConfig.options.length) {
+    if (forcedMobileMenuOpen) {
+      await ensureMobileMenuState(false);
+      forcedMobileMenuOpen = false;
+    }
     currentStage.bridgeLabel =
       branchConfig.planBridgeLabel || currentStage.bridgeLabel || "";
 
@@ -813,6 +899,8 @@ export const tour = {
 
     cleanupBindings();
     detachViewportWatchers();
+    forcedMobileMenuOpen = false;
+    await ensureMobileMenuState(false);
 
     state.stageIndex = 0;
     state.index = 0;
@@ -894,6 +982,10 @@ export const tour = {
   },
 
   close() {
+    if (forcedMobileMenuOpen) {
+      ensureMobileMenuState(false);
+      forcedMobileMenuOpen = false;
+    }
     state.open = false;
     cleanupBindings();
     detachViewportWatchers();

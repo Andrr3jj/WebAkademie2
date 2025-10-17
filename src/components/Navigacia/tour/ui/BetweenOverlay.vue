@@ -6,7 +6,7 @@
     aria-modal="true"
   >
     <div class="intro-center">
-      <div class="intro-group">
+      <div class="intro-group" :class="{ 'is-compact': isCompact }">
         <!-- AVATAR + efekty -->
         <div class="intro-avatar-shell" :class="[`st-${stage}`]">
           <div class="intro-halo" aria-hidden="true"></div>
@@ -21,7 +21,12 @@
         </div>
 
         <!-- Bublina -->
-        <section class="intro-bubble" :class="[`st-${stage}`]">
+        <section
+          class="intro-bubble"
+          :class="[`st-${stage}`, { 'is-compact': isCompact }]"
+          :style="bubbleStyle"
+          ref="bubbleEl"
+        >
           <button
             class="guide-close intro-close"
             type="button"
@@ -132,7 +137,14 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  nextTick,
+} from "vue";
 
 export default {
   name: "BetweenOverlay",
@@ -150,6 +162,63 @@ export default {
   emits: ["start", "choose", "close"],
   setup(props, { emit }) {
     const stage = ref("enter"); // enter -> ready -> leave
+    const bubbleEl = ref(null);
+    const bubbleScale = ref(1);
+    let resizeObserver = null;
+    let viewportResizeListener = null;
+
+    const ensureNextFrame = (fn) => {
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(fn);
+      } else {
+        setTimeout(fn, 16);
+      }
+    };
+
+    const updateScale = () => {
+      if (typeof window === "undefined") {
+        bubbleScale.value = 1;
+        return;
+      }
+      const el = bubbleEl.value;
+      if (!el) {
+        bubbleScale.value = 1;
+        return;
+      }
+
+      const viewport = window.visualViewport || window;
+      const viewportHeight = Math.max(
+        0,
+        Number(
+          viewport?.height || viewport?.innerHeight || window.innerHeight || 0
+        )
+      );
+      if (!viewportHeight) {
+        bubbleScale.value = 1;
+        return;
+      }
+
+      const margin = viewportHeight <= 720 ? 40 : 64;
+      const available = Math.max(160, viewportHeight - margin);
+      const bubbleHeight = el.scrollHeight || el.offsetHeight || 0;
+      if (!bubbleHeight) {
+        bubbleScale.value = 1;
+        return;
+      }
+
+      const ratio = available / bubbleHeight;
+      const clamped = Math.min(
+        1,
+        Math.max(0.75, Number.isFinite(ratio) ? ratio : 1)
+      );
+      bubbleScale.value = clamped;
+    };
+
+    const queueUpdateScale = () => {
+      ensureNextFrame(() => {
+        nextTick(() => updateScale());
+      });
+    };
 
     const planBridges = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
@@ -210,11 +279,118 @@ export default {
       }
     };
 
+    let restoreBodyScroll = null;
+
+    const lockBodyScroll = () => {
+      if (typeof window === "undefined") return;
+      const body = document.body;
+      const doc = document.documentElement;
+      if (!body || !doc) return;
+
+      const previous = {
+        bodyOverflow: body.style.overflow,
+        bodyTouch: body.style.touchAction,
+        docOverflow: doc.style.overflow,
+        docTouch: doc.style.touchAction,
+      };
+
+      restoreBodyScroll = () => {
+        body.style.overflow = previous.bodyOverflow;
+        body.style.touchAction = previous.bodyTouch;
+        doc.style.overflow = previous.docOverflow;
+        doc.style.touchAction = previous.docTouch;
+      };
+
+      body.style.overflow = "hidden";
+      body.style.touchAction = "none";
+      doc.style.overflow = "hidden";
+      doc.style.touchAction = "none";
+    };
+
     onMounted(() => {
-      requestAnimationFrame(() => (stage.value = "ready"));
+      requestAnimationFrame(() => {
+        stage.value = "ready";
+        queueUpdateScale();
+      });
       window.addEventListener("keydown", onKey);
+      if (typeof window !== "undefined") {
+        window.addEventListener("resize", queueUpdateScale);
+        window.addEventListener("orientationchange", queueUpdateScale);
+        if (window.visualViewport) {
+          viewportResizeListener = () => queueUpdateScale();
+          window.visualViewport.addEventListener(
+            "resize",
+            viewportResizeListener
+          );
+          window.visualViewport.addEventListener(
+            "scroll",
+            viewportResizeListener
+          );
+        }
+      }
+
+      if (typeof ResizeObserver !== "undefined" && bubbleEl.value) {
+        resizeObserver = new ResizeObserver(queueUpdateScale);
+        resizeObserver.observe(bubbleEl.value);
+      }
+
+      lockBodyScroll();
     });
-    onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", onKey);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", queueUpdateScale);
+        window.removeEventListener("orientationchange", queueUpdateScale);
+        if (window.visualViewport && viewportResizeListener) {
+          window.visualViewport.removeEventListener(
+            "resize",
+            viewportResizeListener
+          );
+          window.visualViewport.removeEventListener(
+            "scroll",
+            viewportResizeListener
+          );
+        }
+      }
+      if (resizeObserver) {
+        try {
+          resizeObserver.disconnect();
+        } catch (e) {
+          void 0;
+        }
+        resizeObserver = null;
+      }
+      if (typeof restoreBodyScroll === "function") {
+        restoreBodyScroll();
+      }
+    });
+
+    const bubbleStyle = computed(() => ({
+      "--bubble-scale": bubbleScale.value,
+    }));
+
+    const isCompact = computed(() => bubbleScale.value < 0.999);
+
+    const watchedSources = [
+      () => props.planItems,
+      () => props.planSummary,
+      () => props.options,
+      () => props.text,
+      () => props.title,
+      () => props.variant,
+      () => props.visibleTotal,
+    ];
+
+    watchedSources.forEach((source) => {
+      watch(
+        source,
+        () => {
+          queueUpdateScale();
+        },
+        { deep: true }
+      );
+    });
 
     const planSegments = computed(() => {
       const items = Array.isArray(props.planItems) ? props.planItems : [];
@@ -245,7 +421,17 @@ export default {
       }
     };
 
-    return { stage, start, choose, planBridges, planSegments, statusLabel };
+    return {
+      stage,
+      start,
+      choose,
+      planBridges,
+      planSegments,
+      statusLabel,
+      bubbleEl,
+      bubbleStyle,
+      isCompact,
+    };
   },
 };
 </script>
@@ -306,6 +492,9 @@ export default {
     96vw,
     calc(var(--intro-avatar-w) + var(--intro-gap) + var(--intro-bubble-w))
   );
+}
+.intro-group.is-compact {
+  gap: clamp(0.45rem, 1vw, 0.85rem);
 }
 
 /* avatar + efekty */
@@ -415,7 +604,8 @@ export default {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform: translateY(0.5rem);
+  transform-origin: top center;
+  transform: translateY(0.5rem) scale(var(--bubble-scale, 1));
   transition: -webkit-clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     clip-path var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity var(--intro-dur) cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -425,14 +615,17 @@ export default {
   -webkit-clip-path: var(--maskTo);
   clip-path: var(--maskTo);
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(var(--bubble-scale, 1));
 }
 .intro-bubble.st-leave {
   -webkit-clip-path: var(--maskFrom);
   clip-path: var(--maskFrom);
   opacity: 0;
-  transform: translateY(0.375rem);
+  transform: translateY(0.375rem) scale(var(--bubble-scale, 1));
   transition-duration: var(--intro-out);
+}
+.intro-bubble.is-compact {
+  --intro-bubble-w: clamp(18rem, 72vw, 32rem);
 }
 
 .intro-bubble::after {
@@ -705,6 +898,9 @@ export default {
     gap: clamp(0.75rem, 3vw, 1.75rem);
     max-width: min(92vw, 40rem);
   }
+  .intro-group.is-compact {
+    gap: clamp(0.55rem, 2.4vw, 1.15rem);
+  }
 
   .intro-bubble {
     order: 1;
@@ -730,38 +926,45 @@ export default {
 
 @media (max-width: 40rem) {
   .intro-layer {
-    overflow-y: auto;
-    padding: clamp(0.75rem, 4vw, 1.5rem) 0;
+    overflow: hidden;
+    padding: clamp(0.85rem, 5vw, 1.6rem) clamp(0.75rem, 6vw, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .intro-center {
-    position: relative;
+    position: static;
     inset: auto;
-    min-height: 100%;
-    align-items: stretch;
-    padding: 0 clamp(0.6rem, 4.5vw, 1.25rem) clamp(1.5rem, 6vw, 2.5rem);
+    min-height: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 
   .intro-group {
     width: 100%;
-    max-width: min(100%, 32rem);
+    max-width: min(100%, 26rem);
     padding: 0;
-    gap: clamp(0.75rem, 5vw, 1.5rem);
+    gap: clamp(0.65rem, 4.6vw, 1.35rem);
   }
 
   .intro-avatar-shell {
-    width: clamp(9.5rem, 42vw, 12.5rem);
+    width: clamp(8.75rem, 40vw, 11.5rem);
     margin: 0 auto;
   }
 
   .intro-bubble {
     width: 100%;
-    max-width: 100%;
+    max-width: min(94vw, 24rem);
     text-align: left;
-    padding: clamp(1rem, 6vw, 1.4rem) clamp(0.9rem, 6vw, 1.35rem);
-    border-radius: 1rem;
-    max-height: min(82vh, 36rem);
-    overflow-y: auto;
+    padding: clamp(0.85rem, 5.2vw, 1.2rem) clamp(0.85rem, 5.8vw, 1.3rem);
+    border-radius: 0.9rem;
+    max-height: none;
+    overflow: visible;
+  }
+  .intro-bubble.is-compact {
+    padding: clamp(0.75rem, 4.6vw, 1rem) clamp(0.75rem, 4.8vw, 1.1rem);
   }
 
   .intro-bubble::after {
@@ -769,30 +972,51 @@ export default {
   }
 
   .intro-title {
-    font-size: clamp(1.22rem, 6vw, 1.55rem);
+    font-size: clamp(1.2rem, 5.6vw, 1.5rem);
   }
 
   .intro-lead {
-    font-size: clamp(0.92rem, 4.8vw, 1.05rem);
+    font-size: clamp(0.9rem, 4.6vw, 1.03rem);
+  }
+
+  .intro-plan {
+    margin-bottom: clamp(0.6rem, 3.8vw, 1rem);
+    padding: 0 clamp(0.35rem, 4.2vw, 0.85rem);
+  }
+
+  .plan-summary {
+    gap: clamp(0.45rem, 3.4vw, 0.8rem);
   }
 
   .plan-summary__item {
-    padding: clamp(0.55rem, 4.2vw, 0.85rem) clamp(0.6rem, 5.4vw, 1rem);
+    padding: clamp(0.5rem, 3.8vw, 0.8rem) clamp(0.55rem, 4.8vw, 0.95rem);
+  }
+  .intro-group.is-compact .plan-summary__item {
+    padding: clamp(0.45rem, 3.2vw, 0.7rem) clamp(0.5rem, 4vw, 0.85rem);
   }
 
   .plan-summary__title {
-    font-size: clamp(0.96rem, 4.8vw, 1.15rem);
+    font-size: clamp(0.94rem, 4.4vw, 1.12rem);
+  }
+  .intro-group.is-compact .plan-summary__title {
+    font-size: clamp(0.88rem, 4vw, 1.04rem);
   }
 
   .plan-summary__meta {
-    font-size: clamp(0.8rem, 4.2vw, 0.92rem);
+    font-size: clamp(0.78rem, 4vw, 0.9rem);
+  }
+  .intro-group.is-compact .plan-summary__meta {
+    font-size: clamp(0.74rem, 3.8vw, 0.86rem);
   }
 
   .intro-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: clamp(0.5rem, 4vw, 0.75rem);
+    gap: clamp(0.45rem, 3.6vw, 0.7rem);
     text-align: left;
+  }
+  .intro-group.is-compact .intro-actions {
+    gap: clamp(0.35rem, 3vw, 0.6rem);
   }
 
   .intro-actions .action-tip {
@@ -808,7 +1032,7 @@ export default {
   .branch-options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: clamp(0.5rem, 4vw, 0.75rem);
+    gap: clamp(0.45rem, 3.6vw, 0.7rem);
   }
 
   .branch-options .guide-btn {
