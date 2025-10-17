@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./components/store";
 import vClickOutside from "click-outside-vue3";
-import i18n, { bootI18n } from "./i18n";
+import i18n, { bootI18n } from "./i18n/index.js";
 store.dispatch("referral/init");
 
 const app = createApp(App);
