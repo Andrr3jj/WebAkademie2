@@ -13,24 +13,26 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { setLocale } from '@/i18n';
-import i18n from '@/i18n';
+import { computed } from "vue";
+import { setLocale } from "@/i18n";
+import i18n from "@/i18n";
 
 const locales = [
-  { code: 'sk', labelKey: 'ui.lang.sk' },
-  { code: 'cs', labelKey: 'ui.lang.cs' },
-  { code: 'pl', labelKey: 'ui.lang.pl' }
+  { code: "sk", labelKey: "ui.lang.sk" },
+  { code: "cs", labelKey: "ui.lang.cs" },
+  { code: "pl", labelKey: "ui.lang.pl" }
 ];
 
-const { t } = useI18n();
-
-const buttons = computed(() =>
-  locales.map((locale) => ({ ...locale, label: t(locale.labelKey) }))
-);
-
 const current = computed(() => i18n.global.locale.value);
+
+const buttons = computed(() => {
+  // ensure reactivity when locale changes
+  current.value;
+  return locales.map(l => ({
+    ...l,
+    label: i18n.global.t(l.labelKey)
+  }));
+});
 
 async function switchTo(code) {
   await setLocale(code);
@@ -38,14 +40,11 @@ async function switchTo(code) {
 </script>
 
 <style scoped>
-.lang-switcher {
-  display: flex;
-  gap: 0.5rem;
-}
+.lang-switcher { display: flex; gap: .5rem; }
 .lang-switcher button {
-  padding: 0.35rem 0.6rem;
+  padding: .35rem .6rem;
   border: 1px solid #ddd;
-  border-radius: 0.4rem;
+  border-radius: .4rem;
   cursor: pointer;
   background: #fff;
 }
