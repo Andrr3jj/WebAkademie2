@@ -175,7 +175,10 @@
           </li>
 
           <!-- Domov -->
-          <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-home">
+          <li
+            @click="menuOpenValue = false"
+            data-tour-id="home-menu-mobile-home"
+          >
             <router-link to="/">
               <div class="icon">
                 <img src="@/assets/images/icons/domov.svg" alt="Domov" />

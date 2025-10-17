@@ -197,7 +197,8 @@ export function steps() {
       },
     },
     {
-      selector: "[data-tour-id='home-menu-mobile-admin'], [data-tour-id='home-menu-mobile-scores']",
+      selector:
+        "[data-tour-id='home-menu-mobile-admin'], [data-tour-id='home-menu-mobile-scores']",
       title: "🎼 Menu: Číselné zápisy",
       text: "Nájdeš tu všetky naše číselné zápisy. Vyber si pieseň a hraj podľa nich krok za krokom.",
       side: "top",
@@ -244,7 +245,8 @@ export function steps() {
       waitFor: 200,
     },
     {
-      selector: "[data-tour-id='home-menu-mobile-login'], [data-tour-id='home-menu-mobile-account']",
+      selector:
+        "[data-tour-id='home-menu-mobile-login'], [data-tour-id='home-menu-mobile-account']",
       title: "👤 Prihlásenie alebo môj účet",
       text: "Prihlás sa do Akadémie alebo otvor svoj účet a pokračuj v učení tam, kde si prestal.",
       side: "top",

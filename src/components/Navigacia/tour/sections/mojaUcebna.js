@@ -18,8 +18,7 @@ export function steps() {
         ".mobile .stats .time-stats-wrapper",
       ],
       title: "⏱️ Čas výučby",
-      text:
-        "Tu uvidíš, koľko si už odohral. Každá minúta strávená učením sa premení na body do systému HeliČas.",
+      text: "Tu uvidíš, koľko si už odohral. Každá minúta strávená učením sa premení na body do systému HeliČas.",
       side: "left",
       pad: { x: 26, y: 20 },
       radius: 20,
@@ -32,8 +31,7 @@ export function steps() {
         ".mobile .stats .statistika-wrapper",
       ],
       title: "📊 Štatistika zápisov",
-      text:
-        "Porovnaj si, koľko máš poliek, valčíkov či iných žánrov. Pomôže ti to udržiavať vyvážený repertoár.",
+      text: "Porovnaj si, koľko máš poliek, valčíkov či iných žánrov. Pomôže ti to udržiavať vyvážený repertoár.",
       side: "left",
       pad: { x: 24, y: 18 },
       radius: 18,
@@ -46,8 +44,7 @@ export function steps() {
         ".mobile .profile-actions .friend-list",
       ],
       title: "🧑‍🤝‍🧑 Heligónková partia",
-      text:
-        "Pozvi kamarátov a sledujte navzájom svoj pokrok. Spoločne sa motivujete a môžete sa aj trochu hecovať 😉.",
+      text: "Pozvi kamarátov a sledujte navzájom svoj pokrok. Spoločne sa motivujete a môžete sa aj trochu hecovať 😉.",
       side: "right",
       pad: { x: 26, y: 22 },
       radius: 22,
@@ -57,8 +54,7 @@ export function steps() {
     {
       selectors: [".computer .column-left .news-list", ".mobile .news-list"],
       title: "📰 Novinky na Akadémii",
-      text:
-        "Všetky nové piesne, videá alebo výzvy sa zobrazia tu. Máš tak vždy prehľad, čo pribudlo.",
+      text: "Všetky nové piesne, videá alebo výzvy sa zobrazia tu. Máš tak vždy prehľad, čo pribudlo.",
       side: "right",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -71,8 +67,7 @@ export function steps() {
         ".mobile .naposledy-sledovane",
       ],
       title: "▶️ Naposledy sledované",
-      text:
-        "Pokračuj presne tam, kde si naposledy skončil. Jedným klikom si spustíš posledné video alebo zápis.",
+      text: "Pokračuj presne tam, kde si naposledy skončil. Jedným klikom si spustíš posledné video alebo zápis.",
       side: "left",
       pad: { x: 24, y: 20 },
       radius: 20,
@@ -85,8 +80,7 @@ export function steps() {
         ".mobile .pripomienky",
       ],
       title: "🏆 Výzvy a odmeny",
-      text:
-        "Získavaj body, plň úlohy a odmeň sa! Každá splnená výzva ťa posunie o krok bližšie k cieľu.",
+      text: "Získavaj body, plň úlohy a odmeň sa! Každá splnená výzva ťa posunie o krok bližšie k cieľu.",
       side: "left",
       pad: { x: 26, y: 22 },
       radius: 24,
@@ -100,8 +94,7 @@ export function steps() {
         ".teleported-achievements .vyzva-card",
       ],
       title: "👋 Pozvi priateľov",
-      text:
-        "Zdieľaj svoj pozývací odkaz a získaj odmenu za každého kamaráta, ktorý sa pridá. Hudba znie lepšie, keď ju hráme spolu.",
+      text: "Zdieľaj svoj pozývací odkaz a získaj odmenu za každého kamaráta, ktorý sa pridá. Hudba znie lepšie, keď ju hráme spolu.",
       side: "left",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -115,8 +108,7 @@ export function steps() {
         ".teleported-achievements .vyzva-card",
       ],
       title: "📅 7-dňová výzva",
-      text:
-        "Plň úlohy každý deň a sleduj, ako sa plnia políčka. Po siedmich dňoch ťa čaká hlavná odmena!",
+      text: "Plň úlohy každý deň a sleduj, ako sa plnia políčka. Po siedmich dňoch ťa čaká hlavná odmena!",
       side: "left",
       pad: { x: 22, y: 18 },
       radius: 18,
@@ -129,8 +121,7 @@ export function steps() {
         ".mobile .oblubene-zapisy .box-item.oblubene",
       ],
       title: "❤️ Obľúbené zápisy",
-      text:
-        "Rýchly prístup k tvojim najobľúbenejším skladbám. Stačí kliknúť a hneď hráš.",
+      text: "Rýchly prístup k tvojim najobľúbenejším skladbám. Stačí kliknúť a hneď hráš.",
       side: "left",
       pad: { x: 26, y: 20 },
       radius: 20,
@@ -141,8 +132,7 @@ export function steps() {
       selectors: [".bottom-nav-wrapper .bottom-bar"],
       closest: ".bottom-nav-wrapper",
       title: "🧭 Navigácia na ďalšie podstránky",
-      text:
-        "Darčekové poukážky, predplatné, HeliČas, kniha aj nastavenia účtu – všetko nájdeš rýchlo v spodnej lište.",
+      text: "Darčekové poukážky, predplatné, HeliČas, kniha aj nastavenia účtu – všetko nájdeš rýchlo v spodnej lište.",
       side: "top",
       pad: { x: 28, y: 24 },
       radius: 28,
