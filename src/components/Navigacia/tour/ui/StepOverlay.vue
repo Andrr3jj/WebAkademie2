@@ -729,4 +729,46 @@ export default {
 }
 
 /* hint */
+@media (max-width: 720px) {
+  .guide-tooltip.light {
+    max-width: min(94vw, 21.5rem);
+    padding: clamp(0.5rem, 3.6vw, 0.75rem) clamp(0.85rem, 5.8vw, 1.1rem)
+      clamp(0.6rem, 3.4vw, 0.8rem) clamp(0.85rem, 5.8vw, 1.1rem);
+    border-radius: clamp(0.75rem, 5vw, 1rem);
+  }
+
+  .guide-title {
+    font-size: clamp(0.94rem, 4.6vw, 1.08rem);
+  }
+
+  .guide-text {
+    font-size: clamp(0.84rem, 4.2vw, 0.96rem);
+    margin-bottom: clamp(0.45rem, 3.6vw, 0.65rem);
+  }
+
+  .guide-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.4rem;
+  }
+
+  .guide-progress {
+    flex-basis: 100%;
+    margin-right: 0;
+    text-align: left;
+    font-size: clamp(0.78rem, 3.6vw, 0.9rem);
+  }
+
+  .guide-btn {
+    padding: clamp(0.4rem, 3.4vw, 0.52rem) clamp(0.6rem, 4.8vw, 0.85rem);
+    font-size: clamp(0.8rem, 3.8vw, 0.92rem);
+  }
+
+  .guide-close {
+    top: clamp(0.45rem, 3vw, 0.6rem);
+    right: clamp(0.45rem, 3vw, 0.6rem);
+    width: clamp(1.4rem, 6vw, 1.7rem);
+    height: clamp(1.4rem, 6vw, 1.7rem);
+  }
+}
 </style>
