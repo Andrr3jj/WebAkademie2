@@ -8,6 +8,8 @@ import { steps as zapisyFlowSteps } from "./sections/ciselneZapisy";
 import { steps as videoFlowSteps } from "./sections/naucneVidea";
 import { steps as classroomFlowSteps } from "./sections/mojaUcebna";
 
+import { ensureMobileMenuState, isMobileMenuOpen } from "./utils/mobileMenu";
+
 // === Guest (nologged) – prvý krok musí byť type: "between" ===
 import { steps as notLoggedSteps } from "./sections/notLogged";
 
@@ -573,6 +575,34 @@ function buildProgram() {
 // ⬇️ MINI utilita
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+let forcedMobileMenuOpen = false;
+
+async function prepareMobileMenuForStep(step) {
+  const wantsMenu =
+    !!step &&
+    step.bind &&
+    typeof step.bind === "object" &&
+    step.bind.where === "menu";
+
+  if (wantsMenu) {
+    const changed = await ensureMobileMenuState(true, {
+      waitMs: 200,
+      retries: 3,
+    });
+    if (changed || isMobileMenuOpen()) {
+      forcedMobileMenuOpen = true;
+    }
+    return;
+  }
+
+  if (!forcedMobileMenuOpen) return;
+
+  await ensureMobileMenuState(false, { waitMs: 140, retries: 2 });
+  if (!isMobileMenuOpen()) {
+    forcedMobileMenuOpen = false;
+  }
+}
+
 const STEP_TRANSITION_GUARD_MS = 2200;
 
 let navigationTimer = null;
@@ -677,6 +707,7 @@ async function goTo(i) {
       }
     }
 
+    await prepareMobileMenuForStep(s);
     bindStepAt(i);
     scheduleRecalc();
   } finally {
@@ -737,6 +768,10 @@ async function advanceStageIfNeeded() {
 
   const branchConfig = resolveBranch(currentStage.branch, currentStage);
   if (branchConfig && branchConfig.options.length) {
+    if (forcedMobileMenuOpen) {
+      await ensureMobileMenuState(false);
+      forcedMobileMenuOpen = false;
+    }
     currentStage.bridgeLabel =
       branchConfig.planBridgeLabel || currentStage.bridgeLabel || "";
 
@@ -813,6 +848,8 @@ export const tour = {
 
     cleanupBindings();
     detachViewportWatchers();
+    forcedMobileMenuOpen = false;
+    await ensureMobileMenuState(false);
 
     state.stageIndex = 0;
     state.index = 0;
@@ -894,6 +931,10 @@ export const tour = {
   },
 
   close() {
+    if (forcedMobileMenuOpen) {
+      ensureMobileMenuState(false);
+      forcedMobileMenuOpen = false;
+    }
     state.open = false;
     cleanupBindings();
     detachViewportWatchers();
