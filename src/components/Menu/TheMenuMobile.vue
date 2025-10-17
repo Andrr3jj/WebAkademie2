@@ -513,6 +513,13 @@ section {
       align-items: center;
       gap: 0.3em;
       font-weight: 700;
+      color: inherit;
+      text-decoration: none;
+      &:hover,
+      &:focus,
+      &:visited {
+        color: inherit;
+      }
     }
     img {
       width: auto;

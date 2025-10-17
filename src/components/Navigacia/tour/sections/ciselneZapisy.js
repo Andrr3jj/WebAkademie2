@@ -164,6 +164,9 @@ export function steps() {
       side: "left",
       pad: { x: 22, y: 12 },
       radius: 14,
+      mobileMenu: "open",
+      mobileMenuDelay: 260,
+      waitFor: 220,
     },
 
     // F) Podstránka /ucebna/moje-piesne
@@ -179,6 +182,8 @@ export function steps() {
       pad: { x: 24, y: 16 },
       radius: 18,
       waitFor: 480,
+      mobileMenu: "close",
+      mobileMenuDelay: 220,
     },
 
     // G) Konkrétny vlastnený zápis
