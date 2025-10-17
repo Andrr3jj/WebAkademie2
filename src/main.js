@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./components/store";
 import vClickOutside from "click-outside-vue3";
+import i18n, { bootI18n } from "./i18n";
 store.dispatch("referral/init");
 
 const app = createApp(App);
@@ -78,4 +79,8 @@ router.afterEach((to) => {
   }
 });
 
-app.use(store).use(router).mount("#app");
+app.use(store).use(router).use(i18n);
+
+bootI18n().then(() => {
+  app.mount("#app");
+});
