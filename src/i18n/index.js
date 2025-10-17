@@ -1,12 +1,35 @@
 // src/i18n/index.js
 import { createI18n } from 'vue-i18n/dist/vue-i18n.esm-bundler.js';
 
-const DEFAULT_LOCALE = localStorage.getItem('locale') || 'sk';
+const FALLBACK_LOCALE = 'sk';
+
+function readStoredLocale() {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage.getItem('locale');
+    }
+  } catch (error) {
+    // Ignored – localStorage may be unavailable (SSR, private mode, etc.)
+  }
+  return null;
+}
+
+function persistLocale(locale) {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem('locale', locale);
+    }
+  } catch (error) {
+    // Ignore storage write errors
+  }
+}
+
+const DEFAULT_LOCALE = readStoredLocale() || FALLBACK_LOCALE;
 
 const i18n = createI18n({
   legacy: false,
   locale: DEFAULT_LOCALE,
-  fallbackLocale: 'sk',
+  fallbackLocale: FALLBACK_LOCALE,
   messages: {}, // lazy load
 });
 
@@ -27,11 +50,16 @@ async function loadLocaleMessages(locale) {
 export async function setLocale(locale) {
   await loadLocaleMessages(locale);
   i18n.global.locale.value = locale;
-  document.documentElement.setAttribute('lang', locale);
-  localStorage.setItem('locale', locale);
+
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('lang', locale);
+  }
+
+  persistLocale(locale);
 }
 
 export async function bootI18n() {
+  await loadLocaleMessages(FALLBACK_LOCALE);
   await setLocale(DEFAULT_LOCALE);
 }
 
