@@ -1,0 +1,13 @@
+{
+  "name": "vue-i18n",
+  "version": "9.9.0",
+  "type": "module",
+  "module": "dist/vue-i18n.esm-bundler.js",
+  "main": "dist/vue-i18n.esm-bundler.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-i18n.esm-bundler.js",
+      "require": "./dist/vue-i18n.esm-bundler.js"
+    }
+  }
+}

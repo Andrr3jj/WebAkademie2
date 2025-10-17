@@ -21,7 +21,7 @@
     "vue-meta": "^3.0.0-alpha.10",
     "vue-multiselect": "^3.2.0",
     "vue-router": "^4.0.3",
-    "vue-i18n": "^9.9.0",
+    "vue-i18n": "file:vendor/vue-i18n",
     "vue3-virtual-scroller": "^0.2.3",
     "vuex": "^4.0.0"
   },
