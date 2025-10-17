@@ -197,9 +197,21 @@ export function steps() {
       },
     },
     {
+      selector: "[data-tour-id='home-menu-mobile-admin'], [data-tour-id='home-menu-mobile-scores']",
+      title: "🎼 Menu: Číselné zápisy",
+      text: "Nájdeš tu všetky naše číselné zápisy. Vyber si pieseň a hraj podľa nich krok za krokom.",
+      side: "top",
+      pad: { x: 20, y: 14 },
+      radius: 32,
+      onBeforeEnter() {
+        ensureMobileMenu(false);
+      },
+      waitFor: 200,
+    },
+    {
       selector: "[data-tour-id='home-menu-mobile-toggle']",
       title: "📋 Mobilné menu",
-      text: "Ťuknutím na ikonu otvoríš celé menu – nájdeš tam Náučné videá, Texty piesní, HeliFest aj ďalšie sekcie.",
+      text: "Ťuknutím na ikonu otvoríš viac možností – v rozšírenom menu sú ďalšie sekcie Akadémie.",
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 36,
@@ -208,38 +220,38 @@ export function steps() {
       },
     },
     {
-      selector: "[data-tour-id='home-menu-mobile-texty']",
-      title: "📜 Menu: Texty piesní",
-      text: "Ak si rád zaspievaš, tu nájdeš texty k obľúbeným piesňam. Spoj hudbu so spevom a uži si to naplno.",
-      side: "right",
+      selector: "[data-tour-id='home-menu-mobile-songs']",
+      title: "🎵 Moje piesne alebo Spevník",
+      text: "Prejdi priamo do svojho zoznamu piesní alebo do Spevníka a hraj, čo máš rád.",
+      side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(true);
+        ensureMobileMenu(false);
       },
       waitFor: 200,
     },
     {
-      selector: "[data-tour-id='home-menu-mobile-about']",
-      title: "👨‍🏫 Menu: O nás",
-      text: "Zisti, kto stojí za Heligónkovou Akadémiou a prečo to celé robíme. Poznaj ľudí, ktorí ťa sprevádzajú na tvojej hudobnej ceste.",
-      side: "right",
+      selector: "[data-tour-id='home-menu-mobile-home']",
+      title: "🏠 Domov",
+      text: "Vráť sa späť na hlavnú stránku Akadémie, kde nájdeš najnovšie informácie a novinky.",
+      side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(true);
+        ensureMobileMenu(false);
       },
       waitFor: 200,
     },
     {
-      selector: "[data-tour-id='home-menu-mobile-help']",
-      title: "🆘 Menu: Pomoc",
-      text: "Ak si niekde nevieš rady, napíš nám. Radi ti pomôžeme s prihlásením, platbou alebo čímkoľvek iným.",
-      side: "right",
+      selector: "[data-tour-id='home-menu-mobile-login'], [data-tour-id='home-menu-mobile-account']",
+      title: "👤 Prihlásenie alebo môj účet",
+      text: "Prihlás sa do Akadémie alebo otvor svoj účet a pokračuj v učení tam, kde si prestal.",
+      side: "top",
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(true);
+        ensureMobileMenu(false);
       },
       waitFor: 200,
     },
