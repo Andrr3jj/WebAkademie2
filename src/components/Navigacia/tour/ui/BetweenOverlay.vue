@@ -265,6 +265,13 @@ export default {
   --intro-bubble-w: clamp(26.25rem, 42vw, 45rem);
 }
 
+@media (max-width: 64rem) {
+  :root {
+    --intro-avatar-w: clamp(11.5rem, 24vw, 15.5rem);
+    --intro-bubble-w: clamp(22rem, 48vw, 34rem);
+  }
+}
+
 /* vrstva */
 .intro-layer {
   position: fixed;
@@ -718,6 +725,109 @@ export default {
     width: min(60vw, 16.5rem);
     min-width: 0;
     transform-origin: 50% 75%;
+  }
+}
+
+@media (max-width: 40rem) {
+  .intro-layer {
+    overflow-y: auto;
+    padding: clamp(0.75rem, 4vw, 1.5rem) 0;
+  }
+
+  .intro-center {
+    position: relative;
+    inset: auto;
+    min-height: 100%;
+    align-items: stretch;
+    padding: 0 clamp(0.6rem, 4.5vw, 1.25rem) clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  .intro-group {
+    width: 100%;
+    max-width: min(100%, 32rem);
+    padding: 0;
+    gap: clamp(0.75rem, 5vw, 1.5rem);
+  }
+
+  .intro-avatar-shell {
+    width: clamp(9.5rem, 42vw, 12.5rem);
+    margin: 0 auto;
+  }
+
+  .intro-bubble {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    padding: clamp(1rem, 6vw, 1.4rem) clamp(0.9rem, 6vw, 1.35rem);
+    border-radius: 1rem;
+    max-height: min(82vh, 36rem);
+    overflow-y: auto;
+  }
+
+  .intro-bubble::after {
+    display: none;
+  }
+
+  .intro-title {
+    font-size: clamp(1.22rem, 6vw, 1.55rem);
+  }
+
+  .intro-lead {
+    font-size: clamp(0.92rem, 4.8vw, 1.05rem);
+  }
+
+  .plan-summary__item {
+    padding: clamp(0.55rem, 4.2vw, 0.85rem) clamp(0.6rem, 5.4vw, 1rem);
+  }
+
+  .plan-summary__title {
+    font-size: clamp(0.96rem, 4.8vw, 1.15rem);
+  }
+
+  .plan-summary__meta {
+    font-size: clamp(0.8rem, 4.2vw, 0.92rem);
+  }
+
+  .intro-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(0.5rem, 4vw, 0.75rem);
+    text-align: left;
+  }
+
+  .intro-actions .action-tip {
+    margin-right: 0;
+    justify-content: flex-start;
+  }
+
+  .intro-actions.is-branch {
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .branch-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: clamp(0.5rem, 4vw, 0.75rem);
+  }
+
+  .branch-options .guide-btn {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .guide-btn.primary,
+  .guide-btn.ghost,
+  .guide-btn.skip {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .intro-close {
+    top: clamp(0.45rem, 3.4vw, 0.65rem);
+    right: clamp(0.45rem, 3.4vw, 0.65rem);
+    width: clamp(1.45rem, 6.6vw, 1.75rem);
+    height: clamp(1.45rem, 6.6vw, 1.75rem);
   }
 }
 </style>

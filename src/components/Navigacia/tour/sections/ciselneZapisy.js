@@ -14,8 +14,7 @@ export function steps() {
       selector: ".computer.zapisy .scroll",
       closest: ".computer.zapisy",
       title: "🪗 Všetky dostupné zápisy",
-      text:
-        "Tu nájdeš celú ponuku piesní pripravených na hranie. Vyber si podľa nálady alebo kategórie – a objav stále nové melódie.",
+      text: "Tu nájdeš celú ponuku piesní pripravených na hranie. Vyber si podľa nálady alebo kategórie – a objav stále nové melódie.",
       side: "top",
       pad: { x: 24, y: 16 },
       radius: 18,
@@ -26,8 +25,7 @@ export function steps() {
       selector: ".computer.vyber .categories-search .search input",
       closest: ".computer.vyber .categories-search .search",
       title: "🔍 Vyhľadávanie piesní",
-      text:
-        "Napíš názov piesne alebo jeho časť a zoznam sa ti hneď prispôsobí. Ideálne, ak hľadáš niečo konkrétne.",
+      text: "Napíš názov piesne alebo jeho časť a zoznam sa ti hneď prispôsobí. Ideálne, ak hľadáš niečo konkrétne.",
       side: "bottom",
       pad: { x: 18, y: 10 },
       radius: 12,
@@ -38,8 +36,7 @@ export function steps() {
       selectors: ".computer.vyber .layouts > img:first-of-type",
       closest: ".computer.vyber",
       title: "🧩 Zobrazenie kariet",
-      text:
-        "Zoznam sa zobrazí vo forme kariet – každá pieseň má svoju vlastnú „kartičku“ s prehľadom detailov a tlačidlom Hrať.",
+      text: "Zoznam sa zobrazí vo forme kariet – každá pieseň má svoju vlastnú „kartičku“ s prehľadom detailov a tlačidlom Hrať.",
       side: "top",
       pad: { x: 16, y: 10 },
       radius: 12,
@@ -50,8 +47,7 @@ export function steps() {
       selectors: ".computer.vyber .layouts > img:nth-of-type(2)",
       closest: ".computer.vyber",
       title: "📋 Zobrazenie zoznamu",
-      text:
-        "Ak chceš rýchlo prechádzať viac piesní naraz, prepni si pohľad na zoznam. Prehľadné a praktické.",
+      text: "Ak chceš rýchlo prechádzať viac piesní naraz, prepni si pohľad na zoznam. Prehľadné a praktické.",
       side: "top",
       pad: { x: 16, y: 10 },
       radius: 12,
@@ -62,8 +58,7 @@ export function steps() {
       selectors: ".computer.vyber .layouts .credit-toggle",
       closest: ".computer.vyber",
       title: "💰 Kredity & darčeky",
-      text:
-        "Tu vidíš, koľko máš kreditov. Môžeš ich použiť na odomykanie zápisov zdarma alebo na zľavy pri nákupe.",
+      text: "Tu vidíš, koľko máš kreditov. Môžeš ich použiť na odomykanie zápisov zdarma alebo na zľavy pri nákupe.",
       side: "top",
       pad: { x: 18, y: 12 },
       radius: 14,
@@ -74,8 +69,7 @@ export function steps() {
       selectors: ".computer.vyber .categories .buttons .button",
       closest: ".computer.vyber",
       title: "🎶 Kategórie piesní",
-      text:
-        "Zvoľ si, čo máš chuť hrať – Polku, Valčík, Českú, Terchovskú, Modernú či Vianočnú. Stačí kliknúť a zoznam sa hneď upraví.",
+      text: "Zvoľ si, čo máš chuť hrať – Polku, Valčík, Českú, Terchovskú, Modernú či Vianočnú. Stačí kliknúť a zoznam sa hneď upraví.",
       side: "top",
       pad: { x: 22, y: 12 },
       radius: 14,
@@ -103,8 +97,7 @@ export function steps() {
     {
       selector: ".computer.zapisy .scroll .zapis:first-of-type .img-box-zapis",
       title: "🔄 Detailná kartička",
-      text:
-        "Otoč kartičku a pozri si ďalšie informácie: stupnice, obtiažnosť či tipy na hranie.",
+      text: "Otoč kartičku a pozri si ďalšie informácie: stupnice, obtiažnosť či tipy na hranie.",
       side: "top",
       pad: { x: 16, y: 12 },
       radius: 14,
@@ -116,8 +109,7 @@ export function steps() {
         ".computer.zapisy .scroll .zapis:first-of-type .button .rozdeleny-button:not(.hrat-ukazku), " +
         ".computer.zapisy .scroll .zapis:first-of-type .akcia .rozdeleny-button:not(.hrat-ukazku)",
       title: "🛒 Kúpa zápisu",
-      text:
-        "Týmto tlačidlom si zápis pridáš do košíka. Ak máš dostatok kreditov, zobrazí sa možnosť „Získať zdarma“.",
+      text: "Týmto tlačidlom si zápis pridáš do košíka. Ak máš dostatok kreditov, zobrazí sa možnosť „Získať zdarma“.",
       side: "left",
       pad: { x: 16, y: 12 },
       radius: 12,
@@ -139,8 +131,7 @@ export function steps() {
     {
       bind: { where: "menu", text: "Zoznam piesní", hrefLike: "moje-piesne" },
       title: "🎼 Tvoj zoznam piesní",
-      text:
-        "Tu máš všetky svoje zakúpené a získané zápisy. Každá tvoja pieseň pekne pokope – pripravená na hranie.",
+      text: "Tu máš všetky svoje zakúpené a získané zápisy. Každá tvoja pieseň pekne pokope – pripravená na hranie.",
       side: "left",
       pad: { x: 22, y: 12 },
       radius: 14,
@@ -154,8 +145,7 @@ export function steps() {
         "section.computer.mobile .scroll h5",
       ],
       title: "⭐ Moje piesne",
-      text:
-        "Tvoja osobná zbierka – tu sa objavia všetky skladby, ktoré si si pridal alebo odomkol.",
+      text: "Tvoja osobná zbierka – tu sa objavia všetky skladby, ktoré si si pridal alebo odomkol.",
       side: "top",
       pad: { x: 24, y: 16 },
       radius: 18,
@@ -166,8 +156,7 @@ export function steps() {
     {
       selector: "[data-tour='owned-songs-card']",
       title: "❤️ Toto je tvoja pesnička",
-      text:
-        "Každý zápis, ktorý si už získal, sa zobrazí tu. Tvoje osobné miesto plné hudby.",
+      text: "Každý zápis, ktorý si už získal, sa zobrazí tu. Tvoje osobné miesto plné hudby.",
       side: "top",
       pad: { x: 20, y: 14 },
       radius: 16,
@@ -178,8 +167,7 @@ export function steps() {
     {
       selector: "[data-tour='owned-songs-play']",
       title: "▶️ Spusti hranie",
-      text:
-        "Klikni na **Hrať** a otvorí sa prehrávač s číselným zápisom pripraveným na cvičenie. Môžeš začať kedykoľvek.",
+      text: "Klikni na **Hrať** a otvorí sa prehrávač s číselným zápisom pripraveným na cvičenie. Môžeš začať kedykoľvek.",
       side: "left",
       pad: { x: 18, y: 12 },
       radius: 12,

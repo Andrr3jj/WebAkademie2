@@ -17,6 +17,10 @@
           >Krok {{ index + 1 - firstReal }}/{{ total }}</span
         >
 
+        <button class="guide-btn skip" type="button" @click.stop="close">
+          Preskočiť
+        </button>
+
         <button
           class="guide-btn ghost"
           type="button"
@@ -24,10 +28,6 @@
           :disabled="!hasPrev || isLocked"
         >
           Späť
-        </button>
-
-        <button class="guide-btn skip" type="button" @click.stop="close">
-          Preskočiť
         </button>
 
         <div
@@ -233,7 +233,8 @@ export default {
       const rect = el.getBoundingClientRect();
       const cs = window.getComputedStyle(el);
 
-      const PAD = s.pad ?? 22;
+      const defaultPad = () => (window.innerWidth <= 768 ? 14 : 22);
+      const PAD = s.pad ?? defaultPad();
       const radiusGuess =
         s.radius ??
         Math.max(
@@ -475,6 +476,49 @@ export default {
       if (open.value) await updateSpot(true);
     });
 
+    function toggleScrollLock(shouldLock) {
+      const body = document.body;
+      const html = document.documentElement;
+      if (!body || !html) return;
+
+      const className = "tour-scroll-lock";
+
+      [body, html].forEach((node) => {
+        if (shouldLock) node.classList.add(className);
+        else node.classList.remove(className);
+      });
+
+      if (shouldLock) {
+        const scrollTop = window.scrollY || window.pageYOffset || 0;
+        body.dataset.tourScrollTop = String(scrollTop);
+        body.style.top = `-${scrollTop}px`;
+        body.style.left = "0";
+        body.style.right = "0";
+        body.style.position = "fixed";
+        body.style.width = "100%";
+      } else {
+        const storedValue = body.dataset.tourScrollTop;
+        delete body.dataset.tourScrollTop;
+        body.style.top = "";
+        body.style.left = "";
+        body.style.right = "";
+        body.style.position = "";
+        body.style.width = "";
+        if (storedValue !== undefined) {
+          const stored = Number(storedValue) || 0;
+          window.scrollTo(0, stored);
+        }
+      }
+    }
+
+    watch(
+      open,
+      (isOpen) => {
+        toggleScrollLock(isOpen);
+      },
+      { immediate: true }
+    );
+
     onMounted(async () => {
       window.addEventListener("resize", updateSpotThrottled, { passive: true });
       window.addEventListener("scroll", updateSpotThrottled, { passive: true });
@@ -490,6 +534,7 @@ export default {
       window.removeEventListener("keydown", onKeydown);
       detachTargetObserver();
       cancelLockAnimation();
+      toggleScrollLock(false);
     });
 
     return {
@@ -614,16 +659,17 @@ export default {
 }
 .guide-actions {
   display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 .guide-progress {
   margin-right: auto;
-  opacity: 0.75;
-  font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.95rem);
+  font-weight: 600;
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.9rem);
+  color: #111827;
 }
-
 .guide-btn {
   appearance: none;
   border: 0.0625rem solid var(--ha-card-border);
@@ -662,8 +708,11 @@ export default {
 }
 .guide-btn.skip {
   background: transparent;
-  color: #4b5563;
   border-color: transparent;
+  color: #4b5563;
+  font-weight: 700;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 .guide-btn.skip:hover {
   color: #1f2937;
@@ -729,4 +778,56 @@ export default {
 }
 
 /* hint */
+@media (max-width: 720px) {
+  .guide-tooltip.light {
+    max-width: min(94vw, 21.5rem);
+    padding: clamp(0.5rem, 3.6vw, 0.75rem) clamp(0.85rem, 5.8vw, 1.1rem)
+      clamp(0.6rem, 3.4vw, 0.8rem) clamp(0.85rem, 5.8vw, 1.1rem);
+    border-radius: clamp(0.75rem, 5vw, 1rem);
+  }
+
+  .guide-title {
+    font-size: clamp(0.94rem, 4.6vw, 1.08rem);
+  }
+
+  .guide-text {
+    font-size: clamp(0.84rem, 4.2vw, 0.96rem);
+    margin-bottom: clamp(0.45rem, 3.6vw, 0.65rem);
+  }
+
+  .guide-actions {
+    gap: clamp(0.3rem, 2.4vw, 0.5rem);
+    flex-wrap: nowrap;
+  }
+
+  .guide-progress {
+    margin-right: auto;
+    font-size: clamp(0.78rem, 3.6vw, 0.9rem);
+  }
+
+  .guide-btn {
+    padding: clamp(0.4rem, 3.4vw, 0.52rem) clamp(0.6rem, 4.8vw, 0.85rem);
+    font-size: clamp(0.8rem, 3.8vw, 0.92rem);
+  }
+
+  .guide-btn.skip {
+    padding: clamp(0.25rem, 2.4vw, 0.4rem) clamp(0.2rem, 2.2vw, 0.35rem);
+    font-size: clamp(0.74rem, 3.4vw, 0.86rem);
+  }
+
+  .guide-close {
+    top: clamp(0.45rem, 3vw, 0.6rem);
+    right: clamp(0.45rem, 3vw, 0.6rem);
+    width: clamp(1.4rem, 6vw, 1.7rem);
+    height: clamp(1.4rem, 6vw, 1.7rem);
+  }
+}
+.tour-scroll-lock {
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: contain !important;
+}
+body.tour-scroll-lock {
+  width: 100%;
+}
 </style>

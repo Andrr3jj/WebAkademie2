@@ -31,7 +31,9 @@
         @click="startHomeTour"
         aria-label="Spustiť krátky návod"
       >
-        <span aria-hidden="true" class="guide-tour-button__label">Prejsť návod</span>
+        <span aria-hidden="true" class="guide-tour-button__label"
+          >Prejsť návod</span
+        >
         <span aria-hidden="true" class="guide-tour-button__icon">?</span>
       </button>
     </div>
@@ -96,7 +98,9 @@
             @click="startHomeTour"
             aria-label="Spustiť krátky návod"
           >
-            <span aria-hidden="true" class="guide-tour-button__label">Prejsť návod</span>
+            <span aria-hidden="true" class="guide-tour-button__label"
+              >Prejsť návod</span
+            >
             <span aria-hidden="true" class="guide-tour-button__icon">?</span>
           </button>
         </div>
@@ -445,7 +449,9 @@ h5 {
   }
 
   .computer .guide-tour-button:hover {
-    transform: translateX(calc(-1 * (var(--guide-label-width) + var(--guide-label-gap))));
+    transform: translateX(
+      calc(-1 * (var(--guide-label-width) + var(--guide-label-gap)))
+    );
   }
 
   .computer .guide-tour-button:hover .guide-tour-button__label {
