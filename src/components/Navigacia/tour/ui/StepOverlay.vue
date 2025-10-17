@@ -26,10 +26,6 @@
           Späť
         </button>
 
-        <button class="guide-btn skip" type="button" @click.stop="close">
-          Preskočiť
-        </button>
-
         <div
           class="guide-btn-wrap"
           :class="{ locked: isNavigationLocked }"
@@ -233,7 +229,8 @@ export default {
       const rect = el.getBoundingClientRect();
       const cs = window.getComputedStyle(el);
 
-      const PAD = s.pad ?? 22;
+      const defaultPad = () => (window.innerWidth <= 768 ? 14 : 22);
+      const PAD = s.pad ?? defaultPad();
       const radiusGuess =
         s.radius ??
         Math.max(
@@ -475,6 +472,49 @@ export default {
       if (open.value) await updateSpot(true);
     });
 
+    function toggleScrollLock(shouldLock) {
+      const body = document.body;
+      const html = document.documentElement;
+      if (!body || !html) return;
+
+      const className = "tour-scroll-lock";
+
+      [body, html].forEach((node) => {
+        if (shouldLock) node.classList.add(className);
+        else node.classList.remove(className);
+      });
+
+      if (shouldLock) {
+        const scrollTop = window.scrollY || window.pageYOffset || 0;
+        body.dataset.tourScrollTop = String(scrollTop);
+        body.style.top = `-${scrollTop}px`;
+        body.style.left = "0";
+        body.style.right = "0";
+        body.style.position = "fixed";
+        body.style.width = "100%";
+      } else {
+        const storedValue = body.dataset.tourScrollTop;
+        delete body.dataset.tourScrollTop;
+        body.style.top = "";
+        body.style.left = "";
+        body.style.right = "";
+        body.style.position = "";
+        body.style.width = "";
+        if (storedValue !== undefined) {
+          const stored = Number(storedValue) || 0;
+          window.scrollTo(0, stored);
+        }
+      }
+    }
+
+    watch(
+      open,
+      (isOpen) => {
+        toggleScrollLock(isOpen);
+      },
+      { immediate: true }
+    );
+
     onMounted(async () => {
       window.addEventListener("resize", updateSpotThrottled, { passive: true });
       window.addEventListener("scroll", updateSpotThrottled, { passive: true });
@@ -490,6 +530,7 @@ export default {
       window.removeEventListener("keydown", onKeydown);
       detachTargetObserver();
       cancelLockAnimation();
+      toggleScrollLock(false);
     });
 
     return {
@@ -614,16 +655,17 @@ export default {
 }
 .guide-actions {
   display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 .guide-progress {
   margin-right: auto;
-  opacity: 0.75;
-  font-size: clamp(0.86rem, 0.8rem + 0.25vw, 0.95rem);
+  font-weight: 600;
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.9rem);
+  color: #111827;
 }
-
 .guide-btn {
   appearance: none;
   border: 0.0625rem solid var(--ha-card-border);
@@ -659,15 +701,6 @@ export default {
   transform: translateY(-0.0625rem);
   background: #fff;
   box-shadow: 0 0.5rem 1.125rem rgba(0, 0, 0, 0.1);
-}
-.guide-btn.skip {
-  background: transparent;
-  color: #4b5563;
-  border-color: transparent;
-}
-.guide-btn.skip:hover {
-  color: #1f2937;
-  text-decoration: underline;
 }
 .guide-btn:disabled {
   opacity: 0.55;
@@ -747,15 +780,12 @@ export default {
   }
 
   .guide-actions {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.4rem;
+    gap: clamp(0.35rem, 2.8vw, 0.55rem);
+    flex-wrap: nowrap;
   }
 
   .guide-progress {
-    flex-basis: 100%;
-    margin-right: 0;
-    text-align: left;
+    margin-right: auto;
     font-size: clamp(0.78rem, 3.6vw, 0.9rem);
   }
 
@@ -770,5 +800,13 @@ export default {
     width: clamp(1.4rem, 6vw, 1.7rem);
     height: clamp(1.4rem, 6vw, 1.7rem);
   }
+}
+.tour-scroll-lock {
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: contain !important;
+}
+body.tour-scroll-lock {
+  width: 100%;
 }
 </style>
