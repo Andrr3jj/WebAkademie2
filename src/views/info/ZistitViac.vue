@@ -2,11 +2,8 @@
   <!-- DESKTOP: bez zmeny -->
   <section :id="$route.name" class="computer">
     <div class="scroll">
-      <h1>Všetko na jednom mieste</h1>
-      <h5>
-        Nauč sa hrať na heligónke moderne, zábavne, odkiaľkoľvek <br />s videami
-        a číselnými zápismi.
-      </h5>
+      <h1>{{ $t("more.title") }}</h1>
+      <h5 v-html="$t('more.lead')"></h5>
 
       <div class="line horizontal w-80"></div>
       <p class="text center w-85">
@@ -280,11 +277,8 @@
     <!-- 1) H1 + H5 -->
     <section class="m-panel">
       <div class="scroll m-tight">
-        <h1>Všetko na jednom mieste</h1>
-        <h5>
-          Nauč sa hrať na heligónke moderne, zábavne, odkiaľkoľvek s videami a
-          číselnými zápismi.
-        </h5>
+        <h1>{{ $t("more.title") }}</h1>
+        <h5 v-html="$t('more.lead')"></h5>
         <div class="line horizontal w-80 m-line"></div>
         <p class="text center w-85">
           Vitaj medzi milovníkmi heligónky! Objav radosť z hry na heligónke z
@@ -818,6 +812,16 @@ h5 {
   font-weight: 550;
   line-height: 115%;
   margin: 0.3em auto 0.7em;
+}
+
+:deep(.desktop-break) {
+  display: inline;
+}
+
+@media screen and (max-width: 750px) {
+  :deep(.desktop-break) {
+    display: none;
+  }
 }
 
 /* =========================================================
