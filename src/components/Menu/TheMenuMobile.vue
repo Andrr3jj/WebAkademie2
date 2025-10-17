@@ -146,7 +146,11 @@
           </li>
 
           <!-- Moje piesne / Spevník v spodnej lište -->
-          <li @click="menuOpenValue = false" class="songs-li">
+          <li
+            @click="menuOpenValue = false"
+            class="songs-li"
+            data-tour-id="home-menu-mobile-songs"
+          >
             <router-link v-if="$store.state.user == null" to="/spevnik">
               <div class="icon">
                 <img
@@ -171,7 +175,7 @@
           </li>
 
           <!-- Domov -->
-          <li @click="menuOpenValue = false">
+          <li @click="menuOpenValue = false" data-tour-id="home-menu-mobile-home">
             <router-link to="/">
               <div class="icon">
                 <img src="@/assets/images/icons/domov.svg" alt="Domov" />
@@ -186,6 +190,7 @@
         @click="menuOpenValue = false"
         v-if="$store.state.user == null"
         class="login button"
+        data-tour-id="home-menu-mobile-login"
       >
         <img src="@/assets/images/icons/prihlasenie.svg" alt="" />
         <router-link to="/prihlasenie">Prihlásiť sa</router-link>
@@ -196,6 +201,7 @@
         @click="menuOpenValue = false"
         to="/ucebna"
         class="login no-padding button"
+        data-tour-id="home-menu-mobile-account"
       >
         <img :src="profilePhoto" alt="Profilová fotka" class="profile-icon" />
         <p>Môj účet</p>
