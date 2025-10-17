@@ -1,37 +1,11 @@
 // src/components/Navigacia/tour/sections/homeMenu.js
 import { steps as zapisySteps, branch as zapisyBranch } from "./ciselneZapisy";
 import { steps as videoSteps, branch as videoBranch } from "./naucneVidea";
-
-function isMobileLayout() {
-  if (typeof window === "undefined") return false;
-  try {
-    return window.matchMedia("(max-width: 750px)").matches;
-  } catch (e) {
-    return window.innerWidth <= 750;
-  }
-}
-
-function ensureMobileMenu(open) {
-  if (typeof document === "undefined") return;
-
-  const wantOpen = !!open;
-  const dropdown = document.querySelector(".navigation-more");
-  const isOpen = !!dropdown;
-  if (wantOpen === isOpen) return;
-
-  const toggleSelector = wantOpen
-    ? "[data-tour-id='home-menu-mobile-toggle'] img[src*='menuClosed']"
-    : "[data-tour-id='home-menu-mobile-toggle'] img[src*='menuOpen']";
-  const toggle = document.querySelector(toggleSelector);
-  if (!toggle) return;
-
-  const icon = toggle.closest(".icon");
-  icon?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-}
+import { ensureMobileMenuState, isMobileMenuLayout } from "../utils/mobileMenu";
 
 export function steps() {
   const pad = 18;
-  const mobile = isMobileLayout();
+  const mobile = isMobileMenuLayout();
 
   const commonSteps = [
     // 1) Zistiť viac
@@ -193,7 +167,7 @@ export function steps() {
       pad: { x: 18, y: 14 },
       radius: 32,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
     },
     {
@@ -205,7 +179,7 @@ export function steps() {
       pad: { x: 20, y: 14 },
       radius: 32,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
       waitFor: 200,
     },
@@ -217,7 +191,7 @@ export function steps() {
       pad: { x: 20, y: 14 },
       radius: 36,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
     },
     {
@@ -228,7 +202,7 @@ export function steps() {
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
       waitFor: 200,
     },
@@ -240,7 +214,7 @@ export function steps() {
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
       waitFor: 200,
     },
@@ -253,7 +227,7 @@ export function steps() {
       pad: { x: 20, y: 16 },
       radius: 26,
       onBeforeEnter() {
-        ensureMobileMenu(false);
+        ensureMobileMenuState(false);
       },
       waitFor: 200,
     },
